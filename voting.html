@@ -72,6 +72,15 @@
             color: #333;
             text-align: center;
         }
+        .username-input {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .username-input input {
+            padding: 8px;
+            font-size: 16px;
+            width: 200px;
+        }
         @media (max-width: 768px) {
             .ballot-container {
                 flex-direction: column;
@@ -143,6 +152,12 @@
                 </div>
             </div>
         </div>
+
+        <!-- Username Input -->
+        <div class="username-input">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required placeholder="Enter your username">
+        </div>
         
         <div class="error" id="error-message"></div>
         <button id="submit-ballot">Submit Ballot</button>
@@ -153,6 +168,7 @@
             const inputs = document.querySelectorAll('.preference');
             const errorMsg = document.getElementById('error-message');
             const submitBtn = document.getElementById('submit-ballot');
+            const usernameInput = document.getElementById('username');
             const totalCandidates = inputs.length; // Should be 12
             
             // Validate individual input
@@ -188,6 +204,12 @@
             submitBtn.addEventListener('click', function() {
                 errorMsg.textContent = "";
                 
+                // Check username is filled
+                if (!usernameInput.value.trim()) {
+                    errorMsg.textContent = "Error: Please enter your username.";
+                    return;
+                }
+                
                 // Check all boxes are filled
                 const emptyInputs = Array.from(inputs).filter(input => input.value === "");
                 if (emptyInputs.length > 0) {
@@ -211,6 +233,7 @@
                 
                 // Success!
                 errorMsg.textContent = "Ballot submitted successfully!";
+                console.log("Voter:", usernameInput.value.trim());
                 console.log("Votes:", Array.from(inputs)
                     .map(input => ({
                         candidate: input.dataset.candidate,
