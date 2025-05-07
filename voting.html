@@ -167,7 +167,7 @@
         <button id="submit-ballot">Submit Ballot</button>
     </div>
 
-       <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             // DOM elements
             const ballot = document.querySelector('.ballot');
@@ -327,28 +327,6 @@
             initializeBallot();
             setupEventListeners();
         });
-
-        // Google Sheets submission (optional)
-        document.getElementById('submit-ballot').addEventListener('click', async function() {
-            const formData = new FormData();
-            formData.append('timestamp', new Date().toISOString());
-            formData.append('username', document.getElementById('username').value.trim());
-            
-            Array.from(document.querySelectorAll('.preference'))
-                .sort((a, b) => parseInt(a.value) - parseInt(b.value))
-                .forEach(input => {
-                    formData.append(input.dataset.candidate, input.value);
-                });
-
-            try {
-                const response = await fetch(
-                    'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec',
-                    { method: 'POST', body: formData }
-                );
-                
-                if (!response.ok) throw new Error("Failed to save");
-            } catch (error) {
-                console.error(error);
-            }
-        });
     </script>
+</body>
+</html>
