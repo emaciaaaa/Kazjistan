@@ -292,6 +292,47 @@ submitBtn.addEventListener('click', async function() {
         alert("Failed to submit. Please try again.");
     }
 });
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // ... [keep all your existing validation code] ...
+
+        // Modified submit handler
+        submitBtn.addEventListener('click', async function() {
+            // ... [keep all your validation checks] ...
+
+            // Prepare data for Google Sheets
+            const formData = new FormData();
+            formData.append('timestamp', new Date().toISOString());
+            formData.append('username', usernameInput.value.trim());
+            
+            // Add all votes in preference order
+            Array.from(inputs)
+                .sort((a, b) => parseInt(a.value) - parseInt(b.value))
+                .forEach(input => {
+                    formData.append(input.dataset.candidate, input.value);
+                });
+
+            try {
+                const response = await fetch(
+                    'https://script.google.com/macros/s/AKfycbxkQc28tJrSpsXKBfMmoJDcLou3R6kI_x4E7wYUBZy8zJ9uE3IQA1bs8I_DDdjCoOmR/exec',
+                    {
+                        method: 'POST',
+                        body: formData
+                    }
+                );
+                
+                if (response.ok) {
+                    errorMsg.textContent = "Vote submitted to spreadsheet!";
+                    errorMsg.style.color = "green";
+                } else {
+                    throw new Error("Failed to save");
+                }
+            } catch (error) {
+                errorMsg.textContent = "Error submitting vote. Please try again.";
+                console.error(error);
+            }
+        });
+    });
 </script>
 </body>
 </html>
