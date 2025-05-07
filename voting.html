@@ -5,11 +5,163 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kazjistan Legislative Assembly Ballot</title>
     <style>
-        /* [Keep all your existing CSS styles] */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .ballot {
+            background-color: white;
+            border: 2px solid #000;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .ballot-container {
+            display: flex;
+            gap: 20px;
+        }
+        .party-group {
+            border: 2px solid #000;
+            padding: 15px;
+            flex: 1;
+        }
+        .party-name {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 18px;
+            text-align: center;
+            background-color: #f0f0f0;
+            padding: 5px;
+        }
+        .candidate {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .candidate input {
+            width: 40px;
+            height: 30px;
+            margin-right: 10px;
+            text-align: center;
+            font-size: 16px;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        button {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0055aa;
+        }
+        .instructions {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+            text-align: center;
+        }
+        .username-input {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .username-input input {
+            padding: 8px;
+            font-size: 16px;
+            width: 200px;
+        }
+        @media (max-width: 768px) {
+            .ballot-container {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- [Keep all your existing HTML] -->
+    <div class="ballot">
+        <h2 style="text-align: center;">Kazjistan Legislative Assembly Ballot</h2>
+        <p class="instructions">Number ALL boxes in order of preference (1 to 12).</p>
+        
+        <div class="ballot-container">
+            <!-- Group 1: Renew Kazjistan — Restore Democracy -->
+            <div class="party-group">
+                <div class="party-name">RENEW KAZJISTAN — RESTORE DEMOCRACY</div>
+                <div class="candidate">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Seat">
+                    <span>Seat</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Cryzed">
+                    <span>Cryzed</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Igor Witback">
+                    <span>Igor Witback</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Axell Nevylym">
+                    <span>Axell Nevylym</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Emacia">
+                    <span>Emacia</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Fixie">
+                    <span>Fixie</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Timus Maximus">
+                    <span>Timus Maximus</span>
+                </div>
+            </div>
+            
+            <!-- Group 2: Independents -->
+            <div class="party-group">
+                <div class="party-name">INDEPENDENTS</div>
+                <div class="candidate">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Bigurethra">
+                    <span>Bigurethra</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Clover">
+                    <span>Clover</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Adam">
+                    <span>Adam</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Joe Sane">
+                    <span>Joe Sane</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="CSGPlayz">
+                    <span>CSGPlayz</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Username Input -->
+        <div class="username-input">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required placeholder="Enter your username">
+        </div>
+        
+        <div class="error" id="error-message"></div>
+        <button id="submit-ballot">Submit Ballot</button>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -17,19 +169,21 @@
             const errorMsg = document.getElementById('error-message');
             const submitBtn = document.getElementById('submit-ballot');
             const usernameInput = document.getElementById('username');
-            const totalCandidates = inputs.length;
+            const totalCandidates = inputs.length; // Should be 12
             
             // Validate individual input
             inputs.forEach(input => {
                 input.addEventListener('change', function() {
                     const value = parseInt(this.value);
                     
+                    // Check if number is too high
                     if (value > totalCandidates) {
                         errorMsg.textContent = `Error: Maximum preference is ${totalCandidates}.`;
                         this.value = "";
                         return;
                     }
                     
+                    // Check for duplicates
                     let duplicates = 0;
                     inputs.forEach(otherInput => {
                         if (otherInput !== this && otherInput.value === this.value) {
@@ -46,74 +200,50 @@
                 });
             });
             
-            // Submit handler
-            submitBtn.addEventListener('click', async function() {
+            // Validate on submit
+            submitBtn.addEventListener('click', function() {
                 errorMsg.textContent = "";
-                errorMsg.style.color = "red";
                 
-                // Validation checks
+                // Check username is filled
                 if (!usernameInput.value.trim()) {
                     errorMsg.textContent = "Error: Please enter your username.";
                     return;
                 }
                 
+                // Check all boxes are filled
                 const emptyInputs = Array.from(inputs).filter(input => input.value === "");
                 if (emptyInputs.length > 0) {
                     errorMsg.textContent = "Error: You must number ALL candidates (1 to 12).";
                     return;
                 }
                 
+                // Check all numbers are unique
                 const numbers = Array.from(inputs).map(input => parseInt(input.value));
                 if (new Set(numbers).size !== totalCandidates) {
                     errorMsg.textContent = "Error: Duplicate numbers detected.";
                     return;
                 }
                 
+                // Check numbers are within range
                 const invalidNumbers = numbers.filter(n => n < 1 || n > totalCandidates);
                 if (invalidNumbers.length > 0) {
                     errorMsg.textContent = `Error: Preferences must be between 1 and ${totalCandidates}.`;
                     return;
                 }
                 
-                // Prepare data for Google Sheets
-                const voteData = {
-                    'Timestamp': new Date().toISOString(),
-                    'Username': usernameInput.value.trim()
-                };
-                
-                // Add votes in order
-                Array.from(inputs)
-                    .sort((a, b) => parseInt(a.value) - parseInt(b.value))
-                    .forEach(input => {
-                        voteData[input.dataset.candidate] = input.value;
-                    });
-                
-                // Send to Google Sheets
-                try {
-                    const response = await fetch(
-                        'https://script.google.com/macros/s/AKfycby8PwQj7UqjDpYzWuycHmqiv0sgxLFvWMT8celxpY2ZGJXKmGZRoFQXt5IH2QkU2f19/exec',
-                        {
-                            method: 'POST',
-                            body: JSON.stringify(voteData),
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        }
-                    );
-                    
-                    if (response.ok) {
-                        errorMsg.textContent = "Vote submitted successfully!";
-                        errorMsg.style.color = "green";
-                    } else {
-                        throw new Error(await response.text());
-                    }
-                } catch (error) {
-                    errorMsg.textContent = "Error submitting vote. Please try again.";
-                    console.error("Submission error:", error);
-                }
+                // Success!
+                errorMsg.textContent = "Ballot submitted successfully!";
+                console.log("Voter:", usernameInput.value.trim());
+                console.log("Votes:", Array.from(inputs)
+                    .map(input => ({
+                        candidate: input.dataset.candidate,
+                        preference: input.value
+                    }))
+                    .sort((a, b) => a.preference - b.preference)
+                );
             });
             
-            // Shuffle candidates
+            // Optional: Shuffle candidates (Robson Rotation)
             function shuffleCandidates() {
                 const groups = document.querySelectorAll('.party-group');
                 groups.forEach(group => {
@@ -124,8 +254,85 @@
                     }
                 });
             }
+            
             shuffleCandidates();
         });
     </script>
+    <script>
+submitBtn.addEventListener('click', async function() {
+    // ... (keep all your validation code) ...
+
+    // Prepare data
+    const voteData = {
+        username: usernameInput.value.trim(),
+        timestamp: new Date().toISOString(),
+        votes: Array.from(inputs)
+            .map(input => ({
+                candidate: input.dataset.candidate, 
+                preference: input.value
+            }))
+    };
+
+    // Send to GitHub
+    try {
+        await fetch('https://api.github.com/repos/YOUR_GITHUB_USERNAME/election-results/dispatches', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'token YOUR_PERSONAL_TOKEN',
+                'Accept': 'application/vnd.github.v3+json'
+            },
+            body: JSON.stringify({
+                event_type: 'save_vote',
+                client_payload: voteData
+            })
+        });
+        alert("Vote submitted!");
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Failed to submit. Please try again.");
+    }
+});
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // ... [keep all your existing validation code] ...
+
+        // Modified submit handler
+        submitBtn.addEventListener('click', async function() {
+            // ... [keep all your validation checks] ...
+
+            // Prepare data for Google Sheets
+            const formData = new FormData();
+            formData.append('timestamp', new Date().toISOString());
+            formData.append('username', usernameInput.value.trim());
+            
+            // Add all votes in preference order
+            Array.from(inputs)
+                .sort((a, b) => parseInt(a.value) - parseInt(b.value))
+                .forEach(input => {
+                    formData.append(input.dataset.candidate, input.value);
+                });
+
+            try {
+                const response = await fetch(
+                    'https://script.google.com/macros/s/AKfycbxkQc28tJrSpsXKBfMmoJDcLou3R6kI_x4E7wYUBZy8zJ9uE3IQA1bs8I_DDdjCoOmR/exec',
+                    {
+                        method: 'POST',
+                        body: formData
+                    }
+                );
+                
+                if (response.ok) {
+                    errorMsg.textContent = "Vote submitted to spreadsheet!";
+                    errorMsg.style.color = "green";
+                } else {
+                    throw new Error("Failed to save");
+                }
+            } catch (error) {
+                errorMsg.textContent = "Error submitting vote. Please try again.";
+                console.error(error);
+            }
+        });
+    });
+</script>
 </body>
 </html>
