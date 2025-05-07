@@ -258,5 +258,40 @@
             shuffleCandidates();
         });
     </script>
+    <script>
+submitBtn.addEventListener('click', async function() {
+    // ... (keep all your validation code) ...
+
+    // Prepare data
+    const voteData = {
+        username: usernameInput.value.trim(),
+        timestamp: new Date().toISOString(),
+        votes: Array.from(inputs)
+            .map(input => ({
+                candidate: input.dataset.candidate, 
+                preference: input.value
+            }))
+    };
+
+    // Send to GitHub
+    try {
+        await fetch('https://api.github.com/repos/YOUR_GITHUB_USERNAME/election-results/dispatches', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'token YOUR_PERSONAL_TOKEN',
+                'Accept': 'application/vnd.github.v3+json'
+            },
+            body: JSON.stringify({
+                event_type: 'save_vote',
+                client_payload: voteData
+            })
+        });
+        alert("Vote submitted!");
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Failed to submit. Please try again.");
+    }
+});
+</script>
 </body>
 </html>
