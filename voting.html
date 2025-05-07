@@ -14,18 +14,18 @@
             background-color: white;
             border: 2px solid #000;
             padding: 20px;
-            max-width: 900px; /* Wider to fit side-by-side groups */
+            max-width: 900px;
             margin: 0 auto;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         .ballot-container {
             display: flex;
-            gap: 20px; /* Space between groups */
+            gap: 20px;
         }
         .party-group {
             border: 2px solid #000;
             padding: 15px;
-            flex: 1; /* Equal width */
+            flex: 1;
         }
         .party-name {
             font-weight: bold;
@@ -82,38 +82,38 @@
 <body>
     <div class="ballot">
         <h2 style="text-align: center;">Kazjistan Legislative Assembly Ballot</h2>
-        <p class="instructions">Number at least <strong>5</strong> boxes in order of preference.</p>
+        <p class="instructions">Number ALL boxes in order of preference (1 to 12).</p>
         
         <div class="ballot-container">
             <!-- Group 1: Renew Kazjistan — Restore Democracy -->
             <div class="party-group">
                 <div class="party-name">RENEW KAZJISTAN — RESTORE DEMOCRACY</div>
                 <div class="candidate">
-                    <input type="number" min="1" class="preference" placeholder="-" data-candidate="Seat">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Seat">
                     <span>Seat</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" class="preference" placeholder="-" data-candidate="Cryzed">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Cryzed">
                     <span>Cryzed</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" class="preference" placeholder="-" data-candidate="Igor Witback">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Igor Witback">
                     <span>Igor Witback</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" class="preference" placeholder="-" data-candidate="Axell Nevylym">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Axell Nevylym">
                     <span>Axell Nevylym</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" class="preference" placeholder="-" data-candidate="Emacia">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Emacia">
                     <span>Emacia</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" class="preference" placeholder="-" data-candidate="Fixie">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Fixie">
                     <span>Fixie</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" class="preference" placeholder="-" data-candidate="Timus Maximus">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Timus Maximus">
                     <span>Timus Maximus</span>
                 </div>
             </div>
@@ -122,23 +122,23 @@
             <div class="party-group">
                 <div class="party-name">INDEPENDENTS</div>
                 <div class="candidate">
-                    <input type="number" min="1" class="preference" placeholder="-" data-candidate="Bigurethra">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Bigurethra">
                     <span>Bigurethra</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" class="preference" placeholder="-" data-candidate="Clover">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Clover">
                     <span>Clover</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" class="preference" placeholder="-" data-candidate="Adam">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Adam">
                     <span>Adam</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" class="preference" placeholder="-" data-candidate="Joe Sane">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="Joe Sane">
                     <span>Joe Sane</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" class="preference" placeholder="-" data-candidate="CSGPlayz">
+                    <input type="number" min="1" max="12" class="preference" placeholder="-" data-candidate="CSGPlayz">
                     <span>CSGPlayz</span>
                 </div>
             </div>
@@ -153,23 +153,30 @@
             const inputs = document.querySelectorAll('.preference');
             const errorMsg = document.getElementById('error-message');
             const submitBtn = document.getElementById('submit-ballot');
+            const totalCandidates = inputs.length; // Should be 12
             
-            // Prevent duplicate numbers
+            // Validate individual input
             inputs.forEach(input => {
                 input.addEventListener('change', function() {
-                    const currentValue = this.value;
-                    if (currentValue === "") return;
+                    const value = parseInt(this.value);
+                    
+                    // Check if number is too high
+                    if (value > totalCandidates) {
+                        errorMsg.textContent = `Error: Maximum preference is ${totalCandidates}.`;
+                        this.value = "";
+                        return;
+                    }
                     
                     // Check for duplicates
                     let duplicates = 0;
                     inputs.forEach(otherInput => {
-                        if (otherInput !== this && otherInput.value === currentValue) {
+                        if (otherInput !== this && otherInput.value === this.value) {
                             duplicates++;
                         }
                     });
                     
                     if (duplicates > 0) {
-                        errorMsg.textContent = `Error: Number ${currentValue} is used more than once.`;
+                        errorMsg.textContent = `Error: Number ${this.value} is used more than once.`;
                         this.value = "";
                     } else {
                         errorMsg.textContent = "";
@@ -179,24 +186,32 @@
             
             // Validate on submit
             submitBtn.addEventListener('click', function() {
-                const filledInputs = Array.from(inputs).filter(input => input.value !== "");
-                const numbers = filledInputs.map(input => parseInt(input.value));
-                const minPreference = 5;
+                errorMsg.textContent = "";
                 
-                if (filledInputs.length < minPreference) {
-                    errorMsg.textContent = `Error: You must number at least ${minPreference} candidates.`;
+                // Check all boxes are filled
+                const emptyInputs = Array.from(inputs).filter(input => input.value === "");
+                if (emptyInputs.length > 0) {
+                    errorMsg.textContent = "Error: You must number ALL candidates (1 to 12).";
                     return;
                 }
                 
-                if (new Set(numbers).size !== numbers.length) {
+                // Check all numbers are unique
+                const numbers = Array.from(inputs).map(input => parseInt(input.value));
+                if (new Set(numbers).size !== totalCandidates) {
                     errorMsg.textContent = "Error: Duplicate numbers detected.";
                     return;
                 }
                 
-                // Success! (Replace with your logic)
+                // Check numbers are within range
+                const invalidNumbers = numbers.filter(n => n < 1 || n > totalCandidates);
+                if (invalidNumbers.length > 0) {
+                    errorMsg.textContent = `Error: Preferences must be between 1 and ${totalCandidates}.`;
+                    return;
+                }
+                
+                // Success!
                 errorMsg.textContent = "Ballot submitted successfully!";
                 console.log("Votes:", Array.from(inputs)
-                    .filter(input => input.value !== "")
                     .map(input => ({
                         candidate: input.dataset.candidate,
                         preference: input.value
@@ -217,7 +232,7 @@
                 });
             }
             
-            shuffleCandidates(); // Uncomment to randomize candidate order
+            shuffleCandidates();
         });
     </script>
 </body>
