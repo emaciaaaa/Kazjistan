@@ -1,0 +1,19 @@
+name: Save Vote
+
+on:
+  repository_dispatch:
+    types: [save_vote]
+
+jobs:
+  save_vote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Append vote
+        run: |
+          echo '${{ toJson(github.event.client_payload) }}' >> votes.json
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add votes.json
+          git commit -m "Add new vote [skip ci]"
+          git push
