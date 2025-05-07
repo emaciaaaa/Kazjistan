@@ -302,25 +302,57 @@
                 });
                 
                 submitBtn.addEventListener('click', function() {
-                    const validationError = validateBallot();
-                    if (validationError) {
-                        errorMsg.textContent = validationError;
-                        return;
-                    }
-                    
-                    errorMsg.textContent = "Ballot submitted successfully!";
-                    errorMsg.style.color = "green";
-                    
-                    const votes = Array.from(document.querySelectorAll('.preference'))
-                        .map(input => ({
-                            candidate: input.dataset.candidate,
-                            preference: input.value
-                        }))
-                        .sort((a, b) => a.preference - b.preference);
-                    
-                    console.log("Voter:", usernameInput.value.trim());
-                    console.log("Votes:", votes);
-                });
+    const validationError = validateBallot();
+    if (validationError) {
+        errorMsg.textContent = validationError;
+        return;
+    }
+    
+    errorMsg.textContent = "Ballot submitted successfully!";
+    errorMsg.style.color = "green";
+    
+    const votes = Array.from(document.querySelectorAll('.preference'))
+        .map(input => ({
+            candidate: input.dataset.candidate,
+            preference: input.value
+        }))
+        .sort((a, b) => a.preference - b.preference);
+    
+    console.log("Voter:", usernameInput.value.trim());
+    console.log("Votes:", votes);
+    
+    // ===== NEW CODE STARTS HERE =====
+    // Export to CSV
+    exportToCSV(usernameInput.value.trim(), votes);
+});
+
+// ===== ADD THIS NEW FUNCTION BELOW =====
+function exportToCSV(username, votes) {
+    // Prepare CSV content
+    let csvContent = "data:text/csv;charset=utf-8,";
+    
+    // Add header row
+    csvContent += "Username,Candidate,Preference\n";
+    
+    // Add vote data
+    votes.forEach(vote => {
+        csvContent += `${username},${vote.candidate},${vote.preference}\n`;
+    });
+    
+    // Create download link
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `kazjistan_ballot_${username}.csv`);
+    document.body.appendChild(link);
+    
+    // Trigger download
+    link.click();
+    
+    // Clean up
+    document.body.removeChild(link);
+}
+
             }
 
             // Initialize the ballot
