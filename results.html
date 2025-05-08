@@ -1,28 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Election Results - STV Count</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .result-stage { 
-            background: #f5f5f5; 
-            padding: 15px; 
-            margin-bottom: 20px;
-            border-left: 4px solid #0066cc;
-        }
-        .candidate-eliminated { color: #999; }
-        .candidate-elected { 
-            font-weight: bold; 
-            color: green;
-        }
-        table { border-collapse: collapse; width: 100%; }
-        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }
-    </style>
+  <title>Live Results</title>
+  <style>
+    .seat { background-color: #e6f7ff; padding: 10px; margin: 5px; border-radius: 5px }
+    .eliminated { opacity: 0.5 }
+  </style>
 </head>
 <body>
-    <h1>Kazjistan Parliamentary Election - STV Results</h1>
-    <div id="results-container"></div>
+  <h1>STV Results (9 Seats)</h1>
+  <div id="results"></div>
+  
+  <script>
+    const RESULTS_URL = "YOUR_SCRIPT_URL?action=getResults";
     
-    <script src="stv-calculator.js"></script> <!-- New JS file we'll create -->
+    async function loadResults() {
+      try {
+        const response = await fetch(RESULTS_URL);
+        const data = await response.json();
+        
+        let html = `
+          <h3>Quota: ${data.quota} votes</h3>
+          <h3>Rounds:</h3>
+        `;
+        
+        data.rounds.forEach(round => {
+          html += `<div class="round">
+            <h4>Round ${round.number}</h4>
+            ${round.elected.map(c => `<div class="seat">✅ Elected: ${c}</div>`).join('')}
+            ${round.eliminated.map(c => `<div class="eliminated">❌ Eliminated: ${c}</div>`).join('')}
+          </div>`;
+        });
+        
+        document.getElementById("results").innerHTML = html;
+      } catch (error) {
+        console.error("Error loading results:", error);
+      }
+    }
+    
+    // Refresh every 30 seconds
+    loadResults();
+    setInterval(loadResults, 30000);
+  </script>
 </body>
 </html>
