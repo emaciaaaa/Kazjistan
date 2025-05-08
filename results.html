@@ -3,55 +3,37 @@
 <head>
   <title>Election Results</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-    h1 { color: #0066cc; }
-    .result { display: flex; margin: 10px 0; padding: 10px; background: #f5f5f5; }
-    .candidate { flex: 2; font-weight: bold; }
-    .votes { flex: 1; text-align: right; }
-    .elected { background: #d4edda; border-left: 4px solid #28a745; }
-    .quota { margin-top: 20px; padding: 10px; background: #e2e3e5; }
+    /* Add your styling here */
+    .elected { background-color: #ddffdd; }
+    .eliminated { background-color: #ffdddd; }
   </style>
 </head>
 <body>
-  <h1>Parliamentary Election Results</h1>
+  <h1>STV Election Results</h1>
   <div id="results"></div>
-  <div id="quota" class="quota"></div>
-  <button id="refresh">Refresh Results</button>
+  <button id="calculate">Calculate Results</button>
   
   <script>
-    function displayResults(results, quota) {
+    function displayResults(data) {
       const container = document.getElementById('results');
-      container.innerHTML = '';
-      
-      results.forEach(result => {
-        const div = document.createElement('div');
-        div.className = `result ${result.elected ? 'elected' : ''}`;
-        div.innerHTML = `
-          <div class="candidate">${result.candidate}</div>
-          <div class="votes">${result.votes} votes</div>
-          ${result.elected ? '<div class="status">✓ ELECTED</div>' : ''}
-        `;
-        container.appendChild(div);
-      });
-      
-      document.getElementById('quota').textContent = `Quota for election: ${quota} votes`;
+      container.innerHTML = `
+        <h2>Quota: ${data.quota}</h2>
+        <h3>Elected Candidates:</h3>
+        <ul>
+          ${data.elected.map(c => `<li>${c.candidate} (${c.votes} votes)</li>`).join('')}
+        </ul>
+      `;
     }
     
-    function loadResults() {
+    document.getElementById('calculate').addEventListener('click', () => {
       google.script.run
-        .withSuccessHandler(data => {
-          const quota = Math.floor(data.totalVotes / (data.results.length + 1)) + 1;
-          displayResults(data.results, quota);
-        })
+        .withSuccessHandler(displayResults)
         .withFailureHandler(error => {
           console.error(error);
-          alert('Error loading results');
+          alert('Error calculating results');
         })
-        .getSTVResults();
-    }
-    
-    document.getElementById('refresh').addEventListener('click', loadResults);
-    window.addEventListener('load', loadResults);
+        .fullSTVCalculation();
+    });
   </script>
 </body>
 </html>
