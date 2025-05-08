@@ -1,195 +1,345 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <base target="_top">
-  <title>Kazjistan Election Results</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #f5f5f5;
-    }
-    h1, h2 {
-      color: #2c3e50;
-      text-align: center;
-    }
-    .results-container {
-      background-color: white;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-    .elected {
-      color: #27ae60;
-      font-weight: bold;
-    }
-    .eliminated {
-      color: #e74c3c;
-      text-decoration: line-through;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-    }
-    th, td {
-      padding: 10px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-    th {
-      background-color: #3498db;
-      color: white;
-    }
-    tr:nth-child(even) {
-      background-color: #f2f2f2;
-    }
-    .round {
-      margin-bottom: 30px;
-      border: 1px solid #ddd;
-      padding: 15px;
-      border-radius: 5px;
-      background-color: white;
-    }
-    .round h3 {
-      margin-top: 0;
-      color: #3498db;
-    }
-    .action {
-      font-weight: bold;
-      margin: 10px 0;
-      padding: 8px;
-      background-color: #f8f9fa;
-      border-left: 4px solid #3498db;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parliament of Kazjistan Ballot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .ballot {
+            background-color: white;
+            border: 2px solid #000;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .ballot-container {
+            display: flex;
+            gap: 20px;
+        }
+        .party-group {
+            border: 2px solid #000;
+            padding: 15px;
+            flex: 1;
+        }
+        .party-name {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 18px;
+            text-align: center;
+            background-color: #f0f0f0;
+            padding: 5px;
+        }
+        .candidate {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .candidate input {
+            width: 40px;
+            height: 30px;
+            margin-right: 10px;
+            text-align: center;
+            font-size: 16px;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        button {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0055aa;
+        }
+        .instructions {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+            text-align: center;
+        }
+        .username-input {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .username-input input {
+            padding: 8px;
+            font-size: 16px;
+            width: 200px;
+        }
+        @media (max-width: 768px) {
+            .ballot-container {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Parliament of Kazjistan Election Results</h1>
-  
-  <div class="results-container">
-    <h2>Final Results</h2>
-    <p>Total ballots cast: <span id="total-ballots"></span></p>
-    <p>Droop quota: <span id="quota"></span></p>
-    
-    <h3>Elected Candidates:</h3>
-    <ul id="elected-list"></ul>
-    
-    <h3>Final Vote Counts:</h3>
-    <table id="final-counts">
-      <thead>
-        <tr>
-          <th>Candidate</th>
-          <th>Votes</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-  
-  <div class="results-container">
-    <h2>Counting Rounds</h2>
-    <div id="rounds-container"></div>
-  </div>
-  
-  <script>
+    <div class="ballot">
+        <h2 style="text-align: center;">Parliament of Kazjistan Ballot</h2>
+        <p class="instructions">Number ALL boxes in order of preference (1 to 13).</p>
+        
+        <div class="ballot-container">
+            <!-- Group 1: Renew Kazjistan — Restore Democracy -->
+            <div class="party-group">
+                <div class="party-name">RENEW KAZJISTAN — RESTORE DEMOCRACY</div>
+                <div class="candidate">
+                    <input type="number" min="1" max="13" class="preference" placeholder="-" data-candidate="Seat">
+                    <span>Seat</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="13" class="preference" placeholder="-" data-candidate="Cryzed">
+                    <span>Cryzed</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="13" class="preference" placeholder="-" data-candidate="Igor Witback">
+                    <span>Igor Witback</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="13" class="preference" placeholder="-" data-candidate="Axell Nevylym">
+                    <span>Axell Nevylym</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="13" class="preference" placeholder="-" data-candidate="Emacia">
+                    <span>Emacia</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="13" class="preference" placeholder="-" data-candidate="Fixie">
+                    <span>Fixie</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="13" class="preference" placeholder="-" data-candidate="Timus Maximus">
+                    <span>Timus Maximus</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="13" class="preference" placeholder="-" data-candidate="Aeropitz">
+                    <span>Aeropitz</span>
+                </div>
+            </div>
+            
+            <!-- Group 2: Independents -->
+            <div class="party-group">
+                <div class="party-name">INDEPENDENTS</div>
+                <div class="candidate">
+                    <input type="number" min="1" max="13" class="preference" placeholder="-" data-candidate="Bigurethra">
+                    <span>Bigurethra</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="13" class="preference" placeholder="-" data-candidate="Clover">
+                    <span>Clover</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="13" class="preference" placeholder="-" data-candidate="Adam">
+                    <span>Adam</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="13" class="preference" placeholder="-" data-candidate="Joe Sane">
+                    <span>Joe Sane</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="13" class="preference" placeholder="-" data-candidate="CSGPlayz">
+                    <span>CSGPlayz</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Username Input -->
+        <div class="username-input">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required placeholder="Enter your username">
+        </div>
+        
+        <div class="error" id="error-message"></div>
+        <button id="submit-ballot">Submit Ballot</button>
+    </div>
+
+ <script>
     document.addEventListener('DOMContentLoaded', function() {
-      google.script.run.withSuccessHandler(displayResults).getElectionResults();
+        // DOM elements
+        const errorMsg = document.getElementById('error-message');
+        const submitBtn = document.getElementById('submit-ballot');
+        const usernameInput = document.getElementById('username');
+        
+        // Candidate data (GROUPED by party for randomization)
+        const candidateGroups = [
+            {
+                name: "RENEW KAZJISTAN — RESTORE DEMOCRACY",
+                candidates: [
+                    "Seat", "Cryzed", "Igor Witback", "Axell Nevylym", 
+                    "Emacia", "Fixie", "Timus Maximus", "Aeropitz" 
+                ]
+            },
+            {
+                name: "INDEPENDENTS",
+                candidates: [
+                    "Bigurethra", "Clover", "Adam", "Joe Sane", "CSGPlayz"
+                ]
+            }
+        ];
+        const totalCandidates = 13; // 8 + 5 candidates
+
+        // ===== RANDOMIZATION FUNCTIONS =====
+        function initializeBallot() {
+            const ballotContainer = document.querySelector('.ballot-container');
+            ballotContainer.innerHTML = '';
+            
+            candidateGroups.forEach(group => {
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'party-group';
+                
+                const partyName = document.createElement('div');
+                partyName.className = 'party-name';
+                partyName.textContent = group.name;
+                groupDiv.appendChild(partyName);
+                
+                // Shuffle candidates within each group
+                const shuffledCandidates = shuffleArray([...group.candidates]);
+                
+                shuffledCandidates.forEach(candidate => {
+                    const candidateDiv = document.createElement('div');
+                    candidateDiv.className = 'candidate';
+                    
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.min = '1';
+                    input.max = totalCandidates.toString();
+                    input.className = 'preference';
+                    input.placeholder = '-';
+                    input.dataset.candidate = candidate;
+                    
+                    const span = document.createElement('span');
+                    span.textContent = candidate;
+                    
+                    candidateDiv.appendChild(input);
+                    candidateDiv.appendChild(span);
+                    groupDiv.appendChild(candidateDiv);
+                });
+                
+                ballotContainer.appendChild(groupDiv);
+            });
+        }
+
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // ===== VALIDATION FUNCTIONS =====
+        function validateInput(input) {
+            const value = parseInt(input.value);
+            if (isNaN(value)) return '';
+            
+            const inputs = document.querySelectorAll('.preference');
+            
+            if (value > totalCandidates) return `Error: Maximum preference is ${totalCandidates}.`;
+            
+            let duplicates = 0;
+            inputs.forEach(otherInput => {
+                if (otherInput !== input && otherInput.value === input.value) {
+                    duplicates++;
+                }
+            });
+            
+            if (duplicates > 0) return `Error: Number ${input.value} is used more than once.`;
+            return '';
+        }
+
+        function validateBallot() {
+            const inputs = Array.from(document.querySelectorAll('.preference'));
+            
+            if (!usernameInput.value.trim()) return "Error: Please enter your username.";
+            
+            const emptyInputs = inputs.filter(input => input.value === "");
+            if (emptyInputs.length > 0) return `Error: You must number ALL candidates (1 to ${totalCandidates}).`;
+            
+            const numbers = inputs.map(input => parseInt(input.value)).filter(n => !isNaN(n));
+            if (new Set(numbers).size !== totalCandidates) return "Error: Duplicate numbers detected.";
+            
+            const invalidNumbers = numbers.filter(n => n < 1 || n > totalCandidates);
+            if (invalidNumbers.length > 0) return `Error: Preferences must be between 1 and ${totalCandidates}.`;
+            
+            return '';
+        }
+
+        // ===== GOOGLE SHEETS SUBMISSION =====
+        function submitToGoogleSheet(username, votes) {
+            const googleScriptUrl = "https://script.google.com/macros/s/AKfycbwZ3T_6mT2sEG7FFbmGUcgkIJSEtLgSxSJxMyMrb1O-s4gb1xv0vozcTHkn8pr99yOd/exec";
+            
+            // Show loading state
+            errorMsg.textContent = "Submitting...";
+            errorMsg.style.color = "blue";
+            submitBtn.disabled = true;
+            
+            fetch(googleScriptUrl, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    username: username.trim(),
+                    votes: votes.map(vote => ({
+                        candidate: vote.candidate,
+                        preference: parseInt(vote.preference) || 0
+                    }))
+                })
+            })
+            .then(() => {
+                errorMsg.textContent = "Ballot submitted successfully!";
+                errorMsg.style.color = "green";
+                setTimeout(() => window.location.reload(), 2000);
+            })
+            .catch((error) => {
+                errorMsg.textContent = "Error submitting ballot. Please try again.";
+                errorMsg.style.color = "red";
+                submitBtn.disabled = false;
+                console.error("Error:", error);
+            });
+        }
+
+        // ===== EVENT LISTENERS =====
+        document.querySelectorAll('.preference').forEach(input => {
+            input.addEventListener('input', function() {
+                errorMsg.textContent = validateInput(this);
+            });
+        });
+        
+        submitBtn.addEventListener('click', function() {
+            const validationError = validateBallot();
+            if (validationError) {
+                errorMsg.textContent = validationError;
+                errorMsg.style.color = "red";
+                return;
+            }
+            
+            const votes = Array.from(document.querySelectorAll('.preference'))
+                .map(input => ({
+                    candidate: input.dataset.candidate,
+                    preference: input.value
+                }));
+            
+            submitToGoogleSheet(usernameInput.value.trim(), votes);
+        });
+
+        // Initialize the randomized ballot
+        initializeBallot();
     });
-    
-    function displayResults(results) {
-      // Display basic info
-      document.getElementById('total-ballots').textContent = results.totalBallots;
-      document.getElementById('quota').textContent = results.quota;
-      
-      // Display elected candidates
-      const electedList = document.getElementById('elected-list');
-      results.elected.forEach(candidate => {
-        const li = document.createElement('li');
-        li.textContent = candidate;
-        li.className = 'elected';
-        electedList.appendChild(li);
-      });
-      
-      // Display final counts
-      const finalCountsBody = document.querySelector('#final-counts tbody');
-      for (const [candidate, data] of Object.entries(results.finalCounts)) {
-        const row = document.createElement('tr');
-        
-        const nameCell = document.createElement('td');
-        nameCell.textContent = candidate;
-        row.appendChild(nameCell);
-        
-        const votesCell = document.createElement('td');
-        votesCell.textContent = data.votes;
-        row.appendChild(votesCell);
-        
-        const statusCell = document.createElement('td');
-        statusCell.textContent = data.status;
-        if (data.status === 'elected') {
-          statusCell.className = 'elected';
-        } else if (data.status === 'eliminated') {
-          statusCell.className = 'eliminated';
-        }
-        row.appendChild(statusCell);
-        
-        finalCountsBody.appendChild(row);
-      }
-      
-      // Display counting rounds
-      const roundsContainer = document.getElementById('rounds-container');
-      results.rounds.forEach(round => {
-        const roundDiv = document.createElement('div');
-        roundDiv.className = 'round';
-        
-        const heading = document.createElement('h3');
-        heading.textContent = `Round ${round.number}`;
-        roundDiv.appendChild(heading);
-        
-        const actionDiv = document.createElement('div');
-        actionDiv.className = 'action';
-        actionDiv.textContent = round.action;
-        roundDiv.appendChild(actionDiv);
-        
-        const table = document.createElement('table');
-        const thead = document.createElement('thead');
-        const headerRow = document.createElement('tr');
-        
-        const th1 = document.createElement('th');
-        th1.textContent = 'Candidate';
-        headerRow.appendChild(th1);
-        
-        const th2 = document.createElement('th');
-        th2.textContent = 'Votes';
-        headerRow.appendChild(th2);
-        
-        thead.appendChild(headerRow);
-        table.appendChild(thead);
-        
-        const tbody = document.createElement('tbody');
-        for (const [candidate, votes] of Object.entries(round.totals)) {
-          const row = document.createElement('tr');
-          
-          const nameCell = document.createElement('td');
-          nameCell.textContent = candidate;
-          row.appendChild(nameCell);
-          
-          const votesCell = document.createElement('td');
-          votesCell.textContent = votes;
-          row.appendChild(votesCell);
-          
-          tbody.appendChild(row);
-        }
-        table.appendChild(tbody);
-        roundDiv.appendChild(table);
-        
-        roundsContainer.appendChild(roundDiv);
-      });
-    }
-  </script>
+</script>
 </body>
 </html>
