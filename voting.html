@@ -167,7 +167,7 @@
         <button id="submit-ballot">Submit Ballot</button>
     </div>
 
-  <script>
+ <script>
     document.addEventListener('DOMContentLoaded', function() {
         // DOM elements
         const errorMsg = document.getElementById('error-message');
@@ -180,7 +180,7 @@
                 name: "RENEW KAZJISTAN — RESTORE DEMOCRACY",
                 candidates: [
                     "Seat", "Cryzed", "Igor Witback", "Axell Nevylym", 
-                    "Emacia", "Fixie", "Timus Maximus", "aeropitz"
+                    "Emacia", "Fixie", "Timus Maximus", "Aeropitz" // Fixed case to match HTML
                 ]
             },
             {
@@ -195,7 +195,7 @@
         // ===== RANDOMIZATION FUNCTIONS =====
         function initializeBallot() {
             const ballotContainer = document.querySelector('.ballot-container');
-            ballotContainer.innerHTML = ''; // Clear existing content
+            ballotContainer.innerHTML = '';
             
             candidateGroups.forEach(group => {
                 const groupDiv = document.createElement('div');
@@ -209,7 +209,6 @@
                 // Shuffle candidates within each group
                 const shuffledCandidates = shuffleArray([...group.candidates]);
                 
-                // Add shuffled candidates to the ballot
                 shuffledCandidates.forEach(candidate => {
                     const candidateDiv = document.createElement('div');
                     candidateDiv.className = 'candidate';
@@ -246,6 +245,8 @@
         // ===== VALIDATION FUNCTIONS =====
         function validateInput(input) {
             const value = parseInt(input.value);
+            if (isNaN(value)) return '';
+            
             const inputs = document.querySelectorAll('.preference');
             
             if (value > totalCandidates) return `Error: Maximum preference is ${totalCandidates}.`;
@@ -269,7 +270,7 @@
             const emptyInputs = inputs.filter(input => input.value === "");
             if (emptyInputs.length > 0) return `Error: You must number ALL candidates (1 to ${totalCandidates}).`;
             
-            const numbers = inputs.map(input => parseInt(input.value));
+            const numbers = inputs.map(input => parseInt(input.value)).filter(n => !isNaN(n));
             if (new Set(numbers).size !== totalCandidates) return "Error: Duplicate numbers detected.";
             
             const invalidNumbers = numbers.filter(n => n < 1 || n > totalCandidates);
@@ -280,28 +281,41 @@
 
         // ===== GOOGLE SHEETS SUBMISSION =====
         function submitToGoogleSheet(username, votes) {
-            const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzepZQxovWeWopwiD47jRWs7TlWZ6AMyLtkMRNA8OVTFnE32Fg99Ayj7wQTgAZyWJxR/exec";
+            const googleScriptUrl = "YOUR_ACTUAL_SCRIPT_URL_HERE"; // Replace with your URL
+            
+            // Show loading state
+            errorMsg.textContent = "Submitting...";
+            errorMsg.style.color = "blue";
+            submitBtn.disabled = true;
             
             fetch(googleScriptUrl, {
                 method: "POST",
                 mode: "no-cors",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, votes })
+                body: JSON.stringify({ 
+                    username: username.trim(),
+                    votes: votes.map(vote => ({
+                        candidate: vote.candidate,
+                        preference: parseInt(vote.preference) || 0
+                    }))
+                })
             })
             .then(() => {
                 errorMsg.textContent = "Ballot submitted successfully!";
                 errorMsg.style.color = "green";
-                setTimeout(() => window.location.reload(), 2000); // Refresh after 2 sec
+                setTimeout(() => window.location.reload(), 2000);
             })
             .catch((error) => {
                 errorMsg.textContent = "Error submitting ballot. Please try again.";
+                errorMsg.style.color = "red";
+                submitBtn.disabled = false;
                 console.error("Error:", error);
             });
         }
 
         // ===== EVENT LISTENERS =====
         document.querySelectorAll('.preference').forEach(input => {
-            input.addEventListener('change', function() {
+            input.addEventListener('input', function() {
                 errorMsg.textContent = validateInput(this);
             });
         });
@@ -310,10 +324,10 @@
             const validationError = validateBallot();
             if (validationError) {
                 errorMsg.textContent = validationError;
+                errorMsg.style.color = "red";
                 return;
             }
             
-            // Collect votes from randomized ballot
             const votes = Array.from(document.querySelectorAll('.preference'))
                 .map(input => ({
                     candidate: input.dataset.candidate,
