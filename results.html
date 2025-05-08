@@ -1,75 +1,119 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Election Results</title>
+  <title>Live Election Results</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-    h1 { color: #1a73e8; }
-    .round { margin-bottom: 30px; border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
-    .candidate { display: flex; margin: 5px 0; padding: 8px; }
-    .candidate-name { flex: 2; }
-    .candidate-votes { flex: 1; text-align: right; }
-    .elected { background-color: #e6f4ea; border-left: 4px solid #34a853; }
-    .eliminated { background-color: #fce8e6; border-left: 4px solid #ea4335; }
-    .round-title { font-weight: bold; margin-bottom: 10px; }
-    .round-action { font-style: italic; margin-top: 10px; color: #5f6368; }
-    .final-results { background-color: #f8f9fa; padding: 15px; margin-top: 20px; }
+    body { 
+      font-family: 'Arial', sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      background: #1a73e8;
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .candidate {
+      display: flex;
+      margin: 8px 0;
+      padding: 12px;
+      border-radius: 4px;
+      background: #f1f3f4;
+    }
+    .candidate.elected {
+      background: #e6f4ea;
+      border-left: 4px solid #34a853;
+    }
+    .name { flex: 2; font-weight: bold; }
+    .votes { flex: 1; text-align: right; }
+    .status { flex: 1; text-align: center; }
+    .progress-container {
+      height: 20px;
+      background: #f1f3f4;
+      border-radius: 10px;
+      margin-top: 5px;
+    }
+    .progress-bar {
+      height: 100%;
+      border-radius: 10px;
+      background: #1a73e8;
+    }
+    .last-updated {
+      font-style: italic;
+      color: #5f6368;
+      text-align: right;
+    }
   </style>
 </head>
 <body>
-  <h1>Kazjistan Parliamentary Election Results</h1>
-  <div id="loading">Calculating results...</div>
-  <div id="results" style="display: none;">
-    <div class="summary">
-      <p>Seats to fill: <span id="seats"></span></p>
-      <p>Droop Quota: <span id="quota"></span> votes</p>
-    </div>
-    
-    <div id="rounds"></div>
-    
-    <div class="final-results">
-      <h2>Elected Candidates</h2>
-      <ul id="elected"></ul>
-    </div>
+  <div class="header">
+    <h1>Kazjistan Parliamentary Election</h1>
+    <div>Live STV Results</div>
   </div>
-  
+
+  <div class="summary">
+    <h2>Current Status</h2>
+    <p>Total ballots cast: <span id="totalBallots">0</span></p>
+    <p>Quota needed for election: <span id="quota">0</span> votes</p>
+  </div>
+
+  <div id="results"></div>
+
+  <div class="last-updated">
+    Last updated: <span id="lastUpdated">Never</span>
+    <br>
+    <small>Auto-refreshing every 30 seconds</small>
+  </div>
+
   <script>
     function displayResults(data) {
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('results').style.display = 'block';
-      
-      // Set basic info
-      document.getElementById('seats').textContent = data.seats;
+      // Update summary
+      document.getElementById('totalBallots').textContent = data.totalBallots;
       document.getElementById('quota').textContent = data.quota;
-      
-      // Show elected candidates
-      const electedList = document.getElementById('elected');
-      electedList.innerHTML = data.elected.map(c => `<li>${c}</li>`).join('');
-      
-      // Display each round
-      const roundsContainer = document.getElementById('rounds');
-      roundsContainer.innerHTML = data.rounds.map(round => `
-        <div class="round">
-          <div class="round-title">Round ${round.number}</div>
-          ${round.counts.map(c => `
-            <div class="candidate ${c.status}">
-              <span class="candidate-name">${c.candidate}</span>
-              <span class="candidate-votes">${c.votes} votes</span>
-            </div>
-          `).join('')}
-          <div class="round-action">${round.action}</div>
-        </div>
-      `).join('');
+      document.getElementById('lastUpdated').textContent = data.lastUpdated;
+
+      // Sort candidates by votes (descending)
+      const sortedCandidates = data.candidates.sort((a, b) => b.votes - a.votes);
+      const maxVotes = sortedCandidates[0]?.votes || 1;
+
+      // Build results HTML
+      let html = '<h2>Candidates</h2>';
+      sortedCandidates.forEach(candidate => {
+        const percent = (candidate.votes / maxVotes) * 100;
+        html += `
+          <div class="candidate ${candidate.status}">
+            <div class="name">${candidate.name}</div>
+            <div class="votes">${candidate.votes} votes</div>
+            <div class="status">${candidate.status.toUpperCase()}</div>
+          </div>
+          <div class="progress-container">
+            <div class="progress-bar" style="width: ${percent}%"></div>
+          </div>
+        `;
+      });
+
+      document.getElementById('results').innerHTML = html;
     }
+
+    function refreshResults() {
+      google.script.run
+        .withSuccessHandler(displayResults)
+        .withFailureHandler(error => {
+          console.error("Error:", error);
+          document.getElementById('lastUpdated').textContent = 
+            "Error loading results - trying again...";
+        })
+        .getLiveResults();
+    }
+
+    // Initial load
+    refreshResults();
     
-    // Load results when page opens
-    google.script.run
-      .withSuccessHandler(displayResults)
-      .withFailureHandler(error => {
-        document.getElementById('loading').textContent = 'Error loading results: ' + error.message;
-        console.error(error);
-      })
-      .getResultsForDisplay();
+    // Auto-refresh every 30 seconds
+    setInterval(refreshResults, 30000);
   </script>
 </body>
 </html>
