@@ -3,37 +3,73 @@
 <head>
   <title>Election Results</title>
   <style>
-    /* Add your styling here */
-    .elected { background-color: #ddffdd; }
-    .eliminated { background-color: #ffdddd; }
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+    h1 { color: #1a73e8; }
+    .round { margin-bottom: 30px; border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
+    .candidate { display: flex; margin: 5px 0; padding: 8px; }
+    .candidate-name { flex: 2; }
+    .candidate-votes { flex: 1; text-align: right; }
+    .elected { background-color: #e6f4ea; border-left: 4px solid #34a853; }
+    .eliminated { background-color: #fce8e6; border-left: 4px solid #ea4335; }
+    .round-title { font-weight: bold; margin-bottom: 10px; }
+    .round-action { font-style: italic; margin-top: 10px; color: #5f6368; }
+    .final-results { background-color: #f8f9fa; padding: 15px; margin-top: 20px; }
   </style>
 </head>
 <body>
-  <h1>STV Election Results</h1>
-  <div id="results"></div>
-  <button id="calculate">Calculate Results</button>
+  <h1>Kazjistan Parliamentary Election Results</h1>
+  <div id="loading">Calculating results...</div>
+  <div id="results" style="display: none;">
+    <div class="summary">
+      <p>Seats to fill: <span id="seats"></span></p>
+      <p>Droop Quota: <span id="quota"></span> votes</p>
+    </div>
+    
+    <div id="rounds"></div>
+    
+    <div class="final-results">
+      <h2>Elected Candidates</h2>
+      <ul id="elected"></ul>
+    </div>
+  </div>
   
   <script>
     function displayResults(data) {
-      const container = document.getElementById('results');
-      container.innerHTML = `
-        <h2>Quota: ${data.quota}</h2>
-        <h3>Elected Candidates:</h3>
-        <ul>
-          ${data.elected.map(c => `<li>${c.candidate} (${c.votes} votes)</li>`).join('')}
-        </ul>
-      `;
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('results').style.display = 'block';
+      
+      // Set basic info
+      document.getElementById('seats').textContent = data.seats;
+      document.getElementById('quota').textContent = data.quota;
+      
+      // Show elected candidates
+      const electedList = document.getElementById('elected');
+      electedList.innerHTML = data.elected.map(c => `<li>${c}</li>`).join('');
+      
+      // Display each round
+      const roundsContainer = document.getElementById('rounds');
+      roundsContainer.innerHTML = data.rounds.map(round => `
+        <div class="round">
+          <div class="round-title">Round ${round.number}</div>
+          ${round.counts.map(c => `
+            <div class="candidate ${c.status}">
+              <span class="candidate-name">${c.candidate}</span>
+              <span class="candidate-votes">${c.votes} votes</span>
+            </div>
+          `).join('')}
+          <div class="round-action">${round.action}</div>
+        </div>
+      `).join('');
     }
     
-    document.getElementById('calculate').addEventListener('click', () => {
-      google.script.run
-        .withSuccessHandler(displayResults)
-        .withFailureHandler(error => {
-          console.error(error);
-          alert('Error calculating results');
-        })
-        .fullSTVCalculation();
-    });
+    // Load results when page opens
+    google.script.run
+      .withSuccessHandler(displayResults)
+      .withFailureHandler(error => {
+        document.getElementById('loading').textContent = 'Error loading results: ' + error.message;
+        console.error(error);
+      })
+      .getResultsForDisplay();
   </script>
 </body>
 </html>
