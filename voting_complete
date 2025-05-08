@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You for Voting</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .thank-you-container {
+            background-color: white;
+            border: 2px solid #000;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h2 {
+            color: #0066cc;
+        }
+        p {
+            font-size: 16px;
+            color: #333;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .instructions {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="thank-you-container">
+        <h2>Thank You for Voting!</h2>
+        <p>Your vote has been successfully submitted.</p>
+        <p>If you'd like to verify your vote, please <a href="https://discord.com/channels/1235929759184064602/1369965402167316570">verify your vote</a>.</p>
+
+        <div class="instructions">
+            <p>Please contact Emacia if you have any issues or questions.</p>
+            <p></p>
+        </div>
+    </div>
+</body>
+</html>
