@@ -51,7 +51,7 @@
     async function fetchResults() {
       try {
         // Fetch the data from the Google Apps Script web app
-        const response = await fetch('https://script.google.com/macros/s/AKfycbwZ3T_6mT2sEG7FFbmGUcgkIJSEtLgSxSJxMyMrb1O-s4gb1xv0vozcTHkn8pr99yOd/exec'); // Replace with your Google Apps Script URL
+        const response = await fetch('https://script.google.com/macros/s/AKfycbxHufpdrVb9DfuUj-hQGUIkjqWCEKNAt7kChJHapugXN9llLawUmweNLNNMizzNsPVh/exec'); // Replace with your Google Apps Script URL
         const data = await response.json();
         displayResults(data);
       } catch (error) {
