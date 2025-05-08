@@ -174,7 +174,6 @@
             const errorMsg = document.getElementById('error-message');
             const submitBtn = document.getElementById('submit-ballot');
             const usernameInput = document.getElementById('username');
-           const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgoqkPg4nOPukxbZBT_Wsn7nz-4f6cq_WTUFQLdG638aoWKnaw5QWtRJA9t0BMLJfN/exec"; // 🔹 ADD THIS
             
             // Candidate data
             const candidateGroups = [
@@ -302,43 +301,22 @@
                     });
                 });
                 
-                submitBtn.addEventListener('click', async function() {
-    // Keep validation (unchanged)
+                submitBtn.addEventListener('click', function() {
     const validationError = validateBallot();
     if (validationError) {
         errorMsg.textContent = validationError;
         return;
     }
-
-    // Prepare data (added party info)
-    const username = usernameInput.value.trim();
+    
+    errorMsg.textContent = "Ballot submitted successfully!";
+    errorMsg.style.color = "green";
+    
     const votes = Array.from(document.querySelectorAll('.preference'))
         .map(input => ({
             candidate: input.dataset.candidate,
-            preference: input.value,
-            party: getPartyForCandidate(input.dataset.candidate) // 🔹 NEW
+            preference: input.value
         }))
         .sort((a, b) => a.preference - b.preference);
-
-    // 🔹 NEW: Send to Google Sheets
-    try {
-        errorMsg.textContent = "Submitting...";
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({ username, votes }),
-            headers: { 'Content-Type': 'application/json' }
-        });
-        
-        if (response.ok) {
-            errorMsg.textContent = "✅ Submitted to Google Sheets!";
-            errorMsg.style.color = "green";
-        } else {
-            errorMsg.textContent = "❌ Failed to submit. Try again.";
-        }
-    } catch (error) {
-        errorMsg.textContent = "⚠️ Error: " + error.message;
-    }
-});
     
     console.log("Voter:", usernameInput.value.trim());
     console.log("Votes:", votes);
@@ -380,15 +358,6 @@ function exportToCSV(username, votes) {
             // Initialize the ballot
             initializeBallot();
             setupEventListeners();
-            // Helper: Returns party for a candidate
-    function getPartyForCandidate(candidate) {
-        const renewKazjistan = ["Seat", "Cryzed", "Igor Witback", "Axell Nevylym", 
-                              "Emacia", "Fixie", "Timus Maximus", "aeropitz"];
-        return renewKazjistan.includes(candidate) 
-            ? "RENEW KAZJISTAN — RESTORE DEMOCRACY" 
-            : "INDEPENDENTS";
-    }
-}); // <- THIS IS THE ORIGINAL CLOSING BRACE (DON'T TOUCH IT)
         });
     </script>
 </body>
