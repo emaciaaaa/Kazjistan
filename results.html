@@ -1,46 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Live Results</title>
+  <title>Election Results</title>
   <style>
-    .seat { background-color: #e6f7ff; padding: 10px; margin: 5px; border-radius: 5px }
-    .eliminated { opacity: 0.5 }
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+    h1 { color: #0066cc; }
+    .result { display: flex; margin: 10px 0; padding: 10px; background: #f5f5f5; }
+    .candidate { flex: 2; font-weight: bold; }
+    .votes { flex: 1; text-align: right; }
+    .elected { background: #d4edda; border-left: 4px solid #28a745; }
+    .quota { margin-top: 20px; padding: 10px; background: #e2e3e5; }
   </style>
 </head>
 <body>
-  <h1>STV Results (9 Seats)</h1>
+  <h1>Parliamentary Election Results</h1>
   <div id="results"></div>
+  <div id="quota" class="quota"></div>
+  <button id="refresh">Refresh Results</button>
   
   <script>
-    const RESULTS_URL = "YOUR_SCRIPT_URL?action=getResults";
-    
-    async function loadResults() {
-      try {
-        const response = await fetch(RESULTS_URL);
-        const data = await response.json();
-        
-        let html = `
-          <h3>Quota: ${data.quota} votes</h3>
-          <h3>Rounds:</h3>
+    function displayResults(results, quota) {
+      const container = document.getElementById('results');
+      container.innerHTML = '';
+      
+      results.forEach(result => {
+        const div = document.createElement('div');
+        div.className = `result ${result.elected ? 'elected' : ''}`;
+        div.innerHTML = `
+          <div class="candidate">${result.candidate}</div>
+          <div class="votes">${result.votes} votes</div>
+          ${result.elected ? '<div class="status">✓ ELECTED</div>' : ''}
         `;
-        
-        data.rounds.forEach(round => {
-          html += `<div class="round">
-            <h4>Round ${round.number}</h4>
-            ${round.elected.map(c => `<div class="seat">✅ Elected: ${c}</div>`).join('')}
-            ${round.eliminated.map(c => `<div class="eliminated">❌ Eliminated: ${c}</div>`).join('')}
-          </div>`;
-        });
-        
-        document.getElementById("results").innerHTML = html;
-      } catch (error) {
-        console.error("Error loading results:", error);
-      }
+        container.appendChild(div);
+      });
+      
+      document.getElementById('quota').textContent = `Quota for election: ${quota} votes`;
     }
     
-    // Refresh every 30 seconds
-    loadResults();
-    setInterval(loadResults, 30000);
+    function loadResults() {
+      google.script.run
+        .withSuccessHandler(data => {
+          const quota = Math.floor(data.totalVotes / (data.results.length + 1)) + 1;
+          displayResults(data.results, quota);
+        })
+        .withFailureHandler(error => {
+          console.error(error);
+          alert('Error loading results');
+        })
+        .getSTVResults();
+    }
+    
+    document.getElementById('refresh').addEventListener('click', loadResults);
+    window.addEventListener('load', loadResults);
   </script>
 </body>
 </html>
