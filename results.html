@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Election Results - STV Count</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result-stage { 
+            background: #f5f5f5; 
+            padding: 15px; 
+            margin-bottom: 20px;
+            border-left: 4px solid #0066cc;
+        }
+        .candidate-eliminated { color: #999; }
+        .candidate-elected { 
+            font-weight: bold; 
+            color: green;
+        }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <h1>Kazjistan Parliamentary Election - STV Results</h1>
+    <div id="results-container"></div>
+    
+    <script src="stv-calculator.js"></script> <!-- New JS file we'll create -->
+</body>
+</html>
