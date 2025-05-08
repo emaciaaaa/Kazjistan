@@ -1,357 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kazjistan Election Results</title>
+  <title>Election Results</title>
   <style>
-    :root {
-      --primary: #2c3e50;
-      --secondary: #3498db;
-      --success: #27ae60;
-      --danger: #e74c3c;
-      --light: #ecf0f1;
-      --dark: #2c3e50;
-    }
-    
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      line-height: 1.6;
-      color: #333;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #f9f9f9;
-    }
-    
-    header {
-      background-color: var(--primary);
-      color: white;
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 30px;
-      text-align: center;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    h1, h2, h3 {
-      margin-top: 0;
-    }
-    
-    .container {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-    
-    @media (min-width: 992px) {
-      .container {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-    
-    .card {
-      background-color: white;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-    }
-    
-    .elected {
-      color: var(--success);
-      font-weight: bold;
-    }
-    
-    .eliminated {
-      color: var(--danger);
-      text-decoration: line-through;
-    }
-    
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 15px 0;
-    }
-    
-    th, td {
-      padding: 12px 15px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-    
-    th {
-      background-color: var(--secondary);
-      color: white;
-      font-weight: bold;
-    }
-    
-    tr:nth-child(even) {
-      background-color: #f2f2f2;
-    }
-    
-    .round {
-      margin-bottom: 25px;
-      border-left: 4px solid var(--secondary);
-      padding: 15px;
-      background-color: white;
-      border-radius: 0 8px 8px 0;
-    }
-    
-    .round-action {
-      font-weight: bold;
-      padding: 10px;
-      background-color: var(--light);
-      border-radius: 4px;
-      margin: 10px 0;
-    }
-    
-    .stats {
-      display: flex;
-      justify-content: space-around;
-      margin: 20px 0;
-      text-align: center;
-    }
-    
-    .stat-box {
-      background-color: white;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      flex: 1;
-      margin: 0 10px;
-    }
-    
-    .stat-value {
-      font-size: 24px;
-      font-weight: bold;
-      color: var(--primary);
-    }
-    
-    .stat-label {
-      font-size: 14px;
-      color: #7f8c8d;
-    }
-    
-    .loading {
-      text-align: center;
-      padding: 40px;
-      font-size: 18px;
-      color: #7f8c8d;
-    }
-    
-    .error {
-      color: var(--danger);
-      background-color: #fadbd8;
-      padding: 15px;
-      border-radius: 4px;
-      margin: 20px 0;
-    }
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+    h1, h2 { color: #2c3e50; }
+    .card { background: #f9f9f9; padding: 20px; margin: 10px 0; border-radius: 5px; }
+    .elected { color: green; font-weight: bold; }
+    .eliminated { color: red; text-decoration: line-through; }
+    table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+    th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }
+    th { background-color: #3498db; color: white; }
+    .round { margin-bottom: 20px; padding: 10px; background: #f0f0f0; }
+    .error { color: red; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Parliament of Kazjistan</h1>
-    <h2>Election Results - STV Count</h2>
-  </header>
-  
-  <div class="container">
-    <div>
-      <div class="card">
-        <h2>Election Summary</h2>
-        <div class="stats" id="election-stats">
-          <!-- Filled by JavaScript -->
-        </div>
-        
-        <h3>Elected Candidates</h3>
-        <div id="elected-candidates">
-          <div class="loading">Loading results...</div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <h2>Final Vote Counts</h2>
-        <table id="final-counts">
-          <thead>
-            <tr>
-              <th>Candidate</th>
-              <th>Votes</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
-    
-    <div>
-      <div class="card">
-        <h2>Counting Rounds</h2>
-        <div id="rounds-container">
-          <div class="loading">Loading counting details...</div>
-        </div>
-      </div>
-    </div>
+  <h1>Election Results</h1>
+  <div id="results">
+    <div class="loading">Loading results...</div>
   </div>
-  
+
   <script>
-    // Configuration
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZ3T_6mT2sEG7FFbmGUcgkIJSEtLgSxSJxMyMrb1O-s4gb1xv0vozcTHkn8pr99yOd/exec';
+    const SCRIPT_URL = 'YOUR_DEPLOYED_SCRIPT_URL';
     
-    // Fetch results when page loads
-    document.addEventListener('DOMContentLoaded', function() {
-      fetchResults();
-    });
-    
-    // Main function to fetch and display results
-    async function fetchResults() {
+    async function loadResults() {
       try {
-        showLoading();
+        const response = await fetch(SCRIPT_URL);
+        const data = await response.json();
         
-        // Fetch results from Google Apps Script
-        const response = await fetch(`${SCRIPT_URL}?action=getResults`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+        if (data.error) {
+          document.getElementById('results').innerHTML = `
+            <div class="error">Error: ${data.error}</div>
+          `;
+          return;
         }
         
-        const results = await response.json();
-        displayResults(results);
+        // Display results
+        let html = `
+          <div class="card">
+            <h2>Summary</h2>
+            <p>Total Ballots: ${data.totalBallots}</p>
+            <p>Quota: ${data.quota}</p>
+            <h3>Elected:</h3>
+            <ul>${data.elected.map(c => `<li class="elected">${c}</li>`).join('')}</ul>
+          </div>
+          
+          <div class="card">
+            <h2>Final Counts</h2>
+            <table>
+              <tr><th>Candidate</th><th>Votes</th><th>Status</th></tr>
+              ${Object.entries(data.finalResults).map(([c, r]) => `
+                <tr>
+                  <td>${c}</td>
+                  <td>${r.votes.toFixed(2)}</td>
+                  <td class="${r.status}">${r.status}</td>
+                </tr>
+              `).join('')}
+            </table>
+          </div>
+          
+          <h2>Counting Rounds</h2>
+          ${data.rounds.map(round => `
+            <div class="round">
+              <h3>Round ${round.number}</h3>
+              <p><strong>Action:</strong> ${round.action}</p>
+              <table>
+                <tr><th>Candidate</th><th>Votes</th></tr>
+                ${Object.entries(round.counts).map(([c, v]) => `
+                  <tr>
+                    <td>${c}</td>
+                    <td>${v.toFixed(2)}</td>
+                  </tr>
+                `).join('')}
+              </table>
+            </div>
+          `).join('')}
+        `;
+        
+        document.getElementById('results').innerHTML = html;
         
       } catch (error) {
-        showError(error);
+        document.getElementById('results').innerHTML = `
+          <div class="error">Failed to load results: ${error.message}</div>
+        `;
       }
     }
     
-    // Display results on page
-    function displayResults(results) {
-      // Display election stats
-      const statsHtml = `
-        <div class="stat-box">
-          <div class="stat-value">${results.totalBallots}</div>
-          <div class="stat-label">Total Ballots</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-value">${results.quota}</div>
-          <div class="stat-label">Droop Quota</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-value">${results.elected.length}</div>
-          <div class="stat-label">Seats Filled</div>
-        </div>
-      `;
-      document.getElementById('election-stats').innerHTML = statsHtml;
-      
-      // Display elected candidates
-      const electedHtml = results.elected.map(candidate => `
-        <div class="elected">✔ ${candidate}</div>
-      `).join('');
-      document.getElementById('elected-candidates').innerHTML = electedHtml || '<div>No candidates elected yet</div>';
-      
-      // Display final counts
-      const finalCountsBody = document.querySelector('#final-counts tbody');
-      finalCountsBody.innerHTML = '';
-      
-      for (const [candidate, data] of Object.entries(results.finalCounts)) {
-        const row = document.createElement('tr');
-        
-        const nameCell = document.createElement('td');
-        nameCell.textContent = candidate;
-        row.appendChild(nameCell);
-        
-        const votesCell = document.createElement('td');
-        votesCell.textContent = data.votes.toFixed(2);
-        row.appendChild(votesCell);
-        
-        const statusCell = document.createElement('td');
-        statusCell.textContent = data.status;
-        if (data.status === 'elected') {
-          statusCell.className = 'elected';
-        } else if (data.status === 'eliminated') {
-          statusCell.className = 'eliminated';
-        }
-        row.appendChild(statusCell);
-        
-        finalCountsBody.appendChild(row);
-      }
-      
-      // Display counting rounds
-      const roundsContainer = document.getElementById('rounds-container');
-      roundsContainer.innerHTML = '';
-      
-      results.rounds.forEach(round => {
-        const roundDiv = document.createElement('div');
-        roundDiv.className = 'round';
-        
-        const heading = document.createElement('h3');
-        heading.textContent = `Round ${round.number}`;
-        roundDiv.appendChild(heading);
-        
-        if (round.action) {
-          const actionDiv = document.createElement('div');
-          actionDiv.className = 'round-action';
-          actionDiv.textContent = round.action;
-          roundDiv.appendChild(actionDiv);
-        }
-        
-        const table = document.createElement('table');
-        const thead = document.createElement('thead');
-        const headerRow = document.createElement('tr');
-        
-        const th1 = document.createElement('th');
-        th1.textContent = 'Candidate';
-        headerRow.appendChild(th1);
-        
-        const th2 = document.createElement('th');
-        th2.textContent = 'Votes';
-        headerRow.appendChild(th2);
-        
-        thead.appendChild(headerRow);
-        table.appendChild(thead);
-        
-        const tbody = document.createElement('tbody');
-        for (const [candidate, votes] of Object.entries(round.totals)) {
-          const row = document.createElement('tr');
-          
-          const nameCell = document.createElement('td');
-          nameCell.textContent = candidate;
-          row.appendChild(nameCell);
-          
-          const votesCell = document.createElement('td');
-          votesCell.textContent = votes.toFixed(2);
-          row.appendChild(votesCell);
-          
-          tbody.appendChild(row);
-        }
-        table.appendChild(tbody);
-        roundDiv.appendChild(table);
-        
-        roundsContainer.appendChild(roundDiv);
-      });
-    }
-    
-    // Show loading state
-    function showLoading() {
-      document.getElementById('elected-candidates').innerHTML = '<div class="loading">Loading results...</div>';
-      document.getElementById('rounds-container').innerHTML = '<div class="loading">Loading counting details...</div>';
-    }
-    
-    // Show error message
-    function showError(error) {
-      const errorHtml = `
-        <div class="error">
-          <strong>Error loading results:</strong> ${error.message}
-          <button onclick="fetchResults()">Try Again</button>
-        </div>
-      `;
-      document.getElementById('elected-candidates').innerHTML = errorHtml;
-      document.getElementById('rounds-container').innerHTML = errorHtml;
-    }
+    // Load results when page loads
+    window.onload = loadResults;
   </script>
 </body>
 </html>
