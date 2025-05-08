@@ -1,74 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Live Results</title>
+  <title>Live Election Results</title>
   <style>
     body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-    .elected { background: #e6f4ea; padding: 10px; border-left: 4px solid #34a853; }
-    .round { margin-bottom: 20px; border: 1px solid #eee; padding: 15px; }
+    .error { color: #d32f2f; background: #ffebee; padding: 15px; }
+    .elected { color: #388e3c; font-weight: bold; }
+    .round { margin-bottom: 25px; border: 1px solid #e0e0e0; padding: 15px; }
     .candidate { display: flex; margin: 5px 0; }
     .candidate-name { flex: 2; }
     .candidate-votes { flex: 1; text-align: right; }
-    .winner { font-weight: bold; color: #0d652d; }
+    .winner { color: #388e3c; font-weight: bold; }
+    .eliminated { color: #d32f2f; text-decoration: line-through; }
   </style>
 </head>
 <body>
-  <h1>Kazjistan Parliamentary Election Results</h1>
-  
-  <div id="summary">
-    <p>Last updated: <span id="timestamp"></span></p>
-    <p>Quota: <span id="quota"></span> votes</p>
+  <h1>Kazjistan Parliamentary Election</h1>
+  <div id="loading">Loading results...</div>
+  <div id="results" style="display: none;">
+    <div id="summary"></div>
+    <div id="elected"></div>
+    <div id="rounds"></div>
   </div>
-  
-  <h2>Elected Candidates</h2>
-  <div id="elected"></div>
-  
-  <h2>Round-by-Round Results</h2>
-  <div id="rounds"></div>
-  
+  <div id="error" class="error" style="display: none;"></div>
+
   <script>
     function displayResults(data) {
-      // Update metadata
-      document.getElementById('timestamp').textContent = data.lastUpdated;
-      document.getElementById('quota').textContent = data.quota;
-      
+      if (!data.success) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').textContent = data.error || "Unknown error occurred";
+        document.getElementById('error').style.display = 'block';
+        return;
+      }
+
+      // Update summary
+      document.getElementById('summary').innerHTML = `
+        <p>Total ballots: ${data.totalBallots}</p>
+        <p>Quota: ${data.quota} votes</p>
+        <p>Last updated: ${data.lastUpdated}</p>
+      `;
+
       // Show elected candidates
-      const electedDiv = document.getElementById('elected');
-      electedDiv.innerHTML = data.elected.map(c => 
-        `<div class="elected">${c}</div>`
-      ).join('');
-      
-      // Show round details
-      const roundsDiv = document.getElementById('rounds');
-      roundsDiv.innerHTML = data.rounds.map(round => `
-        <div class="round">
-          <h3>Round ${round.number}</h3>
-          ${Object.entries(round.counts)
-            .sort((a, b) => b[1] - a[1])
-            .map(([candidate, votes]) => `
-              <div class="candidate ${round.winners.includes(candidate) ? 'winner' : ''}">
-                <span class="candidate-name">${candidate}</span>
-                <span class="candidate-votes">${votes} votes</span>
-              </div>`
-            ).join('')}
-          ${round.winners.length > 0 ? 
-            `<p>Elected: ${round.winners.join(', ')}</p>` : 
-            `<p>Lowest candidate eliminated</p>`}
-        </div>`
-      ).join('');
+      document.getElementById('elected').innerHTML = `
+        <h2>Elected Candidates</h2>
+        <ul>
+          ${data.elected.map(c => `<li class="elected">${c}</li>`).join('')}
+        </ul>
+      `;
+
+      // Show rounds
+      document.getElementById('rounds').innerHTML = `
+        <h2>Counting Rounds</h2>
+        ${data.rounds.map(round => `
+          <div class="round">
+            <h3>Round ${round.number}</h3>
+            ${Object.entries(round.counts)
+              .sort((a, b) => b[1] - a[1])
+              .map(([candidate, votes]) => `
+                <div class="candidate ${
+                  round.elected?.includes(candidate) ? 'winner' : 
+                  round.eliminated === candidate ? 'eliminated' : ''
+                }">
+                  <span class="candidate-name">${candidate}</span>
+                  <span class="candidate-votes">${votes} votes</span>
+                </div>`
+              ).join('')}
+            ${round.elected ? 
+              `<p class="elected">Elected: ${round.elected.join(", ")}</p>` : 
+              `<p class="eliminated">Eliminated: ${round.eliminated}</p>`}
+          </div>`
+        ).join('')}
+      `;
+
+      // Show results
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('results').style.display = 'block';
     }
-    
+
     function loadResults() {
       google.script.run
         .withSuccessHandler(displayResults)
         .withFailureHandler(error => {
-          console.error("Error:", error);
-          document.getElementById('timestamp').textContent = "Error loading results";
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('error').textContent = 
+            "Failed to load results: " + (error.message || JSON.stringify(error));
+          document.getElementById('error').style.display = 'block';
         })
         .getLiveResults();
     }
-    
-    // Load now and refresh every 30 seconds
+
+    // Load immediately and every 30 seconds
     loadResults();
     setInterval(loadResults, 30000);
   </script>
