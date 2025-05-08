@@ -13,6 +13,7 @@
     th { background-color: #3498db; color: white; }
     .round { margin-bottom: 20px; padding: 10px; background: #f0f0f0; }
     .error { color: red; }
+    .loading { color: #666; font-style: italic; }
   </style>
 </head>
 <body>
@@ -22,18 +23,20 @@
   </div>
 
   <script>
-    const SCRIPT_URL = 'YOUR_DEPLOYED_SCRIPT_URL';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZ3T_6mT2sEG7FFbmGUcgkIJSEtLgSxSJxMyMrb1O-s4gb1xv0vozcTHkn8pr99yOd/exec';
     
     async function loadResults() {
       try {
+        document.getElementById('results').innerHTML = '<div class="loading">Loading results...</div>';
+        
         const response = await fetch(SCRIPT_URL);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         
         if (data.error) {
-          document.getElementById('results').innerHTML = `
-            <div class="error">Error: ${data.error}</div>
-          `;
-          return;
+          throw new Error(data.error);
         }
         
         // Display results
@@ -82,8 +85,13 @@
         
       } catch (error) {
         document.getElementById('results').innerHTML = `
-          <div class="error">Failed to load results: ${error.message}</div>
+          <div class="error">
+            <h2>Error</h2>
+            <p>${error.message}</p>
+            <button onclick="loadResults()">Try Again</button>
+          </div>
         `;
+        console.error("Error loading results:", error);
       }
     }
     
