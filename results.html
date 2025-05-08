@@ -1,119 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Live Election Results</title>
+  <title>Live Results</title>
   <style>
-    body { 
-      font-family: 'Arial', sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    .header {
-      background: #1a73e8;
-      color: white;
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
-    .candidate {
-      display: flex;
-      margin: 8px 0;
-      padding: 12px;
-      border-radius: 4px;
-      background: #f1f3f4;
-    }
-    .candidate.elected {
-      background: #e6f4ea;
-      border-left: 4px solid #34a853;
-    }
-    .name { flex: 2; font-weight: bold; }
-    .votes { flex: 1; text-align: right; }
-    .status { flex: 1; text-align: center; }
-    .progress-container {
-      height: 20px;
-      background: #f1f3f4;
-      border-radius: 10px;
-      margin-top: 5px;
-    }
-    .progress-bar {
-      height: 100%;
-      border-radius: 10px;
-      background: #1a73e8;
-    }
-    .last-updated {
-      font-style: italic;
-      color: #5f6368;
-      text-align: right;
-    }
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+    .elected { background: #e6f4ea; padding: 10px; border-left: 4px solid #34a853; }
+    .round { margin-bottom: 20px; border: 1px solid #eee; padding: 15px; }
+    .candidate { display: flex; margin: 5px 0; }
+    .candidate-name { flex: 2; }
+    .candidate-votes { flex: 1; text-align: right; }
+    .winner { font-weight: bold; color: #0d652d; }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>Kazjistan Parliamentary Election</h1>
-    <div>Live STV Results</div>
+  <h1>Kazjistan Parliamentary Election Results</h1>
+  
+  <div id="summary">
+    <p>Last updated: <span id="timestamp"></span></p>
+    <p>Quota: <span id="quota"></span> votes</p>
   </div>
-
-  <div class="summary">
-    <h2>Current Status</h2>
-    <p>Total ballots cast: <span id="totalBallots">0</span></p>
-    <p>Quota needed for election: <span id="quota">0</span> votes</p>
-  </div>
-
-  <div id="results"></div>
-
-  <div class="last-updated">
-    Last updated: <span id="lastUpdated">Never</span>
-    <br>
-    <small>Auto-refreshing every 30 seconds</small>
-  </div>
-
+  
+  <h2>Elected Candidates</h2>
+  <div id="elected"></div>
+  
+  <h2>Round-by-Round Results</h2>
+  <div id="rounds"></div>
+  
   <script>
     function displayResults(data) {
-      // Update summary
-      document.getElementById('totalBallots').textContent = data.totalBallots;
+      // Update metadata
+      document.getElementById('timestamp').textContent = data.lastUpdated;
       document.getElementById('quota').textContent = data.quota;
-      document.getElementById('lastUpdated').textContent = data.lastUpdated;
-
-      // Sort candidates by votes (descending)
-      const sortedCandidates = data.candidates.sort((a, b) => b.votes - a.votes);
-      const maxVotes = sortedCandidates[0]?.votes || 1;
-
-      // Build results HTML
-      let html = '<h2>Candidates</h2>';
-      sortedCandidates.forEach(candidate => {
-        const percent = (candidate.votes / maxVotes) * 100;
-        html += `
-          <div class="candidate ${candidate.status}">
-            <div class="name">${candidate.name}</div>
-            <div class="votes">${candidate.votes} votes</div>
-            <div class="status">${candidate.status.toUpperCase()}</div>
-          </div>
-          <div class="progress-container">
-            <div class="progress-bar" style="width: ${percent}%"></div>
-          </div>
-        `;
-      });
-
-      document.getElementById('results').innerHTML = html;
+      
+      // Show elected candidates
+      const electedDiv = document.getElementById('elected');
+      electedDiv.innerHTML = data.elected.map(c => 
+        `<div class="elected">${c}</div>`
+      ).join('');
+      
+      // Show round details
+      const roundsDiv = document.getElementById('rounds');
+      roundsDiv.innerHTML = data.rounds.map(round => `
+        <div class="round">
+          <h3>Round ${round.number}</h3>
+          ${Object.entries(round.counts)
+            .sort((a, b) => b[1] - a[1])
+            .map(([candidate, votes]) => `
+              <div class="candidate ${round.winners.includes(candidate) ? 'winner' : ''}">
+                <span class="candidate-name">${candidate}</span>
+                <span class="candidate-votes">${votes} votes</span>
+              </div>`
+            ).join('')}
+          ${round.winners.length > 0 ? 
+            `<p>Elected: ${round.winners.join(', ')}</p>` : 
+            `<p>Lowest candidate eliminated</p>`}
+        </div>`
+      ).join('');
     }
-
-    function refreshResults() {
+    
+    function loadResults() {
       google.script.run
         .withSuccessHandler(displayResults)
         .withFailureHandler(error => {
           console.error("Error:", error);
-          document.getElementById('lastUpdated').textContent = 
-            "Error loading results - trying again...";
+          document.getElementById('timestamp').textContent = "Error loading results";
         })
         .getLiveResults();
     }
-
-    // Initial load
-    refreshResults();
     
-    // Auto-refresh every 30 seconds
-    setInterval(refreshResults, 30000);
+    // Load now and refresh every 30 seconds
+    loadResults();
+    setInterval(loadResults, 30000);
   </script>
 </body>
 </html>
