@@ -7,109 +7,94 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-      padding: 20px;
+      margin: 20px;
+      background-color: #f4f4f4;
     }
-    h1 {
+    h1, h3 {
       text-align: center;
-      color: #2c3e50;
     }
-    #results {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    .results-container {
+      margin: 20px;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
-    .result {
-      background-color: #fff;
-      padding: 15px;
-      border-radius: 5px;
-      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    .candidate-list {
+      list-style-type: none;
+      padding: 0;
     }
-    .result h2 {
-      margin: 0;
-      color: #34495e;
-    }
-    .result p {
+    .candidate-list li {
+      background-color: #f0f0f0;
       margin: 5px 0;
-      color: #7f8c8d;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .log-entry {
+      background-color: #e9e9e9;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
     }
   </style>
 </head>
 <body>
+
   <h1>STV Election Results</h1>
-  <div id="results"></div>
+  
+  <div id="results" class="results-container">
+    <!-- Results will be injected here -->
+    <p>Loading results...</p>
+  </div>
 
   <script>
     async function fetchResults() {
       try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbwZ3T_6mT2sEG7FFbmGUcgkIJSEtLgSxSJxMyMrb1O-s4gb1xv0vozcTHkn8pr99yOd/exec');
+        // Fetch the data from the Google Apps Script web app
+        const response = await fetch('https://script.google.com/macros/s/AKfycbwZ3T_6mT2sEG7FFbmGUcgkIJSEtLgSxSJxMyMrb1O-s4gb1xv0vozcTHkn8pr99yOd/exec'); // Replace with your Google Apps Script URL
         const data = await response.json();
         displayResults(data);
       } catch (error) {
         console.error('Error fetching results:', error);
+        document.getElementById('results').innerHTML = '<p>There was an error fetching the results. Please try again later.</p>';
       }
     }
 
     function displayResults(data) {
-      const resultsContainer = document.getElementById('results');
-      resultsContainer.innerHTML = ''; // Clear previous results
-
-      // Displaying general election info
-      const header = document.createElement('div');
-      header.classList.add('result');
-      header.innerHTML = `
-        <h2>Election Results</h2>
-        <p>Total Votes: ${data.totalVotes}</p>
-        <p>Quota: ${data.quota}</p>
-      `;
-      resultsContainer.appendChild(header);
-
-      // Displaying elected candidates
-      const elected = document.createElement('div');
-      elected.classList.add('result');
-      elected.innerHTML = `
-        <h2>Elected Candidates</h2>
-        <ul>
+      const resultsDiv = document.getElementById('results');
+      
+      // Building HTML content
+      resultsDiv.innerHTML = `
+        <h3>Total Votes: ${data.totalVotes}</h3>
+        <h3>Quota: ${data.quota}</h3>
+        
+        <h4>Elected Candidates:</h4>
+        <ul class="candidate-list">
           ${data.elected.map(candidate => `<li>${candidate}</li>`).join('')}
         </ul>
-      `;
-      resultsContainer.appendChild(elected);
-
-      // Displaying eliminated candidates
-      const eliminated = document.createElement('div');
-      eliminated.classList.add('result');
-      eliminated.innerHTML = `
-        <h2>Eliminated Candidates</h2>
-        <ul>
-          ${data.eliminated.size > 0 ? 
-            [...data.eliminated].map(candidate => `<li>${candidate}</li>`).join('') :
-            '<li>No candidates eliminated yet</li>'
-          }
+        
+        <h4>Eliminated Candidates:</h4>
+        <ul class="candidate-list">
+          ${data.eliminated.map(candidate => `<li>${candidate}</li>`).join('')}
         </ul>
+        
+        <h4>Vote Count Log:</h4>
+        ${data.countLog.map(log => `
+          <div class="log-entry">
+            <h5>Round ${log.round}</h5>
+            <ul class="candidate-list">
+              ${Object.entries(log.tally).map(([candidate, votes]) => `
+                <li>${candidate}: ${votes} votes</li>
+              `).join('')}
+            </ul>
+          </div>
+        `).join('')}
       `;
-      resultsContainer.appendChild(eliminated);
-
-      // Displaying round-by-round tallying
-      const rounds = document.createElement('div');
-      rounds.classList.add('result');
-      rounds.innerHTML = '<h2>Round-by-Round Results</h2>';
-      data.countLog.forEach(round => {
-        const roundDiv = document.createElement('div');
-        roundDiv.innerHTML = `
-          <h3>Round ${round.round}</h3>
-          <p>Tally: ${JSON.stringify(round.tally)}</p>
-        `;
-        rounds.appendChild(roundDiv);
-      });
-      resultsContainer.appendChild(rounds);
     }
 
-    // Fetch the results every 5 seconds to update in real time
-    setInterval(fetchResults, 5000);
-
-    // Initial fetch when the page loads
-    fetchResults();
+    // Fetch the results when the page loads
+    window.onload = fetchResults;
   </script>
+
 </body>
 </html>
