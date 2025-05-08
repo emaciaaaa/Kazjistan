@@ -280,38 +280,42 @@
         }
 
         // ===== GOOGLE SHEETS SUBMISSION =====
-        function submitToGoogleSheet(username, votes) {
-            const googleScriptUrl = "https://script.google.com/macros/s/AKfycbxHufpdrVb9DfuUj-hQGUIkjqWCEKNAt7kChJHapugXN9llLawUmweNLNNMizzNsPVh/exec";
-            
-            // Show loading state
-            errorMsg.textContent = "Submitting...";
-            errorMsg.style.color = "blue";
-            submitBtn.disabled = true;
-            
-            fetch(googleScriptUrl, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                    username: username.trim(),
-                    votes: votes.map(vote => ({
-                        candidate: vote.candidate,
-                        preference: parseInt(vote.preference) || 0
-                    }))
-                })
-            })
-            .then(() => {
-                errorMsg.textContent = "Ballot submitted successfully!";
-                errorMsg.style.color = "green";
-                setTimeout(() => window.location.reload(), 2000);
-            })
-            .catch((error) => {
-                errorMsg.textContent = "Error submitting ballot. Please try again.";
-                errorMsg.style.color = "red";
-                submitBtn.disabled = false;
-                console.error("Error:", error);
-            });
-        }
+      function submitToGoogleSheet(username, votes) {
+    const googleScriptUrl = "https://script.google.com/macros/s/AKfycbxHufpdrVb9DfuUj-hQGUIkjqWCEKNAt7kChJHapugXN9llLawUmweNLNNMizzNsPVh/exec";
+    
+    // Show loading state
+    errorMsg.textContent = "Submitting...";
+    errorMsg.style.color = "blue";
+    submitBtn.disabled = true;
+    
+    fetch(googleScriptUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+            username: username.trim(),
+            votes: votes.map(vote => ({
+                candidate: vote.candidate,
+                preference: parseInt(vote.preference) || 0
+            }))
+        })
+    })
+    .then(() => {
+        errorMsg.textContent = "Ballot submitted successfully!";
+        errorMsg.style.color = "green";
+        
+        // Redirect to a new page after 2 seconds
+        setTimeout(() => {
+            window.location.href = "https://www.kazjistan.org/voting_complete"; // Replace with the desired URL
+        }, 2000);
+    })
+    .catch((error) => {
+        errorMsg.textContent = "Error submitting ballot. Please try again.";
+        errorMsg.style.color = "red";
+        submitBtn.disabled = false;
+        console.error("Error:", error);
+    });
+}
 
         // ===== EVENT LISTENERS =====
         document.querySelectorAll('.preference').forEach(input => {
