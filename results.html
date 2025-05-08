@@ -1,102 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Election Results</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Live STV Results</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-    h1, h2 { color: #2c3e50; }
-    .card { background: #f9f9f9; padding: 20px; margin: 10px 0; border-radius: 5px; }
-    .elected { color: green; font-weight: bold; }
-    .eliminated { color: red; text-decoration: line-through; }
-    table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-    th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }
-    th { background-color: #3498db; color: white; }
-    .round { margin-bottom: 20px; padding: 10px; background: #f0f0f0; }
-    .error { color: red; }
-    .loading { color: #666; font-style: italic; }
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: 2em auto;
+      padding: 1em;
+      background: #f9f9f9;
+      color: #333;
+    }
+    h1 { color: #0057b7; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2em;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      text-align: center;
+    }
+    th {
+      background: #eee;
+    }
+    .elected {
+      font-weight: bold;
+      color: green;
+    }
+    .last-updated {
+      font-size: 0.9em;
+      color: #666;
+    }
   </style>
 </head>
 <body>
-  <h1>Election Results</h1>
-  <div id="results">
-    <div class="loading">Loading results...</div>
-  </div>
+  <h1>Live STV Election Results</h1>
+  <p class="last-updated" id="lastUpdated">Loading...</p>
+  <p><strong>Quota:</strong> <span id="quota">-</span></p>
+  <p><strong>Elected Candidates:</strong> <span id="elected">Loading...</span></p>
+
+  <h2>Round-by-Round Tally</h2>
+  <div id="rounds">Loading...</div>
 
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZ3T_6mT2sEG7FFbmGUcgkIJSEtLgSxSJxMyMrb1O-s4gb1xv0vozcTHkn8pr99yOd/exec';
-    
-    async function loadResults() {
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZ3T_6mT2sEG7FFbmGUcgkIJSEtLgSxSJxMyMrb1O-s4gb1xv0vozcTHkn8pr99yOd/exec'; // Replace this
+
+    async function fetchResults() {
       try {
-        document.getElementById('results').innerHTML = '<div class="loading">Loading results...</div>';
-        
         const response = await fetch(SCRIPT_URL);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
         const data = await response.json();
-        
-        if (data.error) {
-          throw new Error(data.error);
-        }
-        
-        // Display results
-        let html = `
-          <div class="card">
-            <h2>Summary</h2>
-            <p>Total Ballots: ${data.totalBallots}</p>
-            <p>Quota: ${data.quota}</p>
-            <h3>Elected:</h3>
-            <ul>${data.elected.map(c => `<li class="elected">${c}</li>`).join('')}</ul>
-          </div>
-          
-          <div class="card">
-            <h2>Final Counts</h2>
-            <table>
-              <tr><th>Candidate</th><th>Votes</th><th>Status</th></tr>
-              ${Object.entries(data.finalResults).map(([c, r]) => `
-                <tr>
-                  <td>${c}</td>
-                  <td>${r.votes.toFixed(2)}</td>
-                  <td class="${r.status}">${r.status}</td>
-                </tr>
-              `).join('')}
-            </table>
-          </div>
-          
-          <h2>Counting Rounds</h2>
-          ${data.rounds.map(round => `
-            <div class="round">
-              <h3>Round ${round.number}</h3>
-              <p><strong>Action:</strong> ${round.action}</p>
-              <table>
-                <tr><th>Candidate</th><th>Votes</th></tr>
-                ${Object.entries(round.counts).map(([c, v]) => `
-                  <tr>
-                    <td>${c}</td>
-                    <td>${v.toFixed(2)}</td>
-                  </tr>
-                `).join('')}
-              </table>
-            </div>
-          `).join('')}
-        `;
-        
-        document.getElementById('results').innerHTML = html;
-        
-      } catch (error) {
-        document.getElementById('results').innerHTML = `
-          <div class="error">
-            <h2>Error</h2>
-            <p>${error.message}</p>
-            <button onclick="loadResults()">Try Again</button>
-          </div>
-        `;
-        console.error("Error loading results:", error);
+
+        document.getElementById('quota').textContent = data.quota;
+        document.getElementById('elected').innerHTML = data.elected.map(name =>
+          `<span class="elected">${name}</span>`
+        ).join(', ');
+
+        const roundsContainer = document.getElementById('rounds');
+        roundsContainer.innerHTML = '';
+
+        const candidateSet = new Set();
+        data.countLog.forEach(r => {
+          Object.keys(r.tally).forEach(c => candidateSet.add(c));
+        });
+        const candidates = Array.from(candidateSet).sort();
+
+        data.countLog.forEach(round => {
+          const table = document.createElement('table');
+          const thead = document.createElement('thead');
+          const headerRow = document.createElement('tr');
+
+          const roundLabel = document.createElement('caption');
+          roundLabel.textContent = `Round ${round.round}`;
+          roundLabel.style.fontWeight = 'bold';
+          table.appendChild(roundLabel);
+
+          candidates.forEach(candidate => {
+            const th = document.createElement('th');
+            th.textContent = candidate;
+            headerRow.appendChild(th);
+          });
+          thead.appendChild(headerRow);
+          table.appendChild(thead);
+
+          const tbody = document.createElement('tbody');
+          const row = document.createElement('tr');
+          candidates.forEach(candidate => {
+            const td = document.createElement('td');
+            td.textContent = round.tally[candidate] ?? '-';
+            row.appendChild(td);
+          });
+          tbody.appendChild(row);
+          table.appendChild(tbody);
+
+          roundsContainer.appendChild(table);
+        });
+
+        const now = new Date().toLocaleTimeString();
+        document.getElementById('lastUpdated').textContent = `Last updated at ${now}`;
+      } catch (err) {
+        document.getElementById('rounds').innerHTML = '<p style="color:red;">Failed to load results.</p>';
+        console.error(err);
       }
     }
-    
-    // Load results when page loads
-    window.onload = loadResults;
+
+    fetchResults();
+    setInterval(fetchResults, 30000); // refresh every 30 seconds
   </script>
 </body>
 </html>
