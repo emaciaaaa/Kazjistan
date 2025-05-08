@@ -320,28 +320,32 @@
 
 // ===== ADD THIS NEW FUNCTION BELOW =====
 function exportToGoogleSheet(username, votes) {
-    // Replace this with your Google Sheets URL
-    const googleSheetUrl = "https://docs.google.com/spreadsheets/d/1d73M-d7tOWWXIK74DlY87OwH3pldMwdHo58JPA6A-IM/edit";
+    // Replace with your Web App URL from Google Apps Script (Part 3)
+    const googleScriptUrl = "https://script.google.com/macros/s/AKfycbxmCuPw1fVEoAyOqcBdo3PcqwWfPyMkg__ow6b9FvIyr0ENnyO-u5GrhHQyy-f8nzoK/exec";
     
     // Prepare the data to send
     const data = {
         username: username,
-        votes: votes,
-        timestamp: new Date().toISOString()
+        votes: votes
     };
     
-    // Show success message
-    errorMsg.textContent = "Ballot submitted to Google Sheet!";
-    errorMsg.style.color = "green";
-    
-    // Log the data (in a real app, this would send to Google Sheets)
-    console.log("Data to send to Google Sheets:", data);
-    
-    // In a real implementation, you would send this data to Google Sheets
-    alert("In a real implementation, this would send the data to Google Sheets.\n\n" +
-          `Google Sheet URL: ${googleSheetUrl}\n` +
-          `Username: ${username}\n` +
-          `Votes: ${JSON.stringify(votes)}`);
+    // Send data to Google Apps Script
+    fetch(googleScriptUrl, {
+        method: "POST",
+        mode: "no-cors", // Required for Google Apps Script
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    })
+    .then(() => {
+        errorMsg.textContent = "Ballot submitted successfully!";
+        errorMsg.style.color = "green";
+    })
+    .catch((error) => {
+        errorMsg.textContent = "Error submitting ballot. Please try again.";
+        console.error("Error:", error);
+    });
 }
 
             }
