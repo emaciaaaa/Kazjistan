@@ -3,103 +3,380 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>People's Republic of Kazjistan</title>
-      <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <title>People's Republic of Kazjistan - Official Government Portal</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #004c4c;
+            --secondary-color: #fba910;
+            --accent-color: #e8f7f7;
+            --text-color: #333;
+            --light-text: #666;
+            --white: #ffffff;
+            --header-height: 80px;
+            --max-width: 1200px;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
             line-height: 1.6;
+            background-color: #f9f9f9;
         }
+        
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
         header {
-            text-align: center;
-            margin-bottom: 30px;
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--secondary-color);
         }
-        h1 {
-            color: #cc0000;
-        }
-        nav {
+        
+        .header-container {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--header-height);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo img {
+            height: 50px;
+        }
+        
+        .logo-text {
+            font-family: 'Noto Serif', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .logo-text span {
+            color: var(--secondary-color);
+            font-weight: 400;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--secondary-color);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #006666 100%);
+            color: var(--white);
+            padding: 60px 0;
+            text-align: center;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            font-weight: 300;
+        }
+        
+        main {
+            padding: 40px 0;
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif', serif;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        
+        .departments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .department-card {
+            background: var(--white);
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            padding: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 3px solid var(--secondary-color);
+        }
+        
+        .department-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+        }
+        
+        .department-card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .department-card p {
+            color: var(--light-text);
+            margin-bottom: 20px;
+        }
+        
+        .department-link {
+            display: inline-block;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .department-link::after {
+            content: '→';
+            margin-left: 5px;
+            transition: margin-left 0.3s;
+        }
+        
+        .department-link:hover::after {
+            margin-left: 10px;
+        }
+        
+        .quick-links {
+            background-color: var(--accent-color);
+            padding: 40px 0;
+            margin: 40px 0;
+            border-top: 3px solid var(--secondary-color);
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        
+        .quick-links-container {
+            display: flex;
+            flex-wrap: wrap;
             gap: 20px;
+            justify-content: center;
+        }
+        
+        .quick-link {
+            background: var(--white);
+            padding: 15px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border: 1px solid var(--secondary-color);
+        }
+        
+        .quick-link:hover {
+            background: var(--secondary-color);
+            color: var(--white);
+        }
+        
+        .announcements {
+            background-color: var(--white);
+            border-left: 4px solid var(--secondary-color);
+            padding: 20px;
             margin-bottom: 30px;
         }
-        a {
-            color: #0066cc;
-            text-decoration: none;
+        
+        .announcements h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
         }
-        a:hover {
-            text-decoration: underline;
-        }
-        .department {
-            margin-bottom: 15px;
-        }
+        
         footer {
-            margin-top: 40px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 20px 0;
             text-align: center;
-            color: #666;
-            font-size: 0.9em;
+            border-top: 3px solid var(--secondary-color);
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                height: auto;
+                padding: 20px 0;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .quick-links-container {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>People's Republic of Kazjistan</h1>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="flag-of-kazjistan.svg" alt="Kazjistan Flag" style="height: 40px;">
+                <div class="logo-text">PEOPLE'S REPUBLIC <span>OF KAZJISTAN</span></div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="https://kazjistan.miraheze.org/wiki/Main_Page">Wiki</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <nav>
-        <a href="#">Home</a>
-        <a href="news.html">News</a>
-        <a href="https://kazjistan.miraheze.org/wiki/Main_Page">Wiki</a>
-    </nav>
+    <section class="hero">
+        <div class="container">
+            <h1>Welcome to the People's Portal</h1>
+            <p>Your direct connection to Kazjistan</p>
+        </div>
+    </section>
 
-    <main>
-        <h2>Government Departments</h2>
-        
-        <div class="department">
-            <strong>Prime Minister</strong><br>
-           
+    <main class="container">
+        <div class="announcements">
+            <h3>Latest Announcement</h3>
+            <p>-</p>
         </div>
         
-        <div class="department">
-            <strong>Deputy Prime Minister</strong><br>
-           
-        </div>
+        <h2 class="section-title">Government Departments</h2>
         
-        <div class="department">
-            <strong>Department of Justice</strong><br>
+        <div class="departments-grid">
+            <div class="department-card">
+                <h3>Department of Data</h3>
+                <p>Maintains server statistics including member count and activity metrics. Tracks participation, conducts censuses, and collects member feedback to inform government decisions.</p>
+                <a href="#" class="department-link">View statistics and reports</a>
+            </div>
             
-        </div>
-        
-        <div class="department">
-            <strong>Department of Moderation</strong><br>
-        </div>
-        
-        <div class="department">
-            <strong>Department of Data</strong><br>
-        </div>
-        
-        <div class="department">
-            <strong>Department of Events</strong><br>
-        </div>
-        
-        <div class="department">
-            <strong>Department of Recruitment and Activity</strong><br>
-        </div>
-        
-        <div class="department">
-            <strong>Department of Information</strong><br>
-        </div>
-        
-        <div class="department">
-            <strong>Department of Community Affairs</strong><br>
+            <div class="department-card">
+                <h3>Department of Justice</h3>
+                <p>Manages all legal affairs and administers justice. Oversees the judiciary from an executive standpoint to ensure fair and consistent application of Kazjistan's laws.</p>
+                <a href="#" class="department-link">Access legal resources</a>
+            </div>
+            
+            <div class="department-card">
+                <h3>Department of Community Affairs</h3>
+                <p>Promotes social cohesion and strengthens Kazji cultural identity through community programs and initiatives that bring citizens together.</p>
+                <a href="#" class="department-link">Explore community programs</a>
+            </div>
+            
+            <div class="department-card">
+                <h3>Department of Information</h3>
+                <p>Publishes official government news, updates, and media. Manages the national Wiki and promotes Kazjistan's public image through official communications.</p>
+                <a href="#" class="department-link">Read official bulletins</a>
+            </div>
+            
+            <div class="department-card">
+                <h3>Department of Recruitment and Activity</h3>
+                <p>Recruits new members into the community and provides orientation services to help them integrate into Kazjistan's society and government structures.</p>
+                <a href="#" class="department-link">Learn about recruitment</a>
+            </div>
+            
+            <div class="department-card">
+                <h3>Department of Moderation</h3>
+                <p>Maintains order and civil discourse throughout Kazjistan by enforcing community standards and moderation policies fairly and consistently.</p>
+                <a href="#" class="department-link">Review community guidelines</a>
+            </div>
+            
+            <div class="department-card">
+                <h3>Department of Events</h3>
+                <p>Plans and promotes community events, discussions, and cultural exchanges to engage citizens and strengthen national unity.</p>
+                <a href="#" class="department-link">View upcoming events</a>
+            </div>
         </div>
     </main>
 
+    <section class="quick-links">
+        <div class="container">
+            <h2 class="section-title" style="text-align: center; border-bottom: none;">Community Resources</h2>
+            <div class="quick-links-container">
+                <a href="#" class="quick-link">Participate in Governance</a>
+                <a href="#" class="quick-link">Offical Election Results</a>
+                <a href="#" class="quick-link">Voting</a>
+                <a href="#" class="quick-link">Petitions</a>
+                <a href="#" class="quick-link">Resource Library</a>
+                <a href="#" class="quick-link">Council Meetings</a>
+            </div>
+        </div>
+    </section>
+
     <footer>
-        &copy; People's Republic of Kazjistan
+        <div class="container">
+            <div class="copyright">
+                &copy; 2025 People's Republic of Kazjistan
+            </div>
+        </div>
     </footer>
 </body>
 </html>
