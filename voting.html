@@ -91,52 +91,52 @@
 <body>
     <div class="ballot">
         <h2 style="text-align: center;">Parliament of Kazjistan Ballot</h2>
-        <p class="instructions">Number ALL boxes in order of preference (1 to 9).</p>
+        <p class="instructions">Number ALL boxes in order of preference (1 to 10).</p>
         
         <div class="ballot-container">
             <!-- Group 1: Renew Kazjistan — Restore Democracy -->
             <div class="party-group">
                 <div class="party-name">RENEW KAZJISTAN — RESTORE DEMOCRACY</div>
                 <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Seat">
+                    <input type="number" min="1" max="10" class="preference" placeholder="-" data-candidate="Seat">
                     <span>Seat</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Cryzed">
+                    <input type="number" min="1" max="10" class="preference" placeholder="-" data-candidate="Cryzed">
                     <span>Cryzed</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Igor Witback">
+                    <input type="number" min="1" max="10" class="preference" placeholder="-" data-candidate="Igor Witback">
                     <span>Igor Witback</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Axell Nevylym">
+                    <input type="number" min="1" max="10" class="preference" placeholder="-" data-candidate="Axell Nevylym">
                     <span>Axell Nevylym</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Emacia">
+                    <input type="number" min="1" max="10" class="preference" placeholder="-" data-candidate="Emacia">
                     <span>Emacia</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Fixie">
+                    <input type="number" min="1" max="10" class="preference" placeholder="-" data-candidate="Fixie">
                     <span>Fixie</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Timus Maximus">
+                    <input type="number" min="1" max="10" class="preference" placeholder="-" data-candidate="Timus Maximus">
                     <span>Timus Maximus</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Aeropitz">
+                    <input type="number" min="1" max="10" class="preference" placeholder="-" data-candidate="Aeropitz">
                     <span>Aeropitz</span>
                 </div>
             </div>
             
-            <!-- Group 2: Secret Unspoken Society of Rocks -->
+            <!-- Group 2: SUSR -->
             <div class="party-group">
-                <div class="party-name">Secret Unspoken Society of Rocks</div>
+                <div class="party-name">SUSR</div>
                 <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Bigurethra">
-                    <span>Bigurethra</span>
+                    <input type="number" min="1" max="10" class="preference" placeholder="-" data-candidate="Big">
+                    <span>Big</span>
                 </div>
             </div>
             
@@ -144,8 +144,12 @@
             <div class="party-group">
                 <div class="party-name">INDEPENDENTS</div>
                 <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Joe Sane">
+                    <input type="number" min="1" max="10" class="preference" placeholder="-" data-candidate="Joe Sane">
                     <span>Joe Sane</span>
+                </div>
+                <div class="candidate">
+                    <input type="number" min="1" max="10" class="preference" placeholder="-" data-candidate="salamanderous._10886">
+                    <span>salamanderous._10886</span>
                 </div>
             </div>
         </div>
@@ -177,15 +181,15 @@
                 ]
             },
             {
-                name: "Secret Unspoken Society of Rocks",
-                candidates: ["Bigurethra"]
+                name: "SUSR",
+                candidates: ["Big"]
             },
             {
                 name: "INDEPENDENTS",
-                candidates: ["Joe Sane"]
+                candidates: ["Joe Sane", "salamanderous._10886"]
             }
         ];
-        const totalCandidates = 9; // 8 + 1 + 1 candidates
+        const totalCandidates = 10; // 8 + 1 + 2 candidates
 
         // ===== RANDOMIZATION FUNCTIONS =====
         function initializeBallot() {
