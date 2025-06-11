@@ -91,7 +91,7 @@
 <body>
     <div class="ballot">
         <h2 style="text-align: center;">Parliament of Kazjistan Ballot</h2>
-        <p class="instructions">Number ALL boxes in order of preference (1 to 10).</p>
+        <p class="instructions">Number ALL boxes in order of preference (1 to 11).</p>
         
         <div class="ballot-container">
             <!-- Group 1: Renew Kazjistan — Restore Democracy -->
@@ -261,22 +261,22 @@
             return '';
         }
 
-        function validateBallot() {
-            const inputs = Array.from(document.querySelectorAll('.preference'));
-            
-            if (!usernameInput.value.trim()) return "Error: Please enter your username.";
-            
-            const emptyInputs = inputs.filter(input => input.value === "");
-            if (emptyInputs.length > 0) return `Error: You must number ALL candidates (1 to ${totalCandidates}).`;
-            
-            const numbers = inputs.map(input => parseInt(input.value)).filter(n => !isNaN(n));
-            if (new Set(numbers).size !== totalCandidates) return "Error: Duplicate numbers detected.";
-            
-            const invalidNumbers = numbers.filter(n => n < 1 || n > totalCandidates);
-            if (invalidNumbers.length > 0) return `Error: Preferences must be between 1 and ${totalCandidates}.`;
-            
-            return '';
-        }
+       function validateBallot() {
+    const inputs = Array.from(document.querySelectorAll('.preference'));
+    
+    if (!usernameInput.value.trim()) return "Error: Please enter your username.";
+    
+    const emptyInputs = inputs.filter(input => input.value === "");
+    if (emptyInputs.length > 0) return `Error: You must number ALL candidates (1 to ${totalCandidates}).`;
+    
+    const numbers = inputs.map(input => parseInt(input.value)).filter(n => !isNaN(n));
+    if (numbers.length !== new Set(numbers).size) return "Error: Duplicate numbers detected.";
+    
+    const invalidNumbers = numbers.filter(n => n < 1 || n > totalCandidates);
+    if (invalidNumbers.length > 0) return `Error: Preferences must be between 1 and ${totalCandidates}.`;
+    
+    return '';
+}
 
         // ===== GOOGLE SHEETS SUBMISSION =====
       function submitToGoogleSheet(username, votes) {
