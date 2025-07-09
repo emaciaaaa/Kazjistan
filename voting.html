@@ -18,23 +18,14 @@
             margin: 0 auto;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        .party-group {
+        .candidates-container {
             border: 2px solid #000;
             padding: 15px;
-            margin-bottom: 15px;
-        }
-        .party-name {
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 18px;
-            text-align: center;
-            background-color: #f0f0f0;
-            padding: 5px;
         }
         .candidate {
             display: flex;
             align-items: center;
-            margin: 10px 0;
+            margin: 15px 0;
         }
         .candidate input {
             width: 40px;
@@ -42,6 +33,19 @@
             margin-right: 10px;
             text-align: center;
             font-size: 16px;
+        }
+        .candidate-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .candidate-name {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .candidate-party {
+            font-size: 12px;
+            color: #555;
+            margin-top: 2px;
         }
         .error {
             color: red;
@@ -84,47 +88,61 @@
         <h2 style="text-align: center;">Kazjistan Single Member Election</h2>
         <p class="instructions">Number ALL boxes in order of preference (1 to 6).</p>
         
-        <div class="party-group">
-            <div class="party-name">RENEW KAZJISTAN</div>
+        <div class="candidates-container">
             <div class="candidate">
                 <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="Fixie">
-                <span>Fixie</span>
+                <div class="candidate-info">
+                    <span class="candidate-name">Fixie</span>
+                    <span class="candidate-party">Renew Kazjistan</span>
+                </div>
             </div>
-        </div>
-        
-        <div class="party-group">
-            <div class="party-name">WHIG</div>
+            
             <div class="candidate">
                 <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="EstoBlake">
-                <span>EstoBlake</span>
+                <div class="candidate-info">
+                    <span class="candidate-name">EstoBlake</span>
+                    <span class="candidate-party">Whig</span>
+                </div>
             </div>
+            
             <div class="candidate">
                 <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="Puggamaximus">
-                <span>Puggamaximus</span>
+                <div class="candidate-info">
+                    <span class="candidate-name">Puggamaximus</span>
+                    <span class="candidate-party">Whig</span>
+                </div>
             </div>
-        </div>
-        
-        <div class="party-group">
-            <div class="party-name">REVOLT!</div>
+            
             <div class="candidate">
                 <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="Clover">
-                <span>Clover</span>
+                <div class="candidate-info">
+                    <span class="candidate-name">Clover</span>
+                    <span class="candidate-party">Revolt!</span>
+                </div>
             </div>
+            
             <div class="candidate">
                 <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="Luci">
-                <span>Luci</span>
+                <div class="candidate-info">
+                    <span class="candidate-name">Luci</span>
+                    <span class="candidate-party">Revolt!</span>
+                </div>
             </div>
-        </div>
-        
-        <div class="party-group">
-            <div class="party-name">INDEPENDENTS</div>
+            
             <div class="candidate">
                 <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="Afinss">
-                <span>Afinss</span>
+                <div class="candidate-info">
+                    <span class="candidate-name">Afinss</span>
+                    <span class="candidate-party">Independent</span>
+                </div>
             </div>
+            
             <div class="candidate">
                 <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="GooseKeeper">
-                <span>GooseKeeper</span>
+                <div class="candidate-info">
+                    <span class="candidate-name">GooseKeeper</span>
+                    <span class="candidate-party">Independent</span>
+                </div>
             </div>
         </div>
 
