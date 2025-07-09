@@ -88,62 +88,8 @@
         <h2 style="text-align: center;">Kazjistan Single Member Election</h2>
         <p class="instructions">Number ALL boxes in order of preference (1 to 6).</p>
         
-        <div class="candidates-container">
-            <div class="candidate">
-                <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="Fixie">
-                <div class="candidate-info">
-                    <span class="candidate-name">Fixie</span>
-                    <span class="candidate-party">Renew Kazjistan</span>
-                </div>
-            </div>
-            
-            <div class="candidate">
-                <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="EstoBlake">
-                <div class="candidate-info">
-                    <span class="candidate-name">EstoBlake</span>
-                    <span class="candidate-party">Whig</span>
-                </div>
-            </div>
-            
-            <div class="candidate">
-                <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="Puggamaximus">
-                <div class="candidate-info">
-                    <span class="candidate-name">Puggamaximus</span>
-                    <span class="candidate-party">Whig</span>
-                </div>
-            </div>
-            
-            <div class="candidate">
-                <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="Clover">
-                <div class="candidate-info">
-                    <span class="candidate-name">Clover</span>
-                    <span class="candidate-party">Revolt!</span>
-                </div>
-            </div>
-            
-            <div class="candidate">
-                <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="Luci">
-                <div class="candidate-info">
-                    <span class="candidate-name">Luci</span>
-                    <span class="candidate-party">Revolt!</span>
-                </div>
-            </div>
-            
-            <div class="candidate">
-                <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="Afinss">
-                <div class="candidate-info">
-                    <span class="candidate-name">Afinss</span>
-                    <span class="candidate-party">Independent</span>
-                </div>
-            </div>
-            
-            <div class="candidate">
-                <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="GooseKeeper">
-                <div class="candidate-info">
-                    <span class="candidate-name">GooseKeeper</span>
-                    <span class="candidate-party">Independent</span>
-                </div>
-            </div>
+        <div class="candidates-container" id="candidates-container">
+            <!-- Candidates will be inserted here by JavaScript -->
         </div>
 
         <!-- Username Input -->
@@ -162,7 +108,68 @@
             const errorMsg = document.getElementById('error-message');
             const submitBtn = document.getElementById('submit-ballot');
             const usernameInput = document.getElementById('username');
+            const candidatesContainer = document.getElementById('candidates-container');
             const totalCandidates = 6;
+            
+            // Candidate data with party affiliations
+            const candidates = [
+                { name: "Fixie", party: "Renew Kazjistan" },
+                { name: "EstoBlake", party: "Whig" },
+                { name: "Puggamaximus", party: "Whig" },
+                { name: "Clover", party: "Revolt!" },
+                { name: "Luci", party: "Revolt!" },
+                { name: "Afinss", party: "Independent" },
+                { name: "GooseKeeper", party: "Independent" }
+            ];
+            
+            // Initialize ballot with Robson Rotation (random order)
+            function initializeBallot() {
+                // Clear existing candidates
+                candidatesContainer.innerHTML = '';
+                
+                // Shuffle candidates using Fisher-Yates algorithm
+                const shuffledCandidates = shuffleArray([...candidates]);
+                
+                // Add shuffled candidates to the ballot
+                shuffledCandidates.forEach(candidate => {
+                    const candidateDiv = document.createElement('div');
+                    candidateDiv.className = 'candidate';
+                    
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.min = '1';
+                    input.max = totalCandidates.toString();
+                    input.className = 'preference';
+                    input.placeholder = '-';
+                    input.dataset.candidate = candidate.name;
+                    
+                    const infoDiv = document.createElement('div');
+                    infoDiv.className = 'candidate-info';
+                    
+                    const nameSpan = document.createElement('span');
+                    nameSpan.className = 'candidate-name';
+                    nameSpan.textContent = candidate.name;
+                    
+                    const partySpan = document.createElement('span');
+                    partySpan.className = 'candidate-party';
+                    partySpan.textContent = candidate.party;
+                    
+                    infoDiv.appendChild(nameSpan);
+                    infoDiv.appendChild(partySpan);
+                    candidateDiv.appendChild(input);
+                    candidateDiv.appendChild(infoDiv);
+                    candidatesContainer.appendChild(candidateDiv);
+                });
+            }
+            
+            // Fisher-Yates shuffle algorithm for Robson Rotation
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
             
             // ===== VALIDATION FUNCTIONS =====
             function validateInput(input) {
@@ -240,10 +247,10 @@
             }
 
             // ===== EVENT LISTENERS =====
-            document.querySelectorAll('.preference').forEach(input => {
-                input.addEventListener('input', function() {
-                    errorMsg.textContent = validateInput(this);
-                });
+            document.addEventListener('input', function(e) {
+                if (e.target.classList.contains('preference')) {
+                    errorMsg.textContent = validateInput(e.target);
+                }
             });
             
             submitBtn.addEventListener('click', function() {
@@ -262,6 +269,9 @@
                 
                 submitToGoogleSheet(usernameInput.value.trim(), votes);
             });
+
+            // Initialize the ballot with Robson Rotation
+            initializeBallot();
         });
     </script>
 </body>
