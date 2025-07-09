@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kazjistan Single Member Election</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .ballot {
+            background-color: white;
+            border: 2px solid #000;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .party-group {
+            border: 2px solid #000;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .party-name {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 18px;
+            text-align: center;
+            background-color: #f0f0f0;
+            padding: 5px;
+        }
+        .candidate {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .candidate input {
+            width: 40px;
+            height: 30px;
+            margin-right: 10px;
+            text-align: center;
+            font-size: 16px;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        button {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0055aa;
+        }
+        .instructions {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+            text-align: center;
+        }
+        .username-input {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .username-input input {
+            padding: 8px;
+            font-size: 16px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="ballot">
+        <h2 style="text-align: center;">Kazjistan Single Member Election</h2>
+        <p class="instructions">Number ALL boxes in order of preference (1 to 6).</p>
+        
+        <div class="party-group">
+            <div class="party-name">RENEW KAZJISTAN</div>
+            <div class="candidate">
+                <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="Fixie">
+                <span>Fixie</span>
+            </div>
+        </div>
+        
+        <div class="party-group">
+            <div class="party-name">WHIG</div>
+            <div class="candidate">
+                <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="EstoBlake">
+                <span>EstoBlake</span>
+            </div>
+            <div class="candidate">
+                <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="Puggamaximus">
+                <span>Puggamaximus</span>
+            </div>
+        </div>
+        
+        <div class="party-group">
+            <div class="party-name">REVOLT!</div>
+            <div class="candidate">
+                <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="Clover">
+                <span>Clover</span>
+            </div>
+            <div class="candidate">
+                <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="Luci">
+                <span>Luci</span>
+            </div>
+        </div>
+        
+        <div class="party-group">
+            <div class="party-name">INDEPENDENTS</div>
+            <div class="candidate">
+                <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="Afinss">
+                <span>Afinss</span>
+            </div>
+            <div class="candidate">
+                <input type="number" min="1" max="6" class="preference" placeholder="-" data-candidate="GooseKeeper">
+                <span>GooseKeeper</span>
+            </div>
+        </div>
+
+        <!-- Username Input -->
+        <div class="username-input">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required placeholder="Enter your username">
+        </div>
+        
+        <div class="error" id="error-message"></div>
+        <button id="submit-ballot">Submit Ballot</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const errorMsg = document.getElementById('error-message');
+            const submitBtn = document.getElementById('submit-ballot');
+            const usernameInput = document.getElementById('username');
+            const totalCandidates = 6;
+            
+            // ===== VALIDATION FUNCTIONS =====
+            function validateInput(input) {
+                const value = parseInt(input.value);
+                if (isNaN(value)) return '';
+                
+                const inputs = document.querySelectorAll('.preference');
+                
+                if (value > totalCandidates) return `Error: Maximum preference is ${totalCandidates}.`;
+                
+                let duplicates = 0;
+                inputs.forEach(otherInput => {
+                    if (otherInput !== input && otherInput.value === input.value) {
+                        duplicates++;
+                    }
+                });
+                
+                if (duplicates > 0) return `Error: Number ${input.value} is used more than once.`;
+                return '';
+            }
+
+            function validateBallot() {
+                const inputs = Array.from(document.querySelectorAll('.preference'));
+                
+                if (!usernameInput.value.trim()) return "Error: Please enter your username.";
+                
+                const emptyInputs = inputs.filter(input => input.value === "");
+                if (emptyInputs.length > 0) return `Error: You must number ALL candidates (1 to ${totalCandidates}).`;
+                
+                const numbers = inputs.map(input => parseInt(input.value)).filter(n => !isNaN(n));
+                if (numbers.length !== new Set(numbers).size) return "Error: Duplicate numbers detected.";
+                
+                const invalidNumbers = numbers.filter(n => n < 1 || n > totalCandidates);
+                if (invalidNumbers.length > 0) return `Error: Preferences must be between 1 and ${totalCandidates}.`;
+                
+                return '';
+            }
+
+            // ===== GOOGLE SHEETS SUBMISSION =====
+            function submitToGoogleSheet(username, votes) {
+                const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzWINxRnQVYjWafOzCyTMSU96el7omcYDB-iF85paWJ5QDHSYpdG8x_lEtUi_1E68RK/exec";
+                
+                // Show loading state
+                errorMsg.textContent = "Submitting...";
+                errorMsg.style.color = "blue";
+                submitBtn.disabled = true;
+                
+                fetch(googleScriptUrl, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        username: username.trim(),
+                        votes: votes.map(vote => ({
+                            candidate: vote.candidate,
+                            preference: parseInt(vote.preference) || 0
+                        }))
+                    })
+                })
+                .then(() => {
+                    errorMsg.textContent = "Ballot submitted successfully!";
+                    errorMsg.style.color = "green";
+                    
+                    // Redirect to a new page after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = "https://www.kazjistan.org/voting_complete";
+                    }, 2000);
+                })
+                .catch((error) => {
+                    errorMsg.textContent = "Error submitting ballot. Please try again.";
+                    errorMsg.style.color = "red";
+                    submitBtn.disabled = false;
+                    console.error("Error:", error);
+                });
+            }
+
+            // ===== EVENT LISTENERS =====
+            document.querySelectorAll('.preference').forEach(input => {
+                input.addEventListener('input', function() {
+                    errorMsg.textContent = validateInput(this);
+                });
+            });
+            
+            submitBtn.addEventListener('click', function() {
+                const validationError = validateBallot();
+                if (validationError) {
+                    errorMsg.textContent = validationError;
+                    errorMsg.style.color = "red";
+                    return;
+                }
+                
+                const votes = Array.from(document.querySelectorAll('.preference'))
+                    .map(input => ({
+                        candidate: input.dataset.candidate,
+                        preference: input.value
+                    }));
+                
+                submitToGoogleSheet(usernameInput.value.trim(), votes);
+            });
+        });
+    </script>
+</body>
+</html>
