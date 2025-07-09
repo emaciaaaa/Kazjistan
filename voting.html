@@ -86,7 +86,7 @@
 <body>
     <div class="ballot">
         <h2 style="text-align: center;">Kazjistan Single Member Election</h2>
-        <p class="instructions">Number ALL boxes in order of preference (1 to 8).</p>
+        <p class="instructions">Number ALL boxes in order of preference (1 to 9).</p>
         
         <div class="candidates-container" id="candidates-container">
             <!-- Candidates will be inserted here by JavaScript -->
@@ -109,15 +109,15 @@
             const submitBtn = document.getElementById('submit-ballot');
             const usernameInput = document.getElementById('username');
             const candidatesContainer = document.getElementById('candidates-container');
-            const totalCandidates = 8; // Updated to 8 candidates
+            const totalCandidates = 9; // Now 9 candidates
             
             // Candidate data with party affiliations
             const candidates = [
                 { name: "Fixie", party: "Renew Kazjistan" },
-                { name: "Baraa", party: "Renew Kazjistan" },  // Added Baraa
+                { name: "Baraa", party: "Renew Kazjistan" },
                 { name: "EstoBlake", party: "Whig" },
                 { name: "Puggamaximus", party: "Whig" },
-                { name: "Elite", party: "Whig" },  // Added Elite
+                { name: "Elite", party: "Whig" },
                 { name: "Clover", party: "Revolt!" },
                 { name: "Luci", party: "Revolt!" },
                 { name: "Afinss", party: "Independent" },
