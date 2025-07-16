@@ -22,18 +22,35 @@
             display: flex;
             gap: 15px;
         }
+        .party-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .party-header {
+            border: 2px solid #000;
+            border-bottom: none;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            background-color: #f0f0f0;
+        }
         .party-group {
             border: 2px solid #000;
             padding: 15px;
-            flex: 1;
         }
-        .party-name {
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 18px;
+        .party-option {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .party-option input {
+            width: 40px;
+            height: 30px;
+            margin-right: 10px;
             text-align: center;
-            background-color: #f0f0f0;
-            padding: 5px;
+            font-size: 16px;
         }
         .candidate {
             display: flex;
@@ -87,23 +104,19 @@
             font-weight: bold;
             font-size: 18px;
         }
-        .above-line {
+        .divider {
             border-top: 3px solid black;
-            padding-top: 20px;
-            margin-top: 20px;
+            margin: 20px 0;
+            position: relative;
         }
-        .party-option {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 10px 0;
-        }
-        .party-option input {
-            width: 40px;
-            height: 30px;
-            margin-right: 10px;
-            text-align: center;
-            font-size: 16px;
+        .divider-text {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 0 10px;
+            font-weight: bold;
         }
         @media (max-width: 768px) {
             .ballot-container {
@@ -118,30 +131,16 @@
         
         <div class="voting-method">VOTE EITHER ABOVE THE LINE OR BELOW THE LINE (NOT BOTH)</div>
         
-        <!-- Above the line (party) voting -->
-        <div class="above-line">
-            <p class="instructions">ABOVE THE LINE - Number at least ONE box to vote for a party</p>
-            <div class="party-option">
-                <input type="number" min="1" max="3" class="party-preference" placeholder="-" data-party="WHIG">
-                <span>WHIG</span>
-            </div>
-            <div class="party-option">
-                <input type="number" min="1" max="3" class="party-preference" placeholder="-" data-party="PROGRESSIVE">
-                <span>PROGRESSIVE</span>
-            </div>
-            <div class="party-option">
-                <input type="number" min="1" max="3" class="party-preference" placeholder="-" data-party="REVOLT!">
-                <span>REVOLT!</span>
-            </div>
-        </div>
-        
-        <!-- Below the line (candidate) voting -->
-        <div>
-            <p class="instructions">BELOW THE LINE - Number ALL boxes in order of preference (1 to 9)</p>
-            <div class="ballot-container">
-                <!-- Group 1: Whig -->
+        <div class="ballot-container">
+            <!-- Whig Column -->
+            <div class="party-column">
+                <div class="party-header">
+                    <div class="party-option">
+                        <input type="number" min="1" max="3" class="party-preference" placeholder="-" data-party="WHIG">
+                        <span>WHIG</span>
+                    </div>
+                </div>
                 <div class="party-group">
-                    <div class="party-name">WHIG</div>
                     <div class="candidate">
                         <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Whig #1">
                         <span>Whig Candidate #1</span>
@@ -155,10 +154,17 @@
                         <span>Whig Candidate #3</span>
                     </div>
                 </div>
-                
-                <!-- Group 2: Progressive -->
+            </div>
+            
+            <!-- Progressive Column -->
+            <div class="party-column">
+                <div class="party-header">
+                    <div class="party-option">
+                        <input type="number" min="1" max="3" class="party-preference" placeholder="-" data-party="PROGRESSIVE">
+                        <span>PROGRESSIVE</span>
+                    </div>
+                </div>
                 <div class="party-group">
-                    <div class="party-name">PROGRESSIVE</div>
                     <div class="candidate">
                         <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Progressive #1">
                         <span>Progressive Candidate #1</span>
@@ -172,10 +178,17 @@
                         <span>Progressive Candidate #3</span>
                     </div>
                 </div>
-                
-                <!-- Group 3: Revolt! -->
+            </div>
+            
+            <!-- Revolt! Column -->
+            <div class="party-column">
+                <div class="party-header">
+                    <div class="party-option">
+                        <input type="number" min="1" max="3" class="party-preference" placeholder="-" data-party="REVOLT!">
+                        <span>REVOLT!</span>
+                    </div>
+                </div>
                 <div class="party-group">
-                    <div class="party-name">REVOLT!</div>
                     <div class="candidate">
                         <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Revolt! #1">
                         <span>Revolt! Candidate #1</span>
@@ -192,6 +205,12 @@
             </div>
         </div>
 
+        <div class="divider">
+            <span class="divider-text">OR</span>
+        </div>
+
+        <p class="instructions">Number ALL boxes below the line in order of preference (1 to 9)</p>
+        
         <!-- Username Input -->
         <div class="username-input">
             <label for="username">Username:</label>
@@ -234,16 +253,47 @@
             // ===== RANDOMIZATION FUNCTIONS =====
             function initializeBallot() {
                 const ballotContainer = document.querySelector('.ballot-container');
+                
+                // Shuffle the order of parties
+                const shuffledGroups = shuffleArray([...candidateGroups]);
+                
+                // Clear existing columns
                 ballotContainer.innerHTML = '';
                 
-                candidateGroups.forEach(group => {
+                // Create columns for each party
+                shuffledGroups.forEach(group => {
+                    const columnDiv = document.createElement('div');
+                    columnDiv.className = 'party-column';
+                    
+                    // Create party header with voting box
+                    const partyHeader = document.createElement('div');
+                    partyHeader.className = 'party-header';
+                    
+                    const partyOption = document.createElement('div');
+                    partyOption.className = 'party-option';
+                    
+                    const partyInput = document.createElement('input');
+                    partyInput.type = 'number';
+                    partyInput.min = '1';
+                    partyInput.max = '3';
+                    partyInput.className = 'party-preference';
+                    partyInput.placeholder = '-';
+                    partyInput.dataset.party = group.name;
+                    partyInput.addEventListener('input', function() {
+                        handlePartyInput(this);
+                    });
+                    
+                    const partySpan = document.createElement('span');
+                    partySpan.textContent = group.name;
+                    
+                    partyOption.appendChild(partyInput);
+                    partyOption.appendChild(partySpan);
+                    partyHeader.appendChild(partyOption);
+                    columnDiv.appendChild(partyHeader);
+                    
+                    // Create candidate group
                     const groupDiv = document.createElement('div');
                     groupDiv.className = 'party-group';
-                    
-                    const partyName = document.createElement('div');
-                    partyName.className = 'party-name';
-                    partyName.textContent = group.name;
-                    groupDiv.appendChild(partyName);
                     
                     // Shuffle candidates within each group
                     const shuffledCandidates = shuffleArray([...group.candidates]);
@@ -259,6 +309,9 @@
                         input.className = 'candidate-preference';
                         input.placeholder = '-';
                         input.dataset.candidate = candidate;
+                        input.addEventListener('input', function() {
+                            handleCandidateInput(this);
+                        });
                         
                         const span = document.createElement('span');
                         span.textContent = candidate.replace(/#(\d)/, 'Candidate #$1');
@@ -268,12 +321,8 @@
                         groupDiv.appendChild(candidateDiv);
                     });
                     
-                    ballotContainer.appendChild(groupDiv);
-                });
-                
-                // Reattach event listeners
-                document.querySelectorAll('.candidate-preference').forEach(input => {
-                    input.addEventListener('input', handleCandidateInput);
+                    columnDiv.appendChild(groupDiv);
+                    ballotContainer.appendChild(columnDiv);
                 });
             }
 
@@ -301,7 +350,7 @@
                 
                 // Validate party input
                 const numValue = parseInt(value);
-                if (isNaN(numValue) {
+                if (isNaN(numValue)) {
                     input.value = "";
                     return;
                 }
@@ -476,18 +525,6 @@
             }
 
             // ===== EVENT LISTENERS =====
-            partyPreferences.forEach(input => {
-                input.addEventListener('input', function() {
-                    handlePartyInput(this);
-                });
-            });
-            
-            candidatePreferences.forEach(input => {
-                input.addEventListener('input', function() {
-                    handleCandidateInput(this);
-                });
-            });
-            
             submitBtn.addEventListener('click', function() {
                 const validationError = validateBallot();
                 if (validationError) {
