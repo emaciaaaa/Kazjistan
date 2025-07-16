@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Election Ballot</title>
+    <title>South Australia Legislative Council Ballot</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,31 +14,42 @@
             background-color: white;
             border: 2px solid #000;
             padding: 20px;
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        .ballot-container {
-            display: flex;
-            gap: 15px;
+        h1, h2, h3 {
+            text-align: center;
+        }
+        .instructions {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+        .voting-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
         }
         .party-group {
-            border: 2px solid #000;
-            padding: 15px;
-            flex: 1;
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #eee;
         }
-        .party-name {
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 18px;
+        .party-group input {
+            width: 40px;
+            height: 30px;
+            margin-right: 15px;
             text-align: center;
-            background-color: #f0f0f0;
-            padding: 5px;
+            font-size: 16px;
         }
         .candidate {
             display: flex;
             align-items: center;
-            margin: 10px 0;
+            margin: 5px 0;
+            padding-left: 55px;
         }
         .candidate input {
             width: 40px;
@@ -66,90 +77,110 @@
         button:hover {
             background-color: #0055aa;
         }
-        .instructions {
-            margin-bottom: 20px;
-            font-size: 16px;
-            color: #333;
+        .divider {
+            border-top: 2px dashed #000;
+            margin: 20px 0;
             text-align: center;
         }
-        .username-input {
-            margin-top: 20px;
-            text-align: center;
+        .divider-text {
+            background: white;
+            padding: 0 10px;
+            position: relative;
+            top: -12px;
         }
-        .username-input input {
-            padding: 8px;
-            font-size: 16px;
-            width: 200px;
-        }
-        @media (max-width: 768px) {
-            .ballot-container {
-                flex-direction: column;
-            }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="ballot">
-        <h2 style="text-align: center;">Official Election Ballot</h2>
-        <p class="instructions">Number ALL boxes in order of preference (1 to 9).</p>
+        <h1>South Australia</h1>
+        <h2>Ballot Paper for the Election of 11 Legislative Councillors</h2>
         
-        <div class="ballot-container">
-            <!-- Group 1: Whig -->
-            <div class="party-group">
-                <div class="party-name">WHIG</div>
-                <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Whig #1">
-                    <span>Whig Candidate #1</span>
-                </div>
-                <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Whig #2">
-                    <span>Whig Candidate #2</span>
-                </div>
-                <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Whig #3">
-                    <span>Whig Candidate #3</span>
-                </div>
-            </div>
+        <p class="instructions">You are not legally obliged to mark the ballot paper.</p>
+        
+        <div class="voting-section">
+            <h3>EITHER</h3>
+            <p>Place the number 1 in the square next to the group of your choice (Above the Line).</p>
             
-            <!-- Group 2: Progressive -->
             <div class="party-group">
-                <div class="party-name">PROGRESSIVE</div>
-                <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Progressive #1">
-                    <span>Progressive Candidate #1</span>
-                </div>
-                <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Progressive #2">
-                    <span>Progressive Candidate #2</span>
-                </div>
-                <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Progressive #3">
-                    <span>Progressive Candidate #3</span>
-                </div>
+                <input type="number" min="1" max="1" class="above-line" placeholder="-" data-party="GROUP A">
+                <span><strong>GROUP A</strong></span>
             </div>
-            
-            <!-- Group 3: Revolt! -->
             <div class="party-group">
-                <div class="party-name">REVOLT!</div>
-                <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Revolt! #1">
-                    <span>Revolt! Candidate #1</span>
-                </div>
-                <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Revolt! #2">
-                    <span>Revolt! Candidate #2</span>
-                </div>
-                <div class="candidate">
-                    <input type="number" min="1" max="9" class="preference" placeholder="-" data-candidate="Revolt! #3">
-                    <span>Revolt! Candidate #3</span>
-                </div>
+                <input type="number" min="1" max="1" class="above-line" placeholder="-" data-party="GROUP B">
+                <span><strong>GROUP B</strong></span>
+            </div>
+            <div class="party-group">
+                <input type="number" min="1" max="1" class="above-line" placeholder="-" data-party="GROUP C">
+                <span><strong>GROUP C</strong></span>
+            </div>
+            <div class="party-group">
+                <input type="number" min="1" max="1" class="above-line" placeholder="-" data-party="GROUP D">
+                <span><strong>GROUP D</strong></span>
+            </div>
+            <div class="party-group">
+                <input type="number" min="1" max="1" class="above-line" placeholder="-" data-party="GROUP E">
+                <span><strong>GROUP E</strong></span>
             </div>
         </div>
-
-        <!-- Username Input -->
-        <div class="username-input">
-            <label for="username">Username:</label>
-            <input type="text" id="username" required placeholder="Enter your username">
+        
+        <div class="divider">
+            <span class="divider-text">OR</span>
+        </div>
+        
+        <div class="voting-section">
+            <h3>Number at least 12 of these squares in the order of your choice (Below the Line)</h3>
+            
+            <div class="candidate">
+                <input type="number" min="1" max="12" class="below-line" placeholder="-" data-candidate="Candidate 1">
+                <span>Candidate 1</span>
+            </div>
+            <div class="candidate">
+                <input type="number" min="1" max="12" class="below-line" placeholder="-" data-candidate="Candidate 2">
+                <span>Candidate 2</span>
+            </div>
+            <div class="candidate">
+                <input type="number" min="1" max="12" class="below-line" placeholder="-" data-candidate="Candidate 3">
+                <span>Candidate 3</span>
+            </div>
+            <div class="candidate">
+                <input type="number" min="1" max="12" class="below-line" placeholder="-" data-candidate="Candidate 4">
+                <span>Candidate 4</span>
+            </div>
+            <div class="candidate">
+                <input type="number" min="1" max="12" class="below-line" placeholder="-" data-candidate="Candidate 5">
+                <span>Candidate 5</span>
+            </div>
+            <div class="candidate">
+                <input type="number" min="1" max="12" class="below-line" placeholder="-" data-candidate="Candidate 6">
+                <span>Candidate 6</span>
+            </div>
+            <div class="candidate">
+                <input type="number" min="1" max="12" class="below-line" placeholder="-" data-candidate="Candidate 7">
+                <span>Candidate 7</span>
+            </div>
+            <div class="candidate">
+                <input type="number" min="1" max="12" class="below-line" placeholder="-" data-candidate="Candidate 8">
+                <span>Candidate 8</span>
+            </div>
+            <div class="candidate">
+                <input type="number" min="1" max="12" class="below-line" placeholder="-" data-candidate="Candidate 9">
+                <span>Candidate 9</span>
+            </div>
+            <div class="candidate">
+                <input type="number" min="1" max="12" class="below-line" placeholder="-" data-candidate="Candidate 10">
+                <span>Candidate 10</span>
+            </div>
+            <div class="candidate">
+                <input type="number" min="1" max="12" class="below-line" placeholder="-" data-candidate="Candidate 11">
+                <span>Candidate 11</span>
+            </div>
+            <div class="candidate">
+                <input type="number" min="1" max="12" class="below-line" placeholder="-" data-candidate="Candidate 12">
+                <span>Candidate 12</span>
+            </div>
         </div>
         
         <div class="error" id="error-message"></div>
@@ -158,179 +189,156 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // DOM elements
             const errorMsg = document.getElementById('error-message');
             const submitBtn = document.getElementById('submit-ballot');
-            const usernameInput = document.getElementById('username');
+            const aboveLineInputs = document.querySelectorAll('.above-line');
+            const belowLineInputs = document.querySelectorAll('.below-line');
             
-            // Candidate data (GROUPED by party for randomization)
-            const candidateGroups = [
-                {
-                    name: "WHIG",
-                    candidates: ["Whig #1", "Whig #2", "Whig #3"]
-                },
-                {
-                    name: "PROGRESSIVE",
-                    candidates: ["Progressive #1", "Progressive #2", "Progressive #3"]
-                },
-                {
-                    name: "REVOLT!",
-                    candidates: ["Revolt! #1", "Revolt! #2", "Revolt! #3"]
+            let votingMethod = null; // 'above' or 'below'
+            
+            // Track which voting method is being used
+            function trackVotingMethod(method) {
+                if (votingMethod && votingMethod !== method) {
+                    errorMsg.textContent = "Error: You can only vote Above the Line OR Below the Line, not both.";
+                    return false;
                 }
-            ];
-            const totalCandidates = 9; // 3 parties × 3 candidates
-
-            // ===== RANDOMIZATION FUNCTIONS =====
-            function initializeBallot() {
-                const ballotContainer = document.querySelector('.ballot-container');
-                ballotContainer.innerHTML = '';
-                
-                candidateGroups.forEach(group => {
-                    const groupDiv = document.createElement('div');
-                    groupDiv.className = 'party-group';
-                    
-                    const partyName = document.createElement('div');
-                    partyName.className = 'party-name';
-                    partyName.textContent = group.name;
-                    groupDiv.appendChild(partyName);
-                    
-                    // Shuffle candidates within each group
-                    const shuffledCandidates = shuffleArray([...group.candidates]);
-                    
-                    shuffledCandidates.forEach(candidate => {
-                        const candidateDiv = document.createElement('div');
-                        candidateDiv.className = 'candidate';
-                        
-                        const input = document.createElement('input');
-                        input.type = 'number';
-                        input.min = '1';
-                        input.max = totalCandidates.toString();
-                        input.className = 'preference';
-                        input.placeholder = '-';
-                        input.dataset.candidate = candidate;
-                        
-                        const span = document.createElement('span');
-                        span.textContent = candidate.replace(/#(\d)/, 'Candidate #$1');
-                        
-                        candidateDiv.appendChild(input);
-                        candidateDiv.appendChild(span);
-                        groupDiv.appendChild(candidateDiv);
-                    });
-                    
-                    ballotContainer.appendChild(groupDiv);
+                votingMethod = method;
+                return true;
+            }
+            
+            // Validate Above the Line votes
+            function validateAboveLine() {
+                let hasVote = false;
+                aboveLineInputs.forEach(input => {
+                    if (input.value === "1") {
+                        if (hasVote) {
+                            errorMsg.textContent = "Error: You can only vote for one group Above the Line.";
+                            return false;
+                        }
+                        hasVote = true;
+                    }
                 });
+                return hasVote;
             }
-
-            // Fisher-Yates shuffle algorithm
-            function shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-                return array;
-            }
-
-            // ===== VALIDATION FUNCTIONS =====
-            function validateInput(input) {
-                const value = parseInt(input.value);
-                if (isNaN(value)) return '';
+            
+            // Validate Below the Line votes
+            function validateBelowLine() {
+                const numbers = [];
+                let hasVote = false;
                 
-                const inputs = document.querySelectorAll('.preference');
-                
-                if (value > totalCandidates) return `Error: Maximum preference is ${totalCandidates}.`;
-                
-                let duplicates = 0;
-                inputs.forEach(otherInput => {
-                    if (otherInput !== input && otherInput.value === input.value) {
-                        duplicates++;
+                belowLineInputs.forEach(input => {
+                    if (input.value !== "") {
+                        const num = parseInt(input.value);
+                        if (isNaN(num) || num < 1 || num > 12) {
+                            errorMsg.textContent = "Error: Preferences must be between 1 and 12.";
+                            return false;
+                        }
+                        if (numbers.includes(num)) {
+                            errorMsg.textContent = `Error: Number ${num} is used more than once.`;
+                            return false;
+                        }
+                        numbers.push(num);
+                        hasVote = true;
                     }
                 });
                 
-                if (duplicates > 0) return `Error: Number ${input.value} is used more than once.`;
-                return '';
+                if (!hasVote) return false;
+                
+                // Check if at least 12 candidates are numbered
+                const numberedCount = numbers.length;
+                if (numberedCount < 12) {
+                    errorMsg.textContent = `Error: You must number at least 12 candidates (you've numbered ${numberedCount}).`;
+                    return false;
+                }
+                
+                return true;
             }
-
-            function validateBallot() {
-                const inputs = Array.from(document.querySelectorAll('.preference'));
-                
-                if (!usernameInput.value.trim()) return "Error: Please enter your username.";
-                
-                const emptyInputs = inputs.filter(input => input.value === "");
-                if (emptyInputs.length > 0) return `Error: You must number ALL candidates (1 to ${totalCandidates}).`;
-                
-                const numbers = inputs.map(input => parseInt(input.value)).filter(n => !isNaN(n));
-                if (numbers.length !== new Set(numbers).size) return "Error: Duplicate numbers detected.";
-                
-                const invalidNumbers = numbers.filter(n => n < 1 || n > totalCandidates);
-                if (invalidNumbers.length > 0) return `Error: Preferences must be between 1 and ${totalCandidates}.`;
-                
-                return '';
-            }
-
-            // ===== GOOGLE SHEETS SUBMISSION =====
-            function submitToGoogleSheet(username, votes) {
-                const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzWINxRnQVYjWafOzCyTMSU96el7omcYDB-iF85paWJ5QDHSYpdG8x_lEtUi_1E68RK/exec";
-                
-                // Show loading state
-                errorMsg.textContent = "Submitting...";
-                errorMsg.style.color = "blue";
-                submitBtn.disabled = true;
-                
-                fetch(googleScriptUrl, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ 
-                        username: username.trim(),
-                        votes: votes.map(vote => ({
-                            candidate: vote.candidate,
-                            preference: parseInt(vote.preference) || 0
-                        }))
-                    })
-                })
-                .then(() => {
-                    errorMsg.textContent = "Ballot submitted successfully!";
-                    errorMsg.style.color = "green";
-                    
-                    // Redirect to a new page after 2 seconds
-                    setTimeout(() => {
-                        window.location.href = "https://example.com/voting_complete"; // Replace with your desired URL
-                    }, 2000);
-                })
-                .catch((error) => {
-                    errorMsg.textContent = "Error submitting ballot. Please try again.";
-                    errorMsg.style.color = "red";
-                    submitBtn.disabled = false;
-                    console.error("Error:", error);
-                });
-            }
-
-            // ===== EVENT LISTENERS =====
-            document.querySelectorAll('.preference').forEach(input => {
+            
+            // Event listeners for Above the Line
+            aboveLineInputs.forEach(input => {
                 input.addEventListener('input', function() {
-                    errorMsg.textContent = validateInput(this);
+                    if (this.value !== "" && !trackVotingMethod('above')) {
+                        this.value = "";
+                        return;
+                    }
+                    
+                    if (this.value === "1") {
+                        // Clear other above-line inputs
+                        aboveLineInputs.forEach(otherInput => {
+                            if (otherInput !== this) otherInput.value = "";
+                        });
+                    }
+                    errorMsg.textContent = "";
                 });
             });
             
+            // Event listeners for Below the Line
+            belowLineInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.value !== "" && !trackVotingMethod('below')) {
+                        this.value = "";
+                        return;
+                    }
+                    
+                    // Validate the current input
+                    const num = parseInt(this.value);
+                    if (this.value !== "" && (isNaN(num) || num < 1 || num > 12)) {
+                        errorMsg.textContent = "Error: Preferences must be between 1 and 12.";
+                        this.value = "";
+                        return;
+                    }
+                    
+                    // Check for duplicates
+                    if (this.value !== "") {
+                        belowLineInputs.forEach(otherInput => {
+                            if (otherInput !== this && otherInput.value === this.value) {
+                                errorMsg.textContent = `Error: Number ${this.value} is used more than once.`;
+                                this.value = "";
+                                return;
+                            }
+                        });
+                    }
+                    
+                    errorMsg.textContent = "";
+                });
+            });
+            
+            // Submit validation
             submitBtn.addEventListener('click', function() {
-                const validationError = validateBallot();
-                if (validationError) {
-                    errorMsg.textContent = validationError;
-                    errorMsg.style.color = "red";
+                errorMsg.textContent = "";
+                
+                // Check if voting above the line
+                if (votingMethod === 'above') {
+                    if (!validateAboveLine()) {
+                        if (!errorMsg.textContent) {
+                            errorMsg.textContent = "Error: Please vote for one group Above the Line.";
+                        }
+                        return;
+                    }
+                } 
+                // Check if voting below the line
+                else if (votingMethod === 'below') {
+                    if (!validateBelowLine()) {
+                        if (!errorMsg.textContent) {
+                            errorMsg.textContent = "Error: Please number at least 12 candidates Below the Line.";
+                        }
+                        return;
+                    }
+                }
+                // No voting method selected
+                else {
+                    errorMsg.textContent = "Error: Please vote either Above the Line or Below the Line.";
                     return;
                 }
                 
-                const votes = Array.from(document.querySelectorAll('.preference'))
-                    .map(input => ({
-                        candidate: input.dataset.candidate,
-                        preference: input.value
-                    }));
+                // If validation passes
+                errorMsg.textContent = "Ballot submitted successfully!";
+                errorMsg.style.color = "green";
+                submitBtn.disabled = true;
                 
-                submitToGoogleSheet(usernameInput.value.trim(), votes);
+                // In a real implementation, you would submit the data here
+                console.log("Ballot submitted:", votingMethod);
             });
-
-            // Initialize the randomized ballot
-            initializeBallot();
         });
     </script>
 </body>
