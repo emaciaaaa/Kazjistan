@@ -44,6 +44,7 @@
             display: flex;
             align-items: center;
             margin: 10px 0;
+            justify-content: center;
         }
         .party-option input {
             width: 40px;
@@ -118,6 +119,12 @@
             padding: 0 10px;
             font-weight: bold;
         }
+        .above-the-line {
+            margin-bottom: 30px;
+        }
+        .below-the-line {
+            margin-top: 30px;
+        }
         @media (max-width: 768px) {
             .ballot-container {
                 flex-direction: column;
@@ -131,86 +138,107 @@
         
         <div class="voting-method">VOTE EITHER ABOVE THE LINE OR BELOW THE LINE (NOT BOTH)</div>
         
-        <div class="ballot-container">
-            <!-- Whig Column -->
-            <div class="party-column">
-                <div class="party-header">
-                    <div class="party-option">
-                        <input type="number" min="1" max="3" class="party-preference" placeholder="-" data-party="WHIG">
-                        <span>WHIG</span>
+        <!-- Above the line section -->
+        <div class="above-the-line">
+            <p class="instructions">ABOVE THE LINE - Number at least ONE box to vote for a party</p>
+            <div class="ballot-container">
+                <!-- Whig Column -->
+                <div class="party-column">
+                    <div class="party-header">
+                        <div class="party-option">
+                            <input type="number" min="1" max="3" class="party-preference" placeholder="-" data-party="WHIG">
+                            <span>WHIG</span>
+                        </div>
                     </div>
                 </div>
-                <div class="party-group">
-                    <div class="candidate">
-                        <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Whig #1">
-                        <span>Whig Candidate #1</span>
-                    </div>
-                    <div class="candidate">
-                        <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Whig #2">
-                        <span>Whig Candidate #2</span>
-                    </div>
-                    <div class="candidate">
-                        <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Whig #3">
-                        <span>Whig Candidate #3</span>
+                
+                <!-- Progressive Column -->
+                <div class="party-column">
+                    <div class="party-header">
+                        <div class="party-option">
+                            <input type="number" min="1" max="3" class="party-preference" placeholder="-" data-party="PROGRESSIVE">
+                            <span>PROGRESSIVE</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Progressive Column -->
-            <div class="party-column">
-                <div class="party-header">
-                    <div class="party-option">
-                        <input type="number" min="1" max="3" class="party-preference" placeholder="-" data-party="PROGRESSIVE">
-                        <span>PROGRESSIVE</span>
-                    </div>
-                </div>
-                <div class="party-group">
-                    <div class="candidate">
-                        <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Progressive #1">
-                        <span>Progressive Candidate #1</span>
-                    </div>
-                    <div class="candidate">
-                        <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Progressive #2">
-                        <span>Progressive Candidate #2</span>
-                    </div>
-                    <div class="candidate">
-                        <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Progressive #3">
-                        <span>Progressive Candidate #3</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Revolt! Column -->
-            <div class="party-column">
-                <div class="party-header">
-                    <div class="party-option">
-                        <input type="number" min="1" max="3" class="party-preference" placeholder="-" data-party="REVOLT!">
-                        <span>REVOLT!</span>
-                    </div>
-                </div>
-                <div class="party-group">
-                    <div class="candidate">
-                        <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Revolt! #1">
-                        <span>Revolt! Candidate #1</span>
-                    </div>
-                    <div class="candidate">
-                        <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Revolt! #2">
-                        <span>Revolt! Candidate #2</span>
-                    </div>
-                    <div class="candidate">
-                        <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Revolt! #3">
-                        <span>Revolt! Candidate #3</span>
+                
+                <!-- Revolt! Column -->
+                <div class="party-column">
+                    <div class="party-header">
+                        <div class="party-option">
+                            <input type="number" min="1" max="3" class="party-preference" placeholder="-" data-party="REVOLT!">
+                            <span>REVOLT!</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
+        
+        <!-- Divider line -->
         <div class="divider">
             <span class="divider-text">OR</span>
         </div>
-
-        <p class="instructions">Number ALL boxes below the line in order of preference (1 to 9)</p>
         
+        <!-- Below the line section -->
+        <div class="below-the-line">
+            <p class="instructions">BELOW THE LINE - Number ALL boxes in order of preference (1 to 9)</p>
+            <div class="ballot-container">
+                <!-- Whig Column -->
+                <div class="party-column">
+                    <div class="party-group">
+                        <div class="candidate">
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Whig #1">
+                            <span>Whig Candidate #1</span>
+                        </div>
+                        <div class="candidate">
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Whig #2">
+                            <span>Whig Candidate #2</span>
+                        </div>
+                        <div class="candidate">
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Whig #3">
+                            <span>Whig Candidate #3</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Progressive Column -->
+                <div class="party-column">
+                    <div class="party-group">
+                        <div class="candidate">
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Progressive #1">
+                            <span>Progressive Candidate #1</span>
+                        </div>
+                        <div class="candidate">
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Progressive #2">
+                            <span>Progressive Candidate #2</span>
+                        </div>
+                        <div class="candidate">
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Progressive #3">
+                            <span>Progressive Candidate #3</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Revolt! Column -->
+                <div class="party-column">
+                    <div class="party-group">
+                        <div class="candidate">
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Revolt! #1">
+                            <span>Revolt! Candidate #1</span>
+                        </div>
+                        <div class="candidate">
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Revolt! #2">
+                            <span>Revolt! Candidate #2</span>
+                        </div>
+                        <div class="candidate">
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Revolt! #3">
+                            <span>Revolt! Candidate #3</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Username Input -->
         <div class="username-input">
             <label for="username">Username:</label>
@@ -252,20 +280,22 @@
 
             // ===== RANDOMIZATION FUNCTIONS =====
             function initializeBallot() {
-                const ballotContainer = document.querySelector('.ballot-container');
+                const aboveLineContainer = document.querySelector('.above-the-line .ballot-container');
+                const belowLineContainer = document.querySelector('.below-the-line .ballot-container');
                 
                 // Shuffle the order of parties
                 const shuffledGroups = shuffleArray([...candidateGroups]);
                 
                 // Clear existing columns
-                ballotContainer.innerHTML = '';
+                aboveLineContainer.innerHTML = '';
+                belowLineContainer.innerHTML = '';
                 
                 // Create columns for each party
                 shuffledGroups.forEach(group => {
-                    const columnDiv = document.createElement('div');
-                    columnDiv.className = 'party-column';
+                    // Above the line (party voting)
+                    const aboveColumnDiv = document.createElement('div');
+                    aboveColumnDiv.className = 'party-column';
                     
-                    // Create party header with voting box
                     const partyHeader = document.createElement('div');
                     partyHeader.className = 'party-header';
                     
@@ -289,9 +319,13 @@
                     partyOption.appendChild(partyInput);
                     partyOption.appendChild(partySpan);
                     partyHeader.appendChild(partyOption);
-                    columnDiv.appendChild(partyHeader);
+                    aboveColumnDiv.appendChild(partyHeader);
+                    aboveLineContainer.appendChild(aboveColumnDiv);
                     
-                    // Create candidate group
+                    // Below the line (candidate voting)
+                    const belowColumnDiv = document.createElement('div');
+                    belowColumnDiv.className = 'party-column';
+                    
                     const groupDiv = document.createElement('div');
                     groupDiv.className = 'party-group';
                     
@@ -321,8 +355,8 @@
                         groupDiv.appendChild(candidateDiv);
                     });
                     
-                    columnDiv.appendChild(groupDiv);
-                    ballotContainer.appendChild(columnDiv);
+                    belowColumnDiv.appendChild(groupDiv);
+                    belowLineContainer.appendChild(belowColumnDiv);
                 });
             }
 
