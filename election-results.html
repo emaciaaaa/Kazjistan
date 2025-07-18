@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Election Results - People's Republic of Kazjistan</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #004c4c;
+            --secondary-color: #fba910;
+            --accent-color: #e8f7f7;
+            --text-color: #333;
+            --light-text: #666;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: #f9f9f9;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            font-family: 'Noto Serif', serif;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+        
+        .election-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .election-item {
+            background: var(--white);
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--secondary-color);
+            transition: transform 0.3s;
+        }
+        
+        .election-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .election-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        
+        .election-link:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Official Election Results</h1>
+    
+    <ul class="election-list">
+        <li class="election-item">
+            <a href="elections/2024-05-11.html" class="election-link">11 May 2024 General Election</a>
+        </li>
+        <li class="election-item">
+            <a href="elections/2024-05-25.html" class="election-link">25 May 2024 General Election</a>
+        </li>
+        <li class="election-item">
+            <a href="elections/2024-08-02.html" class="election-link">2 August 2024 General Election</a>
+        </li>
+        <li class="election-item">
+            <a href="elections/2024-08-30.html" class="election-link">30 August 2024 General Election</a>
+        </li>
+        <li class="election-item">
+            <a href="elections/2024-11-22.html" class="election-link">22 November 2024 General Election</a>
+        </li>
+        <li class="election-item">
+            <a href="elections/2025-05-09.html" class="election-link">9 May 2025 General Election</a>
+        </li>
+        <li class="election-item">
+            <a href="elections/2025-06-13.html" class="election-link">13 June 2025 General Election</a>
+        </li>
+    </ul>
+    
+    <a href="index.html" class="back-link">← Back to People's Portal</a>
+</body>
+</html>
