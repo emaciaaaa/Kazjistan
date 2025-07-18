@@ -14,6 +14,8 @@
             --text-color: #333;
             --light-text: #666;
             --white: #ffffff;
+            --header-height: 80px;
+            --max-width: 1200px;
         }
         
         body {
@@ -23,16 +25,99 @@
             color: var(--text-color);
             line-height: 1.6;
             background-color: #f9f9f9;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
         }
         
-        h1 {
-            color: var(--primary-color);
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--header-height);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo img {
+            height: 50px;
+        }
+        
+        .logo-text {
             font-family: 'Noto Serif', serif;
-            border-bottom: 2px solid var(--secondary-color);
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .logo-text span {
+            color: var(--secondary-color);
+            font-weight: 400;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--secondary-color);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        main {
+            padding: 40px 0;
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif', serif;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 30px;
             padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
         }
         
         .election-list {
@@ -77,35 +162,92 @@
         .back-link:hover {
             text-decoration: underline;
         }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 20px 0;
+            text-align: center;
+            border-top: 3px solid var(--secondary-color);
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                height: auto;
+                padding: 20px 0;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Official Election Results</h1>
-    
-    <ul class="election-list">
-        <li class="election-item">
-            <a href="elections/2024-05-11.html" class="election-link">11 May 2024 General Election</a>
-        </li>
-        <li class="election-item">
-            <a href="elections/2024-05-25.html" class="election-link">25 May 2024 General Election</a>
-        </li>
-        <li class="election-item">
-            <a href="elections/2024-08-02.html" class="election-link">2 August 2024 General Election</a>
-        </li>
-        <li class="election-item">
-            <a href="elections/2024-08-30.html" class="election-link">30 August 2024 General Election</a>
-        </li>
-        <li class="election-item">
-            <a href="elections/2024-11-22.html" class="election-link">22 November 2024 General Election</a>
-        </li>
-        <li class="election-item">
-            <a href="elections/2025-05-09.html" class="election-link">9 May 2025 General Election</a>
-        </li>
-        <li class="election-item">
-            <a href="elections/2025-06-13.html" class="election-link">13 June 2025 General Election</a>
-        </li>
-    </ul>
-    
-    <a href="index.html" class="back-link">← Back to People's Portal</a>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="flag-of-kazjistan.svg" alt="Kazjistan Flag" style="height: 40px;">
+                <div class="logo-text">PEOPLE'S REPUBLIC <span>OF KAZJISTAN</span></div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="https://kazjistan.miraheze.org/wiki/Main_Page">Wiki</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="section-title">Official Election Results</h1>
+        
+        <ul class="election-list">
+            <li class="election-item">
+                <a href="elections/2024-05-11.html" class="election-link">11 May 2024 General Election</a>
+            </li>
+            <li class="election-item">
+                <a href="elections/2024-05-25.html" class="election-link">25 May 2024 General Election</a>
+            </li>
+            <li class="election-item">
+                <a href="elections/2024-08-02.html" class="election-link">2 August 2024 General Election</a>
+            </li>
+            <li class="election-item">
+                <a href="elections/2024-08-30.html" class="election-link">30 August 2024 General Election</a>
+            </li>
+            <li class="election-item">
+                <a href="elections/2024-11-22.html" class="election-link">22 November 2024 General Election</a>
+            </li>
+            <li class="election-item">
+                <a href="elections/2025-05-09.html" class="election-link">9 May 2025 General Election</a>
+            </li>
+            <li class="election-item">
+                <a href="elections/2025-06-13.html" class="election-link">13 June 2025 General Election</a>
+            </li>
+        </ul>
+        
+        <a href="index.html" class="back-link">← Back to People's Portal</a>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                &copy; 2025 People's Republic of Kazjistan
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
