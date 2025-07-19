@@ -7,7 +7,6 @@
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* [Previous CSS rules from your main site remain unchanged] */
         :root {
             --primary-color: #004c4c;
             --secondary-color: #fba910;
@@ -19,7 +18,107 @@
             --max-width: 1200px;
         }
         
-        /* [All your existing header/footer/main container styles remain the same] */
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--header-height);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo img {
+            height: 50px;
+        }
+        
+        .logo-text {
+            font-family: 'Noto Serif', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .logo-text span {
+            color: var(--secondary-color);
+            font-weight: 400;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--secondary-color);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        main {
+            padding: 40px 0;
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif', serif;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
         
         .results-table {
             width: 100%;
@@ -50,6 +149,18 @@
             background-color: var(--accent-color);
         }
         
+        .vote-count {
+            font-family: monospace;
+            text-align: right;
+        }
+        
+        .percentage {
+            font-family: monospace;
+            text-align: right;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
         .uncontested-banner {
             background: var(--secondary-color);
             color: var(--white);
@@ -70,6 +181,42 @@
         
         .back-link:hover {
             text-decoration: underline;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 20px 0;
+            text-align: center;
+            border-top: 3px solid var(--secondary-color);
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                height: auto;
+                padding: 20px 0;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .results-table {
+                display: block;
+                overflow-x: auto;
+            }
         }
     </style>
 </head>
@@ -99,43 +246,51 @@
                 <tr>
                     <th>Candidate</th>
                     <th>Votes</th>
+                    <th>Percentage</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>Emacia</td>
-                    <td>-</td>
+                    <td class="vote-count">-</td>
+                    <td class="percentage">-</td>
                     <td>Elected</td>
                 </tr>
                 <tr>
                     <td>Emma</td>
-                    <td>-</td>
+                    <td class="vote-count">-</td>
+                    <td class="percentage">-</td>
                     <td>Elected</td>
                 </tr>
                 <tr>
                     <td>Gromble</td>
-                    <td>-</td>
+                    <td class="vote-count">-</td>
+                    <td class="percentage">-</td>
                     <td>Elected</td>
                 </tr>
                 <tr>
                     <td>Igor Witback</td>
-                    <td>-</td>
+                    <td class="vote-count">-</td>
+                    <td class="percentage">-</td>
                     <td>Elected</td>
                 </tr>
                 <tr>
                     <td>Key to Key</td>
-                    <td>-</td>
+                    <td class="vote-count">-</td>
+                    <td class="percentage">-</td>
                     <td>Elected</td>
                 </tr>
                 <tr>
                     <td>Lia</td>
-                    <td>-</td>
+                    <td class="vote-count">-</td>
+                    <td class="percentage">-</td>
                     <td>Elected</td>
                 </tr>
                 <tr>
                     <td>Seat</td>
-                    <td>-</td>
+                    <td class="vote-count">-</td>
+                    <td class="percentage">-</td>
                     <td>Elected</td>
                 </tr>
             </tbody>
