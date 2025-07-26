@@ -289,7 +289,7 @@
                 const aboveLineContainer = document.querySelector('.above-the-line .ballot-container');
                 const belowLineContainer = document.querySelector('.below-the-line .ballot-container');
                 
-                // Shuffle the order of parties
+                // Shuffle the order of parties (columns)
                 const shuffledGroups = shuffleArray([...candidateGroups]);
                 
                 // Clear existing columns
@@ -335,10 +335,8 @@
                     const groupDiv = document.createElement('div');
                     groupDiv.className = 'party-group';
                     
-                    // Shuffle candidates within each group
-                    const shuffledCandidates = shuffleArray([...group.candidates]);
-                    
-                    shuffledCandidates.forEach(candidate => {
+                    // DO NOT shuffle candidates within each group - keep original order
+                    group.candidates.forEach(candidate => {
                         const candidateDiv = document.createElement('div');
                         candidateDiv.className = 'candidate';
                         
@@ -598,7 +596,7 @@
                 submitToGoogleSheet(usernameInput.value.trim(), votes, isPartyVote);
             });
 
-            // Initialize the randomized ballot
+            // Initialize the randomized ballot (only shuffles party columns, not candidates within)
             initializeBallot();
         });
     </script>
