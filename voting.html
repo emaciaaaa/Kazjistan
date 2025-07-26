@@ -193,16 +193,36 @@
                 <div class="party-column">
                     <div class="party-group">
                         <div class="candidate">
-                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Whig #1">
-                            <span>Whig Candidate #1</span>
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Joe Sane">
+                            <span>Joe Sane</span>
                         </div>
                         <div class="candidate">
-                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Whig #2">
-                            <span>Whig Candidate #2</span>
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="EstoBlak">
+                            <span>EstoBlak</span>
                         </div>
                         <div class="candidate">
-                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Whig #3">
-                            <span>Whig Candidate #3</span>
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Elite">
+                            <span>Elite</span>
+                        </div>
+                        <div class="candidate">
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Hope">
+                            <span>Hope</span>
+                        </div>
+                        <div class="candidate">
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Zelvrix">
+                            <span>Zelvrix</span>
+                        </div>
+                        <div class="candidate">
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Zeynep">
+                            <span>Zeynep</span>
+                        </div>
+                        <div class="candidate">
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Fevsear">
+                            <span>Fevsear</span>
+                        </div>
+                        <div class="candidate">
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Goodquestion">
+                            <span>Goodquestion</span>
                         </div>
                     </div>
                 </div>
@@ -268,7 +288,7 @@
             const candidateGroups = [
                 {
                     name: "WHIG",
-                    candidates: ["Whig #1", "Whig #2", "Whig #3"]
+                    candidates: ["Joe Sane", "EstoBlak", "Elite", "Hope", "Zelvrix", "Zeynep", "Fevsear", "Goodquestion"]
                 },
                 {
                     name: "PROGRESSIVE",
@@ -279,7 +299,7 @@
                     candidates: ["Clover", "Luci", "Cisco"]
                 }
             ];
-            const totalCandidates = 9; // 3 parties × 3 candidates
+            const totalCandidates = 14; // Whig:8 + Progressive:3 + Revolt!:3
 
             // Track voting method
             let votingMethod = null; // 'party' or 'candidate'
@@ -504,7 +524,7 @@
                 else if (candidateVotes.length > 0) {
                     // Validate candidate votes
                     if (candidateVotes.length < 6) {
-                        return `Error: You must number AT LEAST 6 candidates (1-9) when voting below the line.`;
+                        return `Error: You must number AT LEAST 6 candidates (1-${totalCandidates}) when voting below the line.`;
                     }
                     
                     const candidateNumbers = candidateVotes.map(c => parseInt(c.value));
