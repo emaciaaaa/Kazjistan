@@ -229,16 +229,16 @@
                 <div class="party-column">
                     <div class="party-group">
                         <div class="candidate">
-                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Revolt! #1">
-                            <span>Revolt! Candidate #1</span>
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Clover">
+                            <span>Clover</span>
                         </div>
                         <div class="candidate">
-                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Revolt! #2">
-                            <span>Revolt! Candidate #2</span>
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Luci">
+                            <span>Luci</span>
                         </div>
                         <div class="candidate">
-                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Revolt! #3">
-                            <span>Revolt! Candidate #3</span>
+                            <input type="number" min="1" max="9" class="candidate-preference" placeholder="-" data-candidate="Cisco">
+                            <span>Cisco</span>
                         </div>
                     </div>
                 </div>
@@ -276,7 +276,7 @@
                 },
                 {
                     name: "REVOLT!",
-                    candidates: ["Revolt! #1", "Revolt! #2", "Revolt! #3"]
+                    candidates: ["Clover", "Luci", "Cisco"]
                 }
             ];
             const totalCandidates = 9; // 3 parties × 3 candidates
@@ -354,7 +354,7 @@
                         });
                         
                         const span = document.createElement('span');
-                        span.textContent = candidate.replace(/#(\d)/, 'Candidate #$1');
+                        span.textContent = candidate;
                         
                         candidateDiv.appendChild(input);
                         candidateDiv.appendChild(span);
