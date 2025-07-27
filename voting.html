@@ -568,7 +568,7 @@
                 else if (candidateVotes.length > 0) {
                     // Validate candidate votes
                     if (candidateVotes.length < 6) {
-                        return `Error: You must number AT LEAST 6 candidates (1-${totalCandidates}) when voting below the line.`;
+                        return `Error: You must number AT LEAST 6 candidates (1-${totalCandidates}) when voting below the line. You've only numbered ${candidateVotes.length}.`;
                     }
                     
                     const candidateNumbers = candidateVotes.map(c => parseInt(c.value));
@@ -587,6 +587,7 @@
                     return '';
                 }
                 else {
+                    // This case should only trigger if no votes at all are entered
                     return "Error: Please vote either above the line (for parties) or below the line (for candidates).";
                 }
             }
