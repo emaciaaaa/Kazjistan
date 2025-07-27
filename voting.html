@@ -129,6 +129,37 @@
             color: #555;
             margin-top: 5px;
         }
+        .referendum {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #000;
+            background-color: #f9f9f9;
+        }
+        .referendum h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .referendum p {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .referendum-input {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        .referendum-input input {
+            width: 100px;
+            height: 30px;
+            padding: 5px;
+            font-size: 16px;
+            text-align: center;
+            margin-right: 10px;
+        }
+        .referendum-input label {
+            font-weight: bold;
+        }
         @media (max-width: 768px) {
             .ballot-container {
                 flex-direction: column;
@@ -305,6 +336,27 @@
             </div>
         </div>
 
+        <!-- Referendum Propositions -->
+        <div class="referendum">
+            <h3>Referendum Proposition 1</h3>
+            <p>Do you agree with inserting the following article after twenty-eight, thereby shifting each following article by one digit?</p>
+            <p><strong>Article Twenty-Nine:</strong> The Judiciary shall not unduly delay proceedings without just cause, and must adjudicate cases in a timely manner. Justices found to partake in deliberate or unreasonable postponements of proceedings are to be removed by Parliament.</p>
+            <div class="referendum-input">
+                <input type="text" id="referendum1" placeholder="yes or no" pattern="^(yes|no)$" required>
+                <label for="referendum1">Your vote (yes/no):</label>
+            </div>
+        </div>
+
+        <div class="referendum">
+            <h3>Referendum Proposition 2</h3>
+            <p>Do you agree with inserting the following article after fifty-seven, thereby shifting each following article by one digit?</p>
+            <p><strong>Fifty-Eight:</strong> The government shall not establish, impose, or enforce any centralised economic, monetary, or financial system, nor shall it create institutions, regulations, or mechanisms that effectively constitute such a system, whether in whole or in part, directly or indirectly. No government or citizen shall institute financial, monetary, currency, or economic systems within Kazjistan, including central banks, private financial institutions, or external organizations purporting to act on behalf of the Kazji state. This prohibition extends to all claims of state endorsement, de facto financial structures, or circumvention through external entities.</p>
+            <div class="referendum-input">
+                <input type="text" id="referendum2" placeholder="yes or no" pattern="^(yes|no)$" required>
+                <label for="referendum2">Your vote (yes/no):</label>
+            </div>
+        </div>
+
         <!-- Username Input -->
         <div class="username-input">
             <label for="username">Username:</label>
@@ -323,6 +375,8 @@
             const usernameInput = document.getElementById('username');
             const partyPreferences = document.querySelectorAll('.party-preference');
             const candidatePreferences = document.querySelectorAll('.candidate-preference');
+            const referendum1Input = document.getElementById('referendum1');
+            const referendum2Input = document.getElementById('referendum2');
             
             // Candidate data (GROUPED by party for randomization)
             const candidateGroups = [
@@ -536,6 +590,22 @@
                     return "Error: Please enter your username.";
                 }
                 
+                // Validate referendum inputs
+                const referendum1Value = referendum1Input.value.trim().toLowerCase();
+                const referendum2Value = referendum2Input.value.trim().toLowerCase();
+                
+                if (!referendum1Value || !referendum2Value) {
+                    return "Error: Please vote on both referendum propositions (yes or no).";
+                }
+                
+                if (referendum1Value !== "yes" && referendum1Value !== "no") {
+                    return "Error: Referendum 1 must be 'yes' or 'no'.";
+                }
+                
+                if (referendum2Value !== "yes" && referendum2Value !== "no") {
+                    return "Error: Referendum 2 must be 'yes' or 'no'.";
+                }
+                
                 // Check which voting method was used
                 const partyVotes = Array.from(partyPreferences).filter(p => p.value !== "");
                 const candidateVotes = Array.from(candidatePreferences).filter(c => c.value !== "");
@@ -593,7 +663,7 @@
             }
 
             // ===== GOOGLE SHEETS SUBMISSION =====
-            function submitToGoogleSheet(username, votes, isPartyVote) {
+            function submitToGoogleSheet(username, votes, isPartyVote, referendum1, referendum2) {
                 const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzWINxRnQVYjWafOzCyTMSU96el7omcYDB-iF85paWJ5QDHSYpdG8x_lEtUi_1E68RK/exec";
                 
                 // Show loading state
@@ -611,7 +681,9 @@
                             candidate: vote.candidate,
                             preference: parseInt(vote.preference) || 0,
                             isParty: isPartyVote
-                        }))
+                        })),
+                        referendum1: referendum1,
+                        referendum2: referendum2
                     })
                 })
                 .then(() => {
@@ -658,7 +730,17 @@
                               preference: input.value
                           }));
                 
-                submitToGoogleSheet(usernameInput.value.trim(), votes, isPartyVote);
+                // Get referendum values
+                const referendum1Value = referendum1Input.value.trim().toLowerCase();
+                const referendum2Value = referendum2Input.value.trim().toLowerCase();
+                
+                submitToGoogleSheet(
+                    usernameInput.value.trim(), 
+                    votes, 
+                    isPartyVote,
+                    referendum1Value,
+                    referendum2Value
+                );
             });
 
             // Initialize the randomized ballot (only shuffles party columns, not candidates within)
