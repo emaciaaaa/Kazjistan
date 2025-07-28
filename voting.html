@@ -624,7 +624,7 @@
                 
                 if (partyVotes.length > 0) {
                     // Validate party votes
-                    if (partyVotes.length < 4) {
+                    if (partyVotes.length !== 4) {
                         return "Error: You must number ALL 4 party boxes (1-4) when voting above the line.";
                     }
                     
