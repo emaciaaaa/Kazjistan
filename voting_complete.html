@@ -3,54 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You for Voting</title>
+    <title>Thank You for Voting - People's Republic of Kazjistan</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #004c4c;
+            --secondary-color: #fba910;
+            --accent-color: #e8f7f7;
+            --text-color: #333;
+            --light-text: #666;
+            --white: #ffffff;
+            --header-height: 80px;
+            --max-width: 1200px;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: #f9f9f9;
         }
-        .thank-you-container {
-            background-color: white;
-            border: 2px solid #000;
-            padding: 20px;
-            max-width: 600px;
+        
+        .container {
+            max-width: var(--max-width);
             margin: 0 auto;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            text-align: center;
+            padding: 0 20px;
         }
-        h2 {
-            color: #0066cc;
+        
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--secondary-color);
         }
-        p {
-            font-size: 16px;
-            color: #333;
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--header-height);
         }
-        a {
-            color: #0066cc;
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo img {
+            height: 50px;
+        }
+        
+        .logo-text {
+            font-family: 'Noto Serif', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .logo-text span {
+            color: var(--secondary-color);
+            font-weight: 400;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: var(--primary-color);
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 500;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s;
         }
-        a:hover {
-            text-decoration: underline;
+        
+        nav a:hover {
+            color: var(--secondary-color);
         }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #006666 100%);
+            color: var(--white);
+            padding: 60px 0;
+            text-align: center;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            font-weight: 300;
+        }
+        
+        main {
+            padding: 40px 0;
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif', serif;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        
+        .thank-you-card {
+            background: var(--white);
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            border-top: 3px solid var(--secondary-color);
+        }
+        
+        .thank-you-card h2 {
+            color: var(--primary-color);
+            font-family: 'Noto Serif', serif;
+            font-size: 2rem;
+            margin-top: 0;
+        }
+        
+        .thank-you-card p {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            margin-bottom: 25px;
+        }
+        
+        .verify-link {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: var(--white);
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            margin: 20px 0;
+            transition: background-color 0.3s;
+        }
+        
+        .verify-link:hover {
+            background-color: #e69500;
+        }
+        
         .instructions {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #333;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 0.95rem;
+            color: var(--light-text);
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 20px 0;
+            text-align: center;
+            border-top: 3px solid var(--secondary-color);
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                height: auto;
+                padding: 20px 0;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .thank-you-card {
+                padding: 25px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="thank-you-container">
-        <h2>Thank You for Voting!</h2>
-        <p>Your vote has been successfully submitted.</p>
-        <p>Please <a href="https://discord.com/channels/1235929759184064602/1369965402167316570">go to #verify</a> to verify your vote.</p>
-
-        <div class="instructions">
-            <p>Please contact Emacia if you have any issues or questions.</p>
-            <p></p>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="flag-of-kazjistan.svg" alt="Kazjistan Flag" style="height: 40px;">
+                <div class="logo-text">PEOPLE'S REPUBLIC <span>OF KAZJISTAN</span></div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="https://kazjistan.miraheze.org/wiki/Main_Page">Wiki</a></li>
+                </ul>
+            </nav>
         </div>
-    </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Democratic Participation</h1>
+            <p>Your voice matters in the People's Republic</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <div class="thank-you-card">
+            <h2>Thank You for Voting!</h2>
+            <p>Your vote has been successfully submitted and recorded in the official electoral register.</p>
+            <p>The People's Republic values your democratic participation in shaping our collective future.</p>
+            
+            <a href="https://discord.com/channels/1235929759184064602/1369965402167316570" class="verify-link">Proceed to #verify in Discord</a>
+            
+            <div class="instructions">
+                <p>Please visit the #verify channel in our Discord to complete the verification process.</p>
+                <p>For any issues or questions, contact the Department of Justice or Emacia directly.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                &copy; 2025 People's Republic of Kazjistan
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
