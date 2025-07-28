@@ -70,6 +70,12 @@
             margin-top: 10px;
             text-align: center;
         }
+        .success {
+            color: green;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
         button {
             display: block;
             margin: 20px auto 0;
@@ -82,6 +88,10 @@
         }
         button:hover {
             background-color: #0055aa;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
         }
         .instructions {
             margin-bottom: 20px;
@@ -103,6 +113,7 @@
             margin-bottom: 20px;
             font-weight: bold;
             font-size: 18px;
+            color: #cc0000;
         }
         .divider {
             border-top: 3px solid black;
@@ -177,46 +188,8 @@
         <div class="above-the-line">
             <p class="instructions">ABOVE THE LINE - VOTE FOR PARTIES</p>
             <p class="requirement">(Number ALL 4 boxes in order of preference 1-4)</p>
-            <div class="ballot-container">
-                <!-- Whig Column -->
-                <div class="party-column">
-                    <div class="party-header">
-                        <div class="party-option">
-                            <input type="number" min="1" max="4" class="party-preference" placeholder="-" data-party="WHIG">
-                            <span>WHIG</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Progressive Column -->
-                <div class="party-column">
-                    <div class="party-header">
-                        <div class="party-option">
-                            <input type="number" min="1" max="4" class="party-preference" placeholder="-" data-party="PROGRESSIVE">
-                            <span>PROGRESSIVE</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Revolt! Column -->
-                <div class="party-column">
-                    <div class="party-header">
-                        <div class="party-option">
-                            <input type="number" min="1" max="4" class="party-preference" placeholder="-" data-party="REVOLT!">
-                            <span>REVOLT!</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Meg Column -->
-                <div class="party-column">
-                    <div class="party-header">
-                        <div class="party-option">
-                            <input type="number" min="1" max="4" class="party-preference" placeholder="-" data-party="MEG">
-                            <span>MEG</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="ballot-container" id="above-the-line-container">
+                <!-- Parties will be dynamically inserted here -->
             </div>
         </div>
         
@@ -229,118 +202,8 @@
         <div class="below-the-line">
             <p class="instructions">BELOW THE LINE - VOTE FOR CANDIDATES</p>
             <p class="requirement">(Number AT LEAST 8 boxes in order of preference 1-22)</p>
-            <div class="ballot-container">
-                <!-- Whig Column -->
-                <div class="party-column">
-                    <div class="party-group">
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Joe Sane">
-                            <span>Joe Sane</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Elite">
-                            <span>Elite</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Zelvrix">
-                            <span>Zelvrix</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Hope">
-                            <span>Hope</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="EstoBlake">
-                            <span>EstoBlake</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Zeynep">
-                            <span>Zeynep</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Fevsear">
-                            <span>Fevsear</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Goodquestion">
-                            <span>Goodquestion</span>
-                        </div>
-                    </div>
-                </div>
-                
-               <!-- Progressive Column (updated section) -->
-<div class="party-column">
-    <div class="party-group">
-        <div class="candidate">
-            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Igor Witback">
-            <span>Igor Witback</span>
-        </div>
-        <div class="candidate">
-            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Axell Nevylym">
-            <span>Axell Nevylym</span>
-        </div>
-        <div class="candidate">
-            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Timus Maximus">
-            <span>Timus Maximus</span>
-        </div>
-        <div class="candidate">
-            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Emacia">
-            <span>Emacia</span>
-        </div>
-        <div class="candidate">
-            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Fixie">
-            <span>Fixie</span>
-        </div>
-        <div class="candidate">
-            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Cyrzed">
-            <span>Cyrzed</span>
-        </div>
-        <div class="candidate">
-            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Aeropitz">
-            <span>Aeropitz</span>
-        </div>
-        <div class="candidate">
-            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Baraa">
-            <span>Baraa</span>
-        </div>
-        <div class="candidate">
-            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Coca-Cola King">
-            <span>Coca-Cola King</span>
-        </div>
-        <div class="candidate">
-            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Dinobop">
-            <span>Dinobop</span>
-        </div>
-    </div>
-</div>
-                
-                <!-- Revolt! Column -->
-                <div class="party-column">
-                    <div class="party-group">
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Clover">
-                            <span>Clover</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Luci">
-                            <span>Luci</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Cisco">
-                            <span>Cisco</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Meg Column -->
-                <div class="party-column">
-                    <div class="party-group">
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Meg">
-                            <span>Meg</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="ballot-container" id="below-the-line-container">
+                <!-- Candidates will be dynamically inserted here -->
             </div>
         </div>
 
@@ -372,6 +235,7 @@
         </div>
         
         <div class="error" id="error-message"></div>
+        <div class="success" id="success-message"></div>
         <button id="submit-ballot">Submit Ballot</button>
     </div>
 
@@ -379,10 +243,11 @@
     document.addEventListener('DOMContentLoaded', function() {
         // DOM elements
         const errorMsg = document.getElementById('error-message');
+        const successMsg = document.getElementById('success-message');
         const submitBtn = document.getElementById('submit-ballot');
         const usernameInput = document.getElementById('username');
-        const partyPreferences = document.querySelectorAll('.party-preference');
-        const candidatePreferences = document.querySelectorAll('.candidate-preference');
+        const aboveLineContainer = document.getElementById('above-the-line-container');
+        const belowLineContainer = document.getElementById('below-the-line-container');
         const referendum1Input = document.getElementById('referendum1');
         const referendum2Input = document.getElementById('referendum2');
         
@@ -405,15 +270,13 @@
                 candidates: ["Meg"]
             }
         ];
-        const totalCandidates = 22;
+        const totalCandidates = candidateGroups.reduce((sum, group) => sum + group.candidates.length, 0);
+        const totalParties = candidateGroups.length;
 
         // Initialize ballot
         initializeBallot();
 
         function initializeBallot() {
-            const aboveLineContainer = document.querySelector('.above-the-line .ballot-container');
-            const belowLineContainer = document.querySelector('.below-the-line .ballot-container');
-            
             // Shuffle party order
             const shuffledGroups = shuffleArray([...candidateGroups]);
             
@@ -421,7 +284,7 @@
             belowLineContainer.innerHTML = '';
             
             shuffledGroups.forEach(group => {
-                // Above the line
+                // Above the line - Party voting
                 const aboveColumnDiv = document.createElement('div');
                 aboveColumnDiv.className = 'party-column';
                 
@@ -434,7 +297,7 @@
                 const partyInput = document.createElement('input');
                 partyInput.type = 'number';
                 partyInput.min = '1';
-                partyInput.max = '4';
+                partyInput.max = totalParties.toString();
                 partyInput.className = 'party-preference';
                 partyInput.placeholder = '-';
                 partyInput.dataset.party = group.name;
@@ -449,7 +312,7 @@
                 aboveColumnDiv.appendChild(partyHeader);
                 aboveLineContainer.appendChild(aboveColumnDiv);
                 
-                // Below the line
+                // Below the line - Candidate voting
                 const belowColumnDiv = document.createElement('div');
                 belowColumnDiv.className = 'party-column';
                 const groupDiv = document.createElement('div');
@@ -466,6 +329,7 @@
                     input.className = 'candidate-preference';
                     input.placeholder = '-';
                     input.dataset.candidate = candidate;
+                    input.dataset.party = group.name;
                     input.addEventListener('input', handleCandidateInput);
                     
                     const span = document.createElement('span');
@@ -493,20 +357,46 @@
             const input = e.target;
             const value = input.value.trim();
             
-            if (value === "") return;
+            if (value === "") {
+                // Clear any error when clearing the input
+                if (errorMsg.textContent.includes("Party")) {
+                    errorMsg.textContent = "";
+                }
+                return;
+            }
             
             const numValue = parseInt(value);
-            if (isNaN(numValue) || numValue < 1 || numValue > 4) {
-                errorMsg.textContent = "Party preferences must be between 1 and 4.";
+            if (isNaN(numValue) {
+                errorMsg.textContent = "Please enter a valid number.";
                 input.value = "";
                 return;
             }
             
-            // Clear duplicate numbers
-            document.querySelectorAll('.party-preference').forEach(p => {
+            if (numValue < 1 || numValue > totalParties) {
+                errorMsg.textContent = `Party preferences must be between 1 and ${totalParties}.`;
+                input.value = "";
+                return;
+            }
+            
+            // Check if this is a duplicate number
+            const partyInputs = document.querySelectorAll('.party-preference');
+            let isDuplicate = false;
+            
+            partyInputs.forEach(p => {
                 if (p !== input && p.value === value) {
-                    p.value = "";
+                    isDuplicate = true;
                 }
+            });
+            
+            if (isDuplicate) {
+                errorMsg.textContent = "Duplicate party preference detected. Each number must be unique.";
+                input.value = "";
+                return;
+            }
+            
+            // Clear any candidate votes if voting above the line
+            document.querySelectorAll('.candidate-preference').forEach(c => {
+                c.value = "";
             });
             
             errorMsg.textContent = "";
@@ -516,26 +406,56 @@
             const input = e.target;
             const value = input.value.trim();
             
-            if (value === "") return;
+            if (value === "") {
+                // Clear any error when clearing the input
+                if (errorMsg.textContent.includes("Candidate")) {
+                    errorMsg.textContent = "";
+                }
+                return;
+            }
             
             const numValue = parseInt(value);
-            if (isNaN(numValue) || numValue < 1 || numValue > totalCandidates) {
+            if (isNaN(numValue)) {
+                errorMsg.textContent = "Please enter a valid number.";
+                input.value = "";
+                return;
+            }
+            
+            if (numValue < 1 || numValue > totalCandidates) {
                 errorMsg.textContent = `Preferences must be between 1 and ${totalCandidates}.`;
                 input.value = "";
                 return;
             }
             
-            // Clear duplicate numbers
-            document.querySelectorAll('.candidate-preference').forEach(c => {
+            // Check if this is a duplicate number
+            const candidateInputs = document.querySelectorAll('.candidate-preference');
+            let isDuplicate = false;
+            
+            candidateInputs.forEach(c => {
                 if (c !== input && c.value === value) {
-                    c.value = "";
+                    isDuplicate = true;
                 }
+            });
+            
+            if (isDuplicate) {
+                errorMsg.textContent = "Duplicate candidate preference detected. Each number must be unique.";
+                input.value = "";
+                return;
+            }
+            
+            // Clear any party votes if voting below the line
+            document.querySelectorAll('.party-preference').forEach(p => {
+                p.value = "";
             });
             
             errorMsg.textContent = "";
         }
 
         function validateBallot() {
+            // Clear previous messages
+            errorMsg.textContent = "";
+            successMsg.textContent = "";
+            
             // Basic validation
             if (!usernameInput.value.trim()) {
                 return "Error: Please enter your username.";
@@ -568,16 +488,16 @@
             
             // If voting above the line
             if (partyVotes.length > 0) {
-                if (partyVotes.length !== 4) {
-                    return "Error: Please number all 4 party boxes (1-4).";
+                if (partyVotes.length !== totalParties) {
+                    return `Error: Please number all ${totalParties} party boxes (1-${totalParties}).`;
                 }
                 
                 if (new Set(partyVotes).size !== partyVotes.length) {
                     return "Error: Duplicate party preferences detected.";
                 }
                 
-                if (partyVotes.some(n => n < 1 || n > 4)) {
-                    return "Error: Party preferences must be between 1 and 4.";
+                if (partyVotes.some(n => n < 1 || n > totalParties)) {
+                    return `Error: Party preferences must be between 1 and ${totalParties}.`;
                 }
                 
                 return ""; // Valid above-the-line vote
@@ -605,30 +525,52 @@
         }
 
         function submitToGoogleSheet(username, votes, isPartyVote, referendum1, referendum2) {
-            const googleScriptUrl = "YOUR_GOOGLE_SCRIPT_URL";
+            // Replace with your actual Google Apps Script URL
+            const googleScriptUrl = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
             
-            errorMsg.textContent = "Submitting...";
+            errorMsg.textContent = "Submitting your ballot...";
             errorMsg.style.color = "blue";
             submitBtn.disabled = true;
             
+            // Create the data payload
+            const payload = {
+                username: username.trim(),
+                votes: votes,
+                isPartyVote: isPartyVote,
+                referendum1: referendum1,
+                referendum2: referendum2,
+                timestamp: new Date().toISOString()
+            };
+            
+            // In a real implementation, you would send this to your Google Script
+            console.log("Payload to be sent:", payload);
+            
+            // Simulate a successful submission (replace with actual fetch)
+            setTimeout(() => {
+                errorMsg.textContent = "";
+                successMsg.textContent = "Ballot submitted successfully! (Simulated)";
+                successMsg.style.color = "green";
+                
+                // In a real implementation, you would redirect or show a success message
+                console.log("Ballot submitted successfully");
+                
+                // Reset form after successful submission
+                submitBtn.disabled = false;
+                // document.querySelector('form').reset();
+            }, 1500);
+            
+            /* 
+            // Actual fetch implementation would look like this:
             fetch(googleScriptUrl, {
                 method: "POST",
                 mode: "no-cors",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                    username: username.trim(),
-                    votes: votes.map(vote => ({
-                        candidate: vote.candidate,
-                        preference: parseInt(vote.preference) || 0,
-                        isParty: isPartyVote
-                    })),
-                    referendum1: referendum1,
-                    referendum2: referendum2
-                })
+                body: JSON.stringify(payload)
             })
             .then(() => {
-                errorMsg.textContent = "Ballot submitted successfully!";
-                errorMsg.style.color = "green";
+                errorMsg.textContent = "";
+                successMsg.textContent = "Ballot submitted successfully!";
+                successMsg.style.color = "green";
                 setTimeout(() => {
                     window.location.href = "https://example.com/voting_complete";
                 }, 2000);
@@ -639,6 +581,7 @@
                 submitBtn.disabled = false;
                 console.error("Error:", error);
             });
+            */
         }
 
         submitBtn.addEventListener('click', function() {
@@ -657,13 +600,16 @@
                     .filter(p => p.value !== "")
                     .map(p => ({
                         candidate: p.dataset.party,
-                        preference: p.value
+                        preference: p.value,
+                        type: "party"
                     }))
                 : Array.from(document.querySelectorAll('.candidate-preference'))
                     .filter(c => c.value !== "")
                     .map(c => ({
                         candidate: c.dataset.candidate,
-                        preference: c.value
+                        party: c.dataset.party,
+                        preference: c.value,
+                        type: "candidate"
                     }));
             
             submitToGoogleSheet(
