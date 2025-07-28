@@ -333,13 +333,13 @@
                     const span = document.createElement('span');
                     span.textContent = candidate;
                     
-                    candidateDiv.appendChild(input);
-                    candidateDiv.appendChild(span);
-                    groupDiv.appendChild(candidateDiv);
+                    candidateDiv.endChild(input);
+                    candidateDiv.endChild(span);
+                    groupDiv.endChild(candidateDiv);
                 });
                 
-                columnDiv.appendChild(groupDiv);
-                belowLineContainer.appendChild(columnDiv);
+                columnDiv.endChild(groupDiv);
+                belowLineContainer.endChild(columnDiv);
             });
         }
 
@@ -485,7 +485,7 @@
         }
 
         function submitToGoogleSheet(username, votes, isPartyVote, referendum1, referendum2) {
-            const googleScriptUrl = "YOUR_GOOGLE_SCRIPT_URL";
+            const googleScriptUrl = "https://script.google.com/macros/s/AKfycbx5kxcF0DF2maDC-THWPBklnXcZy7Og9iy2BMELJvrB2Wp2ZhEEq85C9MWd6rO2Kma9/exec";
             
             errorMsg.textContent = "Submitting...";
             errorMsg.style.color = "blue";
