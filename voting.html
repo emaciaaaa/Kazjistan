@@ -228,7 +228,7 @@
         <!-- Below the line section -->
         <div class="below-the-line">
             <p class="instructions">BELOW THE LINE - VOTE FOR CANDIDATES</p>
-            <p class="requirement">(Number AT LEAST 6 boxes in order of preference 1-22)</p>
+            <p class="requirement">(Number AT LEAST 8 boxes in order of preference 1-22)</p>
             <div class="ballot-container">
                 <!-- Whig Column -->
                 <div class="party-column">
@@ -268,51 +268,51 @@
                     </div>
                 </div>
                 
-                <!-- Progressive Column -->
-                <div class="party-column">
-                    <div class="party-group">
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Igor Witback">
-                            <span>Igor Witback</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Axell Nevylym">
-                            <span>Axell Nevylym</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Timus Maximus">
-                            <span>Timus Maximus</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Emacia">
-                            <span>Emacia</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Fixie">
-                            <span>Fixie</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Cyrzed">
-                            <span>Cyrzed</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Aeropitz">
-                            <span>Aeropitz</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Baraa">
-                            <span>Baraa</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Dinobop">
-                            <span>Dinobop</span>
-                        </div>
-                        <div class="candidate">
-                            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Coca-Cola King">
-                            <span>Coca-Cola King</span>
-                        </div>
-                    </div>
-                </div>
+               <!-- Progressive Column (updated section) -->
+<div class="party-column">
+    <div class="party-group">
+        <div class="candidate">
+            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Igor Witback">
+            <span>Igor Witback</span>
+        </div>
+        <div class="candidate">
+            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Axell Nevylym">
+            <span>Axell Nevylym</span>
+        </div>
+        <div class="candidate">
+            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Timus Maximus">
+            <span>Timus Maximus</span>
+        </div>
+        <div class="candidate">
+            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Emacia">
+            <span>Emacia</span>
+        </div>
+        <div class="candidate">
+            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Fixie">
+            <span>Fixie</span>
+        </div>
+        <div class="candidate">
+            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Cyrzed">
+            <span>Cyrzed</span>
+        </div>
+        <div class="candidate">
+            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Aeropitz">
+            <span>Aeropitz</span>
+        </div>
+        <div class="candidate">
+            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Baraa">
+            <span>Baraa</span>
+        </div>
+        <div class="candidate">
+            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Coca-Cola King">
+            <span>Coca-Cola King</span>
+        </div>
+        <div class="candidate">
+            <input type="number" min="1" max="22" class="candidate-preference" placeholder="-" data-candidate="Dinobop">
+            <span>Dinobop</span>
+        </div>
+    </div>
+</div>
                 
                 <!-- Revolt! Column -->
                 <div class="party-column">
@@ -645,8 +645,8 @@
                 } 
                 else if (candidateVotes.length > 0) {
                     // Validate candidate votes
-                    if (candidateVotes.length < 6) {
-                        return `Error: You must number AT LEAST 6 candidates (1-${totalCandidates}) when voting below the line. You've only numbered ${candidateVotes.length}.`;
+                    if (candidateVotes.length < 8) {
+                        return `Error: You must number AT LEAST 8 candidates (1-${totalCandidates}) when voting below the line. You've only numbered ${candidateVotes.length}.`;
                     }
                     
                     const candidateNumbers = candidateVotes.map(c => parseInt(c.value));
