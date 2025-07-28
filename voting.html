@@ -375,385 +375,366 @@
         <button id="submit-ballot">Submit Ballot</button>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // DOM elements
-            const errorMsg = document.getElementById('error-message');
-            const submitBtn = document.getElementById('submit-ballot');
-            const usernameInput = document.getElementById('username');
-            const partyPreferences = document.querySelectorAll('.party-preference');
-            const candidatePreferences = document.querySelectorAll('.candidate-preference');
-            const referendum1Input = document.getElementById('referendum1');
-            const referendum2Input = document.getElementById('referendum2');
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // DOM elements
+        const errorMsg = document.getElementById('error-message');
+        const submitBtn = document.getElementById('submit-ballot');
+        const usernameInput = document.getElementById('username');
+        const partyPreferences = document.querySelectorAll('.party-preference');
+        const candidatePreferences = document.querySelectorAll('.candidate-preference');
+        const referendum1Input = document.getElementById('referendum1');
+        const referendum2Input = document.getElementById('referendum2');
+        
+        // Candidate data (GROUPED by party for randomization)
+        const candidateGroups = [
+            {
+                name: "WHIG",
+                candidates: ["Joe Sane", "Elite", "Zelvrix", "Hope", "EstoBlake", "Zeynep", "Fevsear", "Goodquestion"]
+            },
+            {
+                name: "PROGRESSIVE",
+                candidates: ["Igor Witback", "Axell Nevylym", "Timus Maximus", "Emacia", "Fixie", "Cyrzed", "Aeropitz", "Baraa", "Coca-Cola King", "Dinobop"]
+            },
+            {
+                name: "REVOLT!",
+                candidates: ["Clover", "Luci", "Cisco"]
+            },
+            {
+                name: "MEG",
+                candidates: ["Meg"]
+            }
+        ];
+        const totalCandidates = 22; // Whig:8 + Progressive:10 + Revolt!:3 + Meg:1
+
+        // ===== RANDOMIZATION FUNCTIONS =====
+        function initializeBallot() {
+            const aboveLineContainer = document.querySelector('.above-the-line .ballot-container');
+            const belowLineContainer = document.querySelector('.below-the-line .ballot-container');
             
-            // Candidate data (GROUPED by party for randomization)
-            const candidateGroups = [
-                {
-                    name: "WHIG",
-                    candidates: ["Joe Sane", "Elite", "Zelvrix", "Hope", "EstoBlake", "Zeynep", "Fevsear", "Goodquestion"]
-                },
-                {
-                    name: "PROGRESSIVE",
-                    candidates: ["Igor Witback", "Axell Nevylym", "Timus Maximus", "Emacia", "Fixie", "Cyrzed", "Aeropitz", "Baraa", "Coca-Cola King", "Dinobop"]
-                },
-                {
-                    name: "REVOLT!",
-                    candidates: ["Clover", "Luci", "Cisco"]
-                },
-                {
-                    name: "MEG",
-                    candidates: ["Meg"]
-                }
-            ];
-            const totalCandidates = 22; // Whig:8 + Progressive:10 + Revolt!:3 + Meg:1
-
-            // Track voting method
-            let votingMethod = null; // 'party' or 'candidate'
-
-            // ===== RANDOMIZATION FUNCTIONS =====
-            function initializeBallot() {
-                const aboveLineContainer = document.querySelector('.above-the-line .ballot-container');
-                const belowLineContainer = document.querySelector('.below-the-line .ballot-container');
+            // Shuffle the order of parties (columns)
+            const shuffledGroups = shuffleArray([...candidateGroups]);
+            
+            // Clear existing columns
+            aboveLineContainer.innerHTML = '';
+            belowLineContainer.innerHTML = '';
+            
+            // Create columns for each party
+            shuffledGroups.forEach(group => {
+                // Above the line (party voting)
+                const aboveColumnDiv = document.createElement('div');
+                aboveColumnDiv.className = 'party-column';
                 
-                // Shuffle the order of parties (columns)
-                const shuffledGroups = shuffleArray([...candidateGroups]);
+                const partyHeader = document.createElement('div');
+                partyHeader.className = 'party-header';
                 
-                // Clear existing columns
-                aboveLineContainer.innerHTML = '';
-                belowLineContainer.innerHTML = '';
+                const partyOption = document.createElement('div');
+                partyOption.className = 'party-option';
                 
-                // Create columns for each party
-                shuffledGroups.forEach(group => {
-                    // Above the line (party voting)
-                    const aboveColumnDiv = document.createElement('div');
-                    aboveColumnDiv.className = 'party-column';
-                    
-                    const partyHeader = document.createElement('div');
-                    partyHeader.className = 'party-header';
-                    
-                    const partyOption = document.createElement('div');
-                    partyOption.className = 'party-option';
-                    
-                    const partyInput = document.createElement('input');
-                    partyInput.type = 'number';
-                    partyInput.min = '1';
-                    partyInput.max = '4';
-                    partyInput.className = 'party-preference';
-                    partyInput.placeholder = '-';
-                    partyInput.dataset.party = group.name;
-                    partyInput.addEventListener('input', function() {
-                        handlePartyInput(this);
-                    });
-                    
-                    const partySpan = document.createElement('span');
-                    partySpan.textContent = group.name;
-                    
-                    partyOption.appendChild(partyInput);
-                    partyOption.appendChild(partySpan);
-                    partyHeader.appendChild(partyOption);
-                    aboveColumnDiv.appendChild(partyHeader);
-                    aboveLineContainer.appendChild(aboveColumnDiv);
-                    
-                    // Below the line (candidate voting)
-                    const belowColumnDiv = document.createElement('div');
-                    belowColumnDiv.className = 'party-column';
-                    
-                    const groupDiv = document.createElement('div');
-                    groupDiv.className = 'party-group';
-                    
-                    // DO NOT shuffle candidates within each group - keep original order
-                    group.candidates.forEach(candidate => {
-                        const candidateDiv = document.createElement('div');
-                        candidateDiv.className = 'candidate';
-                        
-                        const input = document.createElement('input');
-                        input.type = 'number';
-                        input.min = '1';
-                        input.max = totalCandidates.toString();
-                        input.className = 'candidate-preference';
-                        input.placeholder = '-';
-                        input.dataset.candidate = candidate;
-                        input.addEventListener('input', function() {
-                            handleCandidateInput(this);
-                        });
-                        
-                        const span = document.createElement('span');
-                        span.textContent = candidate;
-                        
-                        candidateDiv.appendChild(input);
-                        candidateDiv.appendChild(span);
-                        groupDiv.appendChild(candidateDiv);
-                    });
-                    
-                    belowColumnDiv.appendChild(groupDiv);
-                    belowLineContainer.appendChild(belowColumnDiv);
-                });
-            }
-
-            // Fisher-Yates shuffle algorithm
-            function shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-                return array;
-            }
-
-            // ===== INPUT HANDLERS =====
-            function handlePartyInput(input) {
-                const value = input.value.trim();
-                
-                if (value === "") {
-                    // If clearing a party vote, reset voting method
-                    const hasPartyVotes = Array.from(partyPreferences).some(p => p.value !== "");
-                    if (!hasPartyVotes) {
-                        votingMethod = null;
-                    }
-                    return;
-                }
-                
-                // Validate party input
-                const numValue = parseInt(value);
-                if (isNaN(numValue)) {
-                    input.value = "";
-                    return;
-                }
-                
-                if (numValue < 1 || numValue > 4) {
-                    errorMsg.textContent = "Party preferences must be between 1 and 4.";
-                    input.value = "";
-                    return;
-                }
-                
-                // Check if candidate voting was already started
-                const hasCandidateVotes = Array.from(candidatePreferences).some(c => c.value !== "");
-                if (hasCandidateVotes) {
-                    errorMsg.textContent = "You can't vote both above and below the line. Please choose one method.";
-                    input.value = "";
-                    return;
-                }
-                
-                // Set voting method to party
-                votingMethod = 'party';
-                
-                // Clear other party inputs with the same value
-                partyPreferences.forEach(p => {
-                    if (p !== input && p.value === value) {
-                        p.value = "";
-                    }
+                const partyInput = document.createElement('input');
+                partyInput.type = 'number';
+                partyInput.min = '1';
+                partyInput.max = '4';
+                partyInput.className = 'party-preference';
+                partyInput.placeholder = '-';
+                partyInput.dataset.party = group.name;
+                partyInput.addEventListener('input', function() {
+                    handlePartyInput(this);
                 });
                 
-                // Clear any error messages
-                errorMsg.textContent = "";
-            }
+                const partySpan = document.createElement('span');
+                partySpan.textContent = group.name;
+                
+                partyOption.appendChild(partyInput);
+                partyOption.appendChild(partySpan);
+                partyHeader.appendChild(partyOption);
+                aboveColumnDiv.appendChild(partyHeader);
+                aboveLineContainer.appendChild(aboveColumnDiv);
+                
+                // Below the line (candidate voting)
+                const belowColumnDiv = document.createElement('div');
+                belowColumnDiv.className = 'party-column';
+                
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'party-group';
+                
+                // Keep original candidate order within each group
+                group.candidates.forEach(candidate => {
+                    const candidateDiv = document.createElement('div');
+                    candidateDiv.className = 'candidate';
+                    
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.min = '1';
+                    input.max = totalCandidates.toString();
+                    input.className = 'candidate-preference';
+                    input.placeholder = '-';
+                    input.dataset.candidate = candidate;
+                    input.addEventListener('input', function() {
+                        handleCandidateInput(this);
+                    });
+                    
+                    const span = document.createElement('span');
+                    span.textContent = candidate;
+                    
+                    candidateDiv.appendChild(input);
+                    candidateDiv.appendChild(span);
+                    groupDiv.appendChild(candidateDiv);
+                });
+                
+                belowColumnDiv.appendChild(groupDiv);
+                belowLineContainer.appendChild(belowColumnDiv);
+            });
+        }
 
-            function handleCandidateInput(input) {
-                const value = input.value.trim();
-                
-                if (value === "") {
-                    // If clearing a candidate vote, check if we should reset voting method
-                    const hasCandidateVotes = Array.from(candidatePreferences).some(c => c.value !== "");
-                    if (!hasCandidateVotes) {
-                        votingMethod = null;
-                    }
-                    return;
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // ===== INPUT HANDLERS =====
+        function handlePartyInput(input) {
+            const value = input.value.trim();
+            
+            if (value === "") {
+                return;
+            }
+            
+            // Validate party input
+            const numValue = parseInt(value);
+            if (isNaN(numValue)) {
+                input.value = "";
+                return;
+            }
+            
+            if (numValue < 1 || numValue > 4) {
+                errorMsg.textContent = "Party preferences must be between 1 and 4.";
+                input.value = "";
+                return;
+            }
+            
+            // Check if candidate voting was already started
+            const hasCandidateVotes = Array.from(candidatePreferences).some(c => c.value !== "");
+            if (hasCandidateVotes) {
+                errorMsg.textContent = "You can't vote both above and below the line. Please choose one method.";
+                input.value = "";
+                return;
+            }
+            
+            // Clear other party inputs with the same value
+            partyPreferences.forEach(p => {
+                if (p !== input && p.value === value) {
+                    p.value = "";
                 }
-                
-                // Check if party voting was already started
-                const hasPartyVotes = Array.from(partyPreferences).some(p => p.value !== "");
-                if (hasPartyVotes) {
-                    errorMsg.textContent = "You can't vote both above and below the line. Please choose one method.";
-                    input.value = "";
-                    return;
+            });
+            
+            errorMsg.textContent = "";
+        }
+
+        function handleCandidateInput(input) {
+            const value = input.value.trim();
+            
+            if (value === "") {
+                return;
+            }
+            
+            // Check if party voting was already started
+            const hasPartyVotes = Array.from(partyPreferences).some(p => p.value !== "");
+            if (hasPartyVotes) {
+                errorMsg.textContent = "You can't vote both above and below the line. Please choose one method.";
+                input.value = "";
+                return;
+            }
+            
+            // Validate candidate input
+            const numValue = parseInt(value);
+            if (isNaN(numValue)) {
+                input.value = "";
+                return;
+            }
+            
+            if (numValue < 1 || numValue > totalCandidates) {
+                errorMsg.textContent = `Preferences must be between 1 and ${totalCandidates}.`;
+                input.value = "";
+                return;
+            }
+            
+            // Check for duplicates
+            candidatePreferences.forEach(c => {
+                if (c !== input && c.value === value) {
+                    errorMsg.textContent = `Number ${value} is used more than once.`;
+                    c.value = "";
                 }
-                
-                // Set voting method to candidate
-                votingMethod = 'candidate';
-                
-                // Validate candidate input
-                const numValue = parseInt(value);
-                if (isNaN(numValue)) {
-                    input.value = "";
-                    return;
-                }
-                
-                if (numValue < 1 || numValue > totalCandidates) {
-                    errorMsg.textContent = `Preferences must be between 1 and ${totalCandidates}.`;
-                    input.value = "";
-                    return;
+            });
+        }
+
+        // ===== VALIDATION FUNCTIONS =====
+        function validateBallot() {
+            if (!usernameInput.value.trim()) {
+                return "Error: Please enter your username.";
+            }
+            
+            // Validate referendum inputs
+            const referendum1Value = referendum1Input.value.trim().toLowerCase();
+            const referendum2Value = referendum2Input.value.trim().toLowerCase();
+            
+            if (!referendum1Value || !referendum2Value) {
+                return "Error: Please vote on both referendum propositions (yes or no).";
+            }
+            
+            if (referendum1Value !== "yes" && referendum1Value !== "no") {
+                return "Error: Referendum 1 must be 'yes' or 'no'.";
+            }
+            
+            if (referendum2Value !== "yes" && referendum2Value !== "no") {
+                return "Error: Referendum 2 must be 'yes' or 'no'.";
+            }
+            
+            // Check voting method
+            const partyVotes = Array.from(partyPreferences).filter(p => p.value !== "");
+            const candidateVotes = Array.from(candidatePreferences).filter(c => c.value !== "");
+            
+            if (partyVotes.length > 0 && candidateVotes.length > 0) {
+                return "Error: Please vote either above OR below the line, not both.";
+            }
+            
+            // If voting above the line (parties)
+            if (partyVotes.length > 0) {
+                // Check if all 4 parties are numbered
+                if (partyVotes.length !== 4) {
+                    return "Error: Please number all 4 party boxes (1-4) when voting above the line.";
                 }
                 
                 // Check for duplicates
-                candidatePreferences.forEach(c => {
-                    if (c !== input && c.value === value) {
-                        errorMsg.textContent = `Number ${value} is used more than once.`;
-                        c.value = "";
-                    }
-                });
+                const partyNumbers = partyVotes.map(p => parseInt(p.value));
+                const uniqueNumbers = new Set(partyNumbers);
+                if (partyNumbers.length !== uniqueNumbers.size) {
+                    return "Error: Duplicate party preferences detected.";
+                }
+                
+                // Check numbers are 1-4
+                const invalidNumbers = partyNumbers.filter(n => n < 1 || n > 4);
+                if (invalidNumbers.length > 0) {
+                    return "Error: Party preferences must be between 1 and 4.";
+                }
+                
+                return ''; // No error
             }
-
-            // ===== VALIDATION FUNCTIONS =====
-            function validateBallot() {
-                if (!usernameInput.value.trim()) {
-                    return "Error: Please enter your username.";
+            // If voting below the line (candidates)
+            else if (candidateVotes.length > 0) {
+                // Check minimum 8 candidates
+                if (candidateVotes.length < 8) {
+                    return `Error: Please number at least 8 candidates (1-${totalCandidates}) when voting below the line.`;
                 }
                 
-                // Validate referendum inputs
-                const referendum1Value = referendum1Input.value.trim().toLowerCase();
-                const referendum2Value = referendum2Input.value.trim().toLowerCase();
-                
-                if (!referendum1Value || !referendum2Value) {
-                    return "Error: Please vote on both referendum propositions (yes or no).";
+                // Check for duplicates
+                const candidateNumbers = candidateVotes.map(c => parseInt(c.value));
+                const uniqueNumbers = new Set(candidateNumbers);
+                if (candidateNumbers.length !== uniqueNumbers.size) {
+                    return "Error: Duplicate candidate preferences detected.";
                 }
                 
-                if (referendum1Value !== "yes" && referendum1Value !== "no") {
-                    return "Error: Referendum 1 must be 'yes' or 'no'.";
+                // Check numbers are 1-22
+                const invalidNumbers = candidateNumbers.filter(n => n < 1 || n > totalCandidates);
+                if (invalidNumbers.length > 0) {
+                    return `Error: Candidate preferences must be between 1 and ${totalCandidates}.`;
                 }
                 
-                if (referendum2Value !== "yes" && referendum2Value !== "no") {
-                    return "Error: Referendum 2 must be 'yes' or 'no'.";
-                }
-                
-                // Check which voting method was used
-                const partyVotes = Array.from(partyPreferences).filter(p => p.value !== "");
-                const candidateVotes = Array.from(candidatePreferences).filter(c => c.value !== "");
-                
-                if (partyVotes.length > 0 && candidateVotes.length > 0) {
-                    return "Error: You can't vote both above and below the line. Please choose one method.";
-                }
-                
-                if (partyVotes.length > 0) {
-                    // Validate party votes
-                    if (partyVotes.length !== 4) {
-                        return "Error: You must number ALL 4 party boxes (1-4) when voting above the line.";
-                    }
-                    
-                    const partyNumbers = partyVotes.map(p => parseInt(p.value));
-                    
-                    // Check for duplicates
-                    if (partyNumbers.length !== new Set(partyNumbers).size) {
-                        return "Error: Duplicate party preferences detected.";
-                    }
-                    
-                    // Check numbers are within range
-                    const invalidNumbers = partyNumbers.filter(n => n < 1 || n > 4);
-                    if (invalidNumbers.length > 0) {
-                        return "Error: Party preferences must be between 1 and 4.";
-                    }
-                    
-                    return '';
-                } 
-                else if (candidateVotes.length > 0) {
-                    // Validate candidate votes
-                    if (candidateVotes.length < 8) {
-                        return `Error: You must number AT LEAST 8 candidates (1-${totalCandidates}) when voting below the line. You've only numbered ${candidateVotes.length}.`;
-                    }
-                    
-                    const candidateNumbers = candidateVotes.map(c => parseInt(c.value));
-                    
-                    // Check for duplicates
-                    if (candidateNumbers.length !== new Set(candidateNumbers).size) {
-                        return "Error: Duplicate candidate preferences detected.";
-                    }
-                    
-                    // Check numbers are within range
-                    const invalidNumbers = candidateNumbers.filter(n => n < 1 || n > totalCandidates);
-                    if (invalidNumbers.length > 0) {
-                        return `Error: Preferences must be between 1 and ${totalCandidates}.`;
-                    }
-                    
-                    return '';
-                }
-                else {
-                    // This case should only trigger if no votes at all are entered
-                    return "Error: Please vote either above the line (for parties) or below the line (for candidates).";
-                }
+                return ''; // No error
             }
+            else {
+                return "Error: Please vote either above the line (for parties) or below the line (for candidates).";
+            }
+        }
 
-            // ===== GOOGLE SHEETS SUBMISSION =====
-            function submitToGoogleSheet(username, votes, isPartyVote, referendum1, referendum2) {
-                const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzWINxRnQVYjWafOzCyTMSU96el7omcYDB-iF85paWJ5QDHSYpdG8x_lEtUi_1E68RK/exec";
-                
-                // Show loading state
-                errorMsg.textContent = "Submitting...";
-                errorMsg.style.color = "blue";
-                submitBtn.disabled = true;
-                
-                fetch(googleScriptUrl, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ 
-                        username: username.trim(),
-                        votes: votes.map(vote => ({
-                            candidate: vote.candidate,
-                            preference: parseInt(vote.preference) || 0,
-                            isParty: isPartyVote
-                        })),
-                        referendum1: referendum1,
-                        referendum2: referendum2
-                    })
+        // ===== GOOGLE SHEETS SUBMISSION =====
+        function submitToGoogleSheet(username, votes, isPartyVote, referendum1, referendum2) {
+            const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzWINxRnQVYjWafOzCyTMSU96el7omcYDB-iF85paWJ5QDHSYpdG8x_lEtUi_1E68RK/exec";
+            
+            // Show loading state
+            errorMsg.textContent = "Submitting...";
+            errorMsg.style.color = "blue";
+            submitBtn.disabled = true;
+            
+            fetch(googleScriptUrl, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    username: username.trim(),
+                    votes: votes.map(vote => ({
+                        candidate: vote.candidate,
+                        preference: parseInt(vote.preference) || 0,
+                        isParty: isPartyVote
+                    })),
+                    referendum1: referendum1,
+                    referendum2: referendum2
                 })
-                .then(() => {
-                    errorMsg.textContent = "Ballot submitted successfully!";
-                    errorMsg.style.color = "green";
-                    
-                    // Redirect to a new page after 2 seconds
-                    setTimeout(() => {
-                        window.location.href = "https://example.com/voting_complete"; // Replace with your desired URL
-                    }, 2000);
-                })
-                .catch((error) => {
-                    errorMsg.textContent = "Error submitting ballot. Please try again.";
-                    errorMsg.style.color = "red";
-                    submitBtn.disabled = false;
-                    console.error("Error:", error);
-                });
-            }
-
-            // ===== EVENT LISTENERS =====
-            submitBtn.addEventListener('click', function() {
-                const validationError = validateBallot();
-                if (validationError) {
-                    errorMsg.textContent = validationError;
-                    errorMsg.style.color = "red";
-                    return;
-                }
+            })
+            .then(() => {
+                errorMsg.textContent = "Ballot submitted successfully!";
+                errorMsg.style.color = "green";
                 
-                // Determine if this is a party or candidate vote
-                const partyVotes = Array.from(partyPreferences).filter(p => p.value !== "");
-                const isPartyVote = partyVotes.length > 0;
-                
-                const votes = isPartyVote 
-                    ? Array.from(partyPreferences)
-                          .filter(p => p.value !== "")
-                          .map(input => ({
-                              candidate: input.dataset.party,
-                              preference: input.value
-                          }))
-                    : Array.from(candidatePreferences)
-                          .filter(c => c.value !== "")
-                          .map(input => ({
-                              candidate: input.dataset.candidate,
-                              preference: input.value
-                          }));
-                
-                // Get referendum values
-                const referendum1Value = referendum1Input.value.trim().toLowerCase();
-                const referendum2Value = referendum2Input.value.trim().toLowerCase();
-                
-                submitToGoogleSheet(
-                    usernameInput.value.trim(), 
-                    votes, 
-                    isPartyVote,
-                    referendum1Value,
-                    referendum2Value
-                );
+                // Redirect after 2 seconds
+                setTimeout(() => {
+                    window.location.href = "https://example.com/voting_complete";
+                }, 2000);
+            })
+            .catch((error) => {
+                errorMsg.textContent = "Error submitting ballot. Please try again.";
+                errorMsg.style.color = "red";
+                submitBtn.disabled = false;
+                console.error("Error:", error);
             });
+        }
 
-            // Initialize the randomized ballot (only shuffles party columns, not candidates within)
-            initializeBallot();
+        // ===== EVENT LISTENERS =====
+        submitBtn.addEventListener('click', function() {
+            const validationError = validateBallot();
+            if (validationError) {
+                errorMsg.textContent = validationError;
+                errorMsg.style.color = "red";
+                return;
+            }
+            
+            // Determine if this is a party or candidate vote
+            const partyVotes = Array.from(partyPreferences).filter(p => p.value !== "");
+            const isPartyVote = partyVotes.length > 0;
+            
+            const votes = isPartyVote 
+                ? Array.from(partyPreferences)
+                      .filter(p => p.value !== "")
+                      .map(input => ({
+                          candidate: input.dataset.party,
+                          preference: input.value
+                      }))
+                : Array.from(candidatePreferences)
+                      .filter(c => c.value !== "")
+                      .map(input => ({
+                          candidate: input.dataset.candidate,
+                          preference: input.value
+                      }));
+            
+            // Get referendum values
+            const referendum1Value = referendum1Input.value.trim().toLowerCase();
+            const referendum2Value = referendum2Input.value.trim().toLowerCase();
+            
+            submitToGoogleSheet(
+                usernameInput.value.trim(), 
+                votes, 
+                isPartyVote,
+                referendum1Value,
+                referendum2Value
+            );
         });
-    </script>
+
+        // Initialize the randomized ballot
+        initializeBallot();
+    });
+</script>
 </body>
 </html>
