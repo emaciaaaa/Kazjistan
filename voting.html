@@ -238,6 +238,14 @@
         const referendum1Input = document.getElementById('referendum1');
         const referendum2Input = document.getElementById('referendum2');
         
+        // Party data
+        const parties = [
+            { name: "WHIG" },
+            { name: "PROGRESSIVE" },
+            { name: "REVOLT!" },
+            { name: "MEG" }
+        ];
+        
         // Candidate data
         const candidateGroups = [
             {
@@ -264,15 +272,17 @@
 
         function initializeBallot() {
             // Shuffle party order
+            const shuffledParties = shuffleArray([...parties]);
             const shuffledGroups = shuffleArray([...candidateGroups]);
             
+            // Clear containers
             aboveLineContainer.innerHTML = '';
             belowLineContainer.innerHTML = '';
             
-            shuffledGroups.forEach(group => {
-                // Above the line
-                const aboveColumnDiv = document.createElement('div');
-                aboveColumnDiv.className = 'party-column';
+            // Create above-the-line (party) voting
+            shuffledParties.forEach(party => {
+                const columnDiv = document.createElement('div');
+                columnDiv.className = 'party-column';
                 
                 const partyHeader = document.createElement('div');
                 partyHeader.className = 'party-header';
@@ -286,21 +296,24 @@
                 partyInput.max = '4';
                 partyInput.className = 'party-preference';
                 partyInput.placeholder = '-';
-                partyInput.dataset.party = group.name;
+                partyInput.dataset.party = party.name;
                 partyInput.addEventListener('input', handlePartyInput);
                 
                 const partySpan = document.createElement('span');
-                partySpan.textContent = group.name;
+                partySpan.textContent = party.name;
                 
                 partyOption.appendChild(partyInput);
                 partyOption.appendChild(partySpan);
                 partyHeader.appendChild(partyOption);
-                aboveColumnDiv.appendChild(partyHeader);
-                aboveLineContainer.appendChild(aboveColumnDiv);
+                columnDiv.appendChild(partyHeader);
+                aboveLineContainer.appendChild(columnDiv);
+            });
+            
+            // Create below-the-line (candidate) voting
+            shuffledGroups.forEach(group => {
+                const columnDiv = document.createElement('div');
+                columnDiv.className = 'party-column';
                 
-                // Below the line
-                const belowColumnDiv = document.createElement('div');
-                belowColumnDiv.className = 'party-column';
                 const groupDiv = document.createElement('div');
                 groupDiv.className = 'party-group';
                 
@@ -325,8 +338,8 @@
                     groupDiv.appendChild(candidateDiv);
                 });
                 
-                belowColumnDiv.appendChild(groupDiv);
-                belowLineContainer.appendChild(belowColumnDiv);
+                columnDiv.appendChild(groupDiv);
+                belowLineContainer.appendChild(columnDiv);
             });
         }
 
@@ -348,7 +361,7 @@
             }
             
             const numValue = parseInt(value);
-            if (isNaN(numValue) {
+            if (isNaN(numValue)) {
                 errorMsg.textContent = "Please enter a valid number.";
                 input.value = "";
                 return;
