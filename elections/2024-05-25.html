@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>25 May 2024 Election Results - People's Republic of Kazjistan</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #004c4c;
+            --secondary-color: #fba910;
+            --accent-color: #e8f7f7;
+            --text-color: #333;
+            --light-text: #666;
+            --white: #ffffff;
+            --header-height: 80px;
+            --max-width: 1200px;
+        }
+        
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--header-height);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo img {
+            height: 50px;
+        }
+        
+        .logo-text {
+            font-family: 'Noto Serif', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .logo-text span {
+            color: var(--secondary-color);
+            font-weight: 400;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--secondary-color);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        main {
+            padding: 40px 0;
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif', serif;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: var(--white);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .results-table th {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        .results-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--accent-color);
+        }
+        
+        .results-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .results-table tr:hover {
+            background-color: var(--accent-color);
+        }
+        
+        .vote-count, .percentage, .quota {
+            font-family: monospace;
+            text-align: right;
+        }
+        
+        .elected {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .elected::after {
+            content: " ✓";
+            color: var(--secondary-color);
+        }
+        
+        .summary-stats {
+            background-color: var(--accent-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 20px 0;
+            text-align: center;
+            border-top: 3px solid var(--secondary-color);
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                height: auto;
+                padding: 20px 0;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .results-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="../flag-of-kazjistan.svg" alt="Kazjistan Flag" style="height: 40px;">
+                <div class="logo-text">PEOPLE'S REPUBLIC <span>OF KAZJISTAN</span></div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../news.html">News</a></li>
+                    <li><a href="https://kazjistan.miraheze.org/wiki/Main_Page">Wiki</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="section-title">25 May 2024 General Election Results</h1>
+        
+        <div class="summary-stats">
+            <strong>Total Votes Cast:</strong> 21<br>
+            <strong>Total Quota:</strong> 2.625<br>
+            <strong>Turnout:</strong> 43.75%
+        </div>
+        
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Candidate</th>
+                    <th>Party</th>
+                    <th>Votes</th>
+                    <th>Percentage</th>
+                    <th>Quota</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="elected">Emacia (elected 1)</td>
+                    <td>Nationalist</td>
+                    <td class="vote-count">9</td>
+                    <td class="percentage">42.86%</td>
+                    <td class="quota">3.43</td>
+                    <td>Elected</td>
+                </tr>
+                <tr>
+                    <td class="elected">Emma (elected 2)</td>
+                    <td>Independent</td>
+                    <td class="vote-count">3</td>
+                    <td class="percentage">14.29%</td>
+                    <td class="quota">1.14</td>
+                    <td>Elected</td>
+                </tr>
+                <tr>
+                    <td class="elected">Igor Witback (elected 3)</td>
+                    <td>Independent</td>
+                    <td class="vote-count">2</td>
+                    <td class="percentage">9.52%</td>
+                    <td class="quota">0.76</td>
+                    <td>Elected</td>
+                </tr>
+                <tr>
+                    <td class="elected">Seat (elected 4)</td>
+                    <td>Independent</td>
+                    <td class="vote-count">2</td>
+                    <td class="percentage">9.52%</td>
+                    <td class="quota">0.76</td>
+                    <td>Elected</td>
+                </tr>
+                <tr>
+                    <td class="elected">Timus Maximus (elected 5)</td>
+                    <td>Independent</td>
+                    <td class="vote-count">2</td>
+                    <td class="percentage">9.52%</td>
+                    <td class="quota">0.76</td>
+                    <td>Elected</td>
+                </tr>
+                <tr>
+                    <td class="elected">Lia (elected 6)</td>
+                    <td>Independent</td>
+                    <td class="vote-count">2</td>
+                    <td class="percentage">9.52%</td>
+                    <td class="quota">0.76</td>
+                    <td>Elected</td>
+                </tr>
+                <tr>
+                    <td class="elected">Cyrzed (elected 7)</td>
+                    <td>Nationalist</td>
+                    <td class="vote-count">1</td>
+                    <td class="percentage">4.76%</td>
+                    <td class="quota">0.38</td>
+                    <td>Elected</td>
+                </tr>
+                <tr>
+                    <td>Hergian</td>
+                    <td>Independent</td>
+                    <td class="vote-count">0</td>
+                    <td class="percentage">0.00%</td>
+                    <td class="quota">0.00</td>
+                    <td>Not Elected</td>
+                </tr>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td></td>
+                    <td class="vote-count"><strong>21</strong></td>
+                    <td class="percentage"><strong>100.00%</strong></td>
+                    <td class="quota"><strong>2.625</strong></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="notes">
+            <h3>Notes:</h3>
+            <ul>
+                <li>This election used a proportional representation system with a quota of 2.625</li>
+                <li>Turnout was 43.75% of eligible voters</li>
+              <li>The Nationalist Part of Kazjistan formed government after this election, with Emacia elected as Prime Minister.</li>
+            </ul>
+        </div>
+        
+        <a href="../elections.html" class="back-link">← Back to All Elections</a>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                &copy; 2025 People's Republic of Kazjistan
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
