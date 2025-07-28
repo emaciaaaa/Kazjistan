@@ -70,12 +70,6 @@
             margin-top: 10px;
             text-align: center;
         }
-        .success {
-            color: green;
-            font-size: 14px;
-            margin-top: 10px;
-            text-align: center;
-        }
         button {
             display: block;
             margin: 20px auto 0;
@@ -88,10 +82,6 @@
         }
         button:hover {
             background-color: #0055aa;
-        }
-        button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
         }
         .instructions {
             margin-bottom: 20px;
@@ -113,7 +103,6 @@
             margin-bottom: 20px;
             font-weight: bold;
             font-size: 18px;
-            color: #cc0000;
         }
         .divider {
             border-top: 3px solid black;
@@ -188,8 +177,8 @@
         <div class="above-the-line">
             <p class="instructions">ABOVE THE LINE - VOTE FOR PARTIES</p>
             <p class="requirement">(Number ALL 4 boxes in order of preference 1-4)</p>
-            <div class="ballot-container" id="above-the-line-container">
-                <!-- Parties will be dynamically inserted here -->
+            <div class="ballot-container" id="above-line-container">
+                <!-- Will be populated by JavaScript -->
             </div>
         </div>
         
@@ -202,8 +191,8 @@
         <div class="below-the-line">
             <p class="instructions">BELOW THE LINE - VOTE FOR CANDIDATES</p>
             <p class="requirement">(Number AT LEAST 8 boxes in order of preference 1-22)</p>
-            <div class="ballot-container" id="below-the-line-container">
-                <!-- Candidates will be dynamically inserted here -->
+            <div class="ballot-container" id="below-line-container">
+                <!-- Will be populated by JavaScript -->
             </div>
         </div>
 
@@ -235,7 +224,6 @@
         </div>
         
         <div class="error" id="error-message"></div>
-        <div class="success" id="success-message"></div>
         <button id="submit-ballot">Submit Ballot</button>
     </div>
 
@@ -243,11 +231,10 @@
     document.addEventListener('DOMContentLoaded', function() {
         // DOM elements
         const errorMsg = document.getElementById('error-message');
-        const successMsg = document.getElementById('success-message');
         const submitBtn = document.getElementById('submit-ballot');
         const usernameInput = document.getElementById('username');
-        const aboveLineContainer = document.getElementById('above-the-line-container');
-        const belowLineContainer = document.getElementById('below-the-line-container');
+        const aboveLineContainer = document.getElementById('above-line-container');
+        const belowLineContainer = document.getElementById('below-line-container');
         const referendum1Input = document.getElementById('referendum1');
         const referendum2Input = document.getElementById('referendum2');
         
@@ -271,7 +258,6 @@
             }
         ];
         const totalCandidates = candidateGroups.reduce((sum, group) => sum + group.candidates.length, 0);
-        const totalParties = candidateGroups.length;
 
         // Initialize ballot
         initializeBallot();
@@ -284,7 +270,7 @@
             belowLineContainer.innerHTML = '';
             
             shuffledGroups.forEach(group => {
-                // Above the line - Party voting
+                // Above the line
                 const aboveColumnDiv = document.createElement('div');
                 aboveColumnDiv.className = 'party-column';
                 
@@ -297,7 +283,7 @@
                 const partyInput = document.createElement('input');
                 partyInput.type = 'number';
                 partyInput.min = '1';
-                partyInput.max = totalParties.toString();
+                partyInput.max = '4';
                 partyInput.className = 'party-preference';
                 partyInput.placeholder = '-';
                 partyInput.dataset.party = group.name;
@@ -312,7 +298,7 @@
                 aboveColumnDiv.appendChild(partyHeader);
                 aboveLineContainer.appendChild(aboveColumnDiv);
                 
-                // Below the line - Candidate voting
+                // Below the line
                 const belowColumnDiv = document.createElement('div');
                 belowColumnDiv.className = 'party-column';
                 const groupDiv = document.createElement('div');
@@ -329,7 +315,6 @@
                     input.className = 'candidate-preference';
                     input.placeholder = '-';
                     input.dataset.candidate = candidate;
-                    input.dataset.party = group.name;
                     input.addEventListener('input', handleCandidateInput);
                     
                     const span = document.createElement('span');
@@ -358,10 +343,7 @@
             const value = input.value.trim();
             
             if (value === "") {
-                // Clear any error when clearing the input
-                if (errorMsg.textContent.includes("Party")) {
-                    errorMsg.textContent = "";
-                }
+                errorMsg.textContent = "";
                 return;
             }
             
@@ -372,31 +354,17 @@
                 return;
             }
             
-            if (numValue < 1 || numValue > totalParties) {
-                errorMsg.textContent = `Party preferences must be between 1 and ${totalParties}.`;
+            if (numValue < 1 || numValue > 4) {
+                errorMsg.textContent = "Party preferences must be between 1 and 4.";
                 input.value = "";
                 return;
             }
             
-            // Check if this is a duplicate number
-            const partyInputs = document.querySelectorAll('.party-preference');
-            let isDuplicate = false;
-            
-            partyInputs.forEach(p => {
+            // Clear duplicate numbers
+            document.querySelectorAll('.party-preference').forEach(p => {
                 if (p !== input && p.value === value) {
-                    isDuplicate = true;
+                    p.value = "";
                 }
-            });
-            
-            if (isDuplicate) {
-                errorMsg.textContent = "Duplicate party preference detected. Each number must be unique.";
-                input.value = "";
-                return;
-            }
-            
-            // Clear any candidate votes if voting above the line
-            document.querySelectorAll('.candidate-preference').forEach(c => {
-                c.value = "";
             });
             
             errorMsg.textContent = "";
@@ -407,10 +375,7 @@
             const value = input.value.trim();
             
             if (value === "") {
-                // Clear any error when clearing the input
-                if (errorMsg.textContent.includes("Candidate")) {
-                    errorMsg.textContent = "";
-                }
+                errorMsg.textContent = "";
                 return;
             }
             
@@ -427,35 +392,17 @@
                 return;
             }
             
-            // Check if this is a duplicate number
-            const candidateInputs = document.querySelectorAll('.candidate-preference');
-            let isDuplicate = false;
-            
-            candidateInputs.forEach(c => {
+            // Clear duplicate numbers
+            document.querySelectorAll('.candidate-preference').forEach(c => {
                 if (c !== input && c.value === value) {
-                    isDuplicate = true;
+                    c.value = "";
                 }
-            });
-            
-            if (isDuplicate) {
-                errorMsg.textContent = "Duplicate candidate preference detected. Each number must be unique.";
-                input.value = "";
-                return;
-            }
-            
-            // Clear any party votes if voting below the line
-            document.querySelectorAll('.party-preference').forEach(p => {
-                p.value = "";
             });
             
             errorMsg.textContent = "";
         }
 
         function validateBallot() {
-            // Clear previous messages
-            errorMsg.textContent = "";
-            successMsg.textContent = "";
-            
             // Basic validation
             if (!usernameInput.value.trim()) {
                 return "Error: Please enter your username.";
@@ -488,16 +435,16 @@
             
             // If voting above the line
             if (partyVotes.length > 0) {
-                if (partyVotes.length !== totalParties) {
-                    return `Error: Please number all ${totalParties} party boxes (1-${totalParties}).`;
+                if (partyVotes.length !== 4) {
+                    return "Error: Please number all 4 party boxes (1-4).";
                 }
                 
                 if (new Set(partyVotes).size !== partyVotes.length) {
                     return "Error: Duplicate party preferences detected.";
                 }
                 
-                if (partyVotes.some(n => n < 1 || n > totalParties)) {
-                    return `Error: Party preferences must be between 1 and ${totalParties}.`;
+                if (partyVotes.some(n => n < 1 || n > 4)) {
+                    return "Error: Party preferences must be between 1 and 4.";
                 }
                 
                 return ""; // Valid above-the-line vote
@@ -525,52 +472,30 @@
         }
 
         function submitToGoogleSheet(username, votes, isPartyVote, referendum1, referendum2) {
-            // Replace with your actual Google Apps Script URL
-            const googleScriptUrl = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+            const googleScriptUrl = "YOUR_GOOGLE_SCRIPT_URL";
             
-            errorMsg.textContent = "Submitting your ballot...";
+            errorMsg.textContent = "Submitting...";
             errorMsg.style.color = "blue";
             submitBtn.disabled = true;
             
-            // Create the data payload
-            const payload = {
-                username: username.trim(),
-                votes: votes,
-                isPartyVote: isPartyVote,
-                referendum1: referendum1,
-                referendum2: referendum2,
-                timestamp: new Date().toISOString()
-            };
-            
-            // In a real implementation, you would send this to your Google Script
-            console.log("Payload to be sent:", payload);
-            
-            // Simulate a successful submission (replace with actual fetch)
-            setTimeout(() => {
-                errorMsg.textContent = "";
-                successMsg.textContent = "Ballot submitted successfully! (Simulated)";
-                successMsg.style.color = "green";
-                
-                // In a real implementation, you would redirect or show a success message
-                console.log("Ballot submitted successfully");
-                
-                // Reset form after successful submission
-                submitBtn.disabled = false;
-                // document.querySelector('form').reset();
-            }, 1500);
-            
-            /* 
-            // Actual fetch implementation would look like this:
             fetch(googleScriptUrl, {
                 method: "POST",
                 mode: "no-cors",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({ 
+                    username: username.trim(),
+                    votes: votes.map(vote => ({
+                        candidate: vote.candidate,
+                        preference: parseInt(vote.preference) || 0,
+                        isParty: isPartyVote
+                    })),
+                    referendum1: referendum1,
+                    referendum2: referendum2
+                })
             })
             .then(() => {
-                errorMsg.textContent = "";
-                successMsg.textContent = "Ballot submitted successfully!";
-                successMsg.style.color = "green";
+                errorMsg.textContent = "Ballot submitted successfully!";
+                errorMsg.style.color = "green";
                 setTimeout(() => {
                     window.location.href = "https://example.com/voting_complete";
                 }, 2000);
@@ -581,7 +506,6 @@
                 submitBtn.disabled = false;
                 console.error("Error:", error);
             });
-            */
         }
 
         submitBtn.addEventListener('click', function() {
@@ -600,16 +524,13 @@
                     .filter(p => p.value !== "")
                     .map(p => ({
                         candidate: p.dataset.party,
-                        preference: p.value,
-                        type: "party"
+                        preference: p.value
                     }))
                 : Array.from(document.querySelectorAll('.candidate-preference'))
                     .filter(c => c.value !== "")
                     .map(c => ({
                         candidate: c.dataset.candidate,
-                        party: c.dataset.party,
-                        preference: c.value,
-                        type: "candidate"
+                        preference: c.value
                     }));
             
             submitToGoogleSheet(
