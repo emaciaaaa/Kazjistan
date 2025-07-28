@@ -1,3 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Election Ballot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .ballot {
+            background-color: white;
+            border: 2px solid #000;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .ballot-container {
+            display: flex;
+            gap: 15px;
+        }
+        .party-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .party-header {
+            border: 2px solid #000;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            background-color: #f0f0f0;
+        }
+        .party-group {
+            border: 2px solid #000;
+            padding: 15px;
+        }
+        .party-option {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            justify-content: center;
+        }
+        .party-option input {
+            width: 40px;
+            height: 30px;
+            margin-right: 10px;
+            text-align: center;
+            font-size: 16px;
+        }
+        .candidate {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .candidate input {
+            width: 40px;
+            height: 30px;
+            margin-right: 10px;
+            text-align: center;
+            font-size: 16px;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        button {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0055aa;
+        }
+        .instructions {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+            text-align: center;
+        }
+        .username-input {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .username-input input {
+            padding: 8px;
+            font-size: 16px;
+            width: 200px;
+        }
+        .voting-method {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .divider {
+            border-top: 3px solid black;
+            margin: 20px 0;
+            position: relative;
+        }
+        .divider-text {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 0 10px;
+            font-weight: bold;
+        }
+        .above-the-line {
+            margin-bottom: 30px;
+        }
+        .below-the-line {
+            margin-top: 30px;
+        }
+        .requirement {
+            font-style: italic;
+            color: #555;
+            margin-top: 5px;
+        }
+        .referendum {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #000;
+            background-color: #f9f9f9;
+        }
+        .referendum h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .referendum p {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .referendum-input {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        .referendum-input input {
+            width: 100px;
+            height: 30px;
+            padding: 5px;
+            font-size: 16px;
+            text-align: center;
+            margin-right: 10px;
+        }
+        .referendum-input label {
+            font-weight: bold;
+        }
+        @media (max-width: 768px) {
+            .ballot-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ballot">
+        <h2 style="text-align: center;">Official Election Ballot</h2>
+        
+        <div class="voting-method">VOTE EITHER ABOVE THE LINE (FOR PARTIES) OR BELOW THE LINE (FOR CANDIDATES) - NOT BOTH</div>
+        
+        <!-- Above the line section -->
+        <div class="above-the-line">
+            <p class="instructions">ABOVE THE LINE - VOTE FOR PARTIES</p>
+            <p class="requirement">(Number ALL 4 boxes in order of preference 1-4)</p>
+            <div class="ballot-container" id="above-line-container">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Divider line -->
+        <div class="divider">
+            <span class="divider-text">OR</span>
+        </div>
+        
+        <!-- Below the line section -->
+        <div class="below-the-line">
+            <p class="instructions">BELOW THE LINE - VOTE FOR CANDIDATES</p>
+            <p class="requirement">(Number AT LEAST 8 boxes in order of preference 1-22)</p>
+            <div class="ballot-container" id="below-line-container">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Referendum Propositions -->
+        <div class="referendum">
+            <h3>Referendum Proposition 1</h3>
+            <p>Do you agree with inserting the following article after twenty-eight, thereby shifting each following article by one digit?</p>
+            <p><strong>Article Twenty-Nine:</strong> The Judiciary shall not unduly delay proceedings without just cause, and must adjudicate cases in a timely manner. Justices found to partake in deliberate or unreasonable postponements of proceedings are to be removed by Parliament.</p>
+            <div class="referendum-input">
+                <input type="text" id="referendum1" placeholder="yes or no" pattern="^(yes|no)$" required>
+                <label for="referendum1">Your vote (yes/no):</label>
+            </div>
+        </div>
+
+        <div class="referendum">
+            <h3>Referendum Proposition 2</h3>
+            <p>Do you agree with inserting the following article after fifty-seven, thereby shifting each following article by one digit?</p>
+            <p><strong>Fifty-Eight:</strong> The government shall not establish, impose, or enforce any centralised economic, monetary, or financial system, nor shall it create institutions, regulations, or mechanisms that effectively constitute such a system, whether in whole or in part, directly or indirectly. No government or citizen shall institute financial, monetary, currency, or economic systems within Kazjistan, including central banks, private financial institutions, or external organizations purporting to act on behalf of the Kazji state. This prohibition extends to all claims of state endorsement, de facto financial structures, or circumvention through external entities.</p>
+            <div class="referendum-input">
+                <input type="text" id="referendum2" placeholder="yes or no" pattern="^(yes|no)$" required>
+                <label for="referendum2">Your vote (yes/no):</label>
+            </div>
+        </div>
+
+        <!-- Username Input -->
+        <div class="username-input">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required placeholder="Enter your username">
+        </div>
+        
+        <div class="error" id="error-message"></div>
+        <button id="submit-ballot">Submit Ballot</button>
+    </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // DOM elements
@@ -298,3 +527,5 @@
         }
     });
 </script>
+</body>
+</html>
