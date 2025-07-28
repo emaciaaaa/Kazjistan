@@ -1,236 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Election Ballot</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
-        }
-        .ballot {
-            background-color: white;
-            border: 2px solid #000;
-            padding: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .ballot-container {
-            display: flex;
-            gap: 15px;
-        }
-        .party-column {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .party-header {
-            border: 2px solid #000;
-            padding: 15px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 18px;
-            background-color: #f0f0f0;
-        }
-        .party-group {
-            border: 2px solid #000;
-            padding: 15px;
-        }
-        .party-option {
-            display: flex;
-            align-items: center;
-            margin: 10px 0;
-            justify-content: center;
-        }
-        .party-option input {
-            width: 40px;
-            height: 30px;
-            margin-right: 10px;
-            text-align: center;
-            font-size: 16px;
-        }
-        .candidate {
-            display: flex;
-            align-items: center;
-            margin: 10px 0;
-        }
-        .candidate input {
-            width: 40px;
-            height: 30px;
-            margin-right: 10px;
-            text-align: center;
-            font-size: 16px;
-        }
-        .error {
-            color: red;
-            font-size: 14px;
-            margin-top: 10px;
-            text-align: center;
-        }
-        button {
-            display: block;
-            margin: 20px auto 0;
-            padding: 10px 20px;
-            background-color: #0066cc;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #0055aa;
-        }
-        .instructions {
-            margin-bottom: 20px;
-            font-size: 16px;
-            color: #333;
-            text-align: center;
-        }
-        .username-input {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .username-input input {
-            padding: 8px;
-            font-size: 16px;
-            width: 200px;
-        }
-        .voting-method {
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        .divider {
-            border-top: 3px solid black;
-            margin: 20px 0;
-            position: relative;
-        }
-        .divider-text {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            padding: 0 10px;
-            font-weight: bold;
-        }
-        .above-the-line {
-            margin-bottom: 30px;
-        }
-        .below-the-line {
-            margin-top: 30px;
-        }
-        .requirement {
-            font-style: italic;
-            color: #555;
-            margin-top: 5px;
-        }
-        .referendum {
-            margin: 30px 0;
-            padding: 20px;
-            border: 2px solid #000;
-            background-color: #f9f9f9;
-        }
-        .referendum h3 {
-            margin-top: 0;
-            color: #333;
-        }
-        .referendum p {
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-        .referendum-input {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 15px;
-        }
-        .referendum-input input {
-            width: 100px;
-            height: 30px;
-            padding: 5px;
-            font-size: 16px;
-            text-align: center;
-            margin-right: 10px;
-        }
-        .referendum-input label {
-            font-weight: bold;
-        }
-        @media (max-width: 768px) {
-            .ballot-container {
-                flex-direction: column;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="ballot">
-        <h2 style="text-align: center;">Official Election Ballot</h2>
-        
-        <div class="voting-method">VOTE EITHER ABOVE THE LINE (FOR PARTIES) OR BELOW THE LINE (FOR CANDIDATES) - NOT BOTH</div>
-        
-        <!-- Above the line section -->
-        <div class="above-the-line">
-            <p class="instructions">ABOVE THE LINE - VOTE FOR PARTIES</p>
-            <p class="requirement">(Number ALL 4 boxes in order of preference 1-4)</p>
-            <div class="ballot-container" id="above-line-container">
-                <!-- Will be populated by JavaScript -->
-            </div>
-        </div>
-        
-        <!-- Divider line -->
-        <div class="divider">
-            <span class="divider-text">OR</span>
-        </div>
-        
-        <!-- Below the line section -->
-        <div class="below-the-line">
-            <p class="instructions">BELOW THE LINE - VOTE FOR CANDIDATES</p>
-            <p class="requirement">(Number AT LEAST 8 boxes in order of preference 1-22)</p>
-            <div class="ballot-container" id="below-line-container">
-                <!-- Will be populated by JavaScript -->
-            </div>
-        </div>
-
-        <!-- Referendum Propositions -->
-        <div class="referendum">
-            <h3>Referendum Proposition 1</h3>
-            <p>Do you agree with inserting the following article after twenty-eight, thereby shifting each following article by one digit?</p>
-            <p><strong>Article Twenty-Nine:</strong> The Judiciary shall not unduly delay proceedings without just cause, and must adjudicate cases in a timely manner. Justices found to partake in deliberate or unreasonable postponements of proceedings are to be removed by Parliament.</p>
-            <div class="referendum-input">
-                <input type="text" id="referendum1" placeholder="yes or no" pattern="^(yes|no)$" required>
-                <label for="referendum1">Your vote (yes/no):</label>
-            </div>
-        </div>
-
-        <div class="referendum">
-            <h3>Referendum Proposition 2</h3>
-            <p>Do you agree with inserting the following article after fifty-seven, thereby shifting each following article by one digit?</p>
-            <p><strong>Fifty-Eight:</strong> The government shall not establish, impose, or enforce any centralised economic, monetary, or financial system, nor shall it create institutions, regulations, or mechanisms that effectively constitute such a system, whether in whole or in part, directly or indirectly. No government or citizen shall institute financial, monetary, currency, or economic systems within Kazjistan, including central banks, private financial institutions, or external organizations purporting to act on behalf of the Kazji state. This prohibition extends to all claims of state endorsement, de facto financial structures, or circumvention through external entities.</p>
-            <div class="referendum-input">
-                <input type="text" id="referendum2" placeholder="yes or no" pattern="^(yes|no)$" required>
-                <label for="referendum2">Your vote (yes/no):</label>
-            </div>
-        </div>
-
-        <!-- Username Input -->
-        <div class="username-input">
-            <label for="username">Username:</label>
-            <input type="text" id="username" required placeholder="Enter your username">
-        </div>
-        
-        <div class="error" id="error-message"></div>
-        <button id="submit-ballot">Submit Ballot</button>
-    </div>
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        console.log("Script loaded"); // Debug log
-
         // DOM elements
         const errorMsg = document.getElementById('error-message');
         const submitBtn = document.getElementById('submit-ballot');
@@ -262,8 +31,6 @@
         initializeBallot();
 
         function initializeBallot() {
-            console.log("Initializing ballot");
-            
             const aboveLineContainer = document.querySelector('.above-the-line .ballot-container');
             const belowLineContainer = document.querySelector('.below-the-line .ballot-container');
             
@@ -330,16 +97,11 @@
                 belowColumnDiv.appendChild(groupDiv);
                 belowLineContainer.appendChild(belowColumnDiv);
             });
-            
-            console.log("Ballot initialized successfully");
         }
 
         function validateBallot() {
-            console.log("Starting validation");
-
             // 1. Validate username
             if (!usernameInput.value.trim()) {
-                console.log("Validation failed: username missing");
                 return "Error: Please enter your username.";
             }
 
@@ -348,12 +110,10 @@
             const referendum2Value = referendum2Input.value.trim().toLowerCase();
             
             if (!referendum1Value || !referendum2Value) {
-                console.log("Validation failed: referendum missing");
                 return "Error: Please vote on both referendum propositions.";
             }
             
             if (!['yes', 'no'].includes(referendum1Value) || !['yes', 'no'].includes(referendum2Value)) {
-                console.log("Validation failed: invalid referendum value");
                 return "Error: Referendum votes must be 'yes' or 'no'.";
             }
 
@@ -364,20 +124,14 @@
             const partyVotes = Array.from(partyInputs).filter(p => p.value !== "");
             const candidateVotes = Array.from(candidateInputs).filter(c => c.value !== "");
             
-            console.log(`Found ${partyVotes.length} party votes and ${candidateVotes.length} candidate votes`);
-
             // 4. Check for mixed voting
             if (partyVotes.length > 0 && candidateVotes.length > 0) {
-                console.log("Validation failed: mixed voting");
                 return "Error: Please vote either above OR below the line, not both.";
             }
 
             // 5. Validate party votes
             if (partyVotes.length > 0) {
-                console.log("Validating party votes");
-                
                 if (partyVotes.length !== 4) {
-                    console.log(`Validation failed: only ${partyVotes.length} party votes`);
                     return "Error: Please number all 4 party boxes (1-4).";
                 }
                 
@@ -385,25 +139,19 @@
                 const uniqueNumbers = new Set(partyNumbers);
                 
                 if (uniqueNumbers.size !== partyNumbers.length) {
-                    console.log("Validation failed: duplicate party numbers");
                     return "Error: Duplicate party preferences detected.";
                 }
                 
                 if (partyNumbers.some(n => n < 1 || n > 4)) {
-                    console.log("Validation failed: party numbers out of range");
                     return "Error: Party preferences must be between 1 and 4.";
                 }
                 
-                console.log("Party votes validated successfully");
                 return ""; // Success
             }
 
             // 6. Validate candidate votes
             if (candidateVotes.length > 0) {
-                console.log("Validating candidate votes");
-                
                 if (candidateVotes.length < 8) {
-                    console.log(`Validation failed: only ${candidateVotes.length} candidate votes`);
                     return `Error: Please number at least 8 candidates (you numbered ${candidateVotes.length}).`;
                 }
                 
@@ -411,33 +159,61 @@
                 const uniqueNumbers = new Set(candidateNumbers);
                 
                 if (uniqueNumbers.size !== candidateNumbers.length) {
-                    console.log("Validation failed: duplicate candidate numbers");
                     return "Error: Duplicate candidate preferences detected.";
                 }
                 
                 if (candidateNumbers.some(n => n < 1 || n > 22)) {
-                    console.log("Validation failed: candidate numbers out of range");
                     return "Error: Candidate preferences must be between 1 and 22.";
                 }
                 
-                console.log("Candidate votes validated successfully");
                 return ""; // Success
             }
 
             // 7. No votes case
-            console.log("Validation failed: no votes submitted");
             return "Error: Please vote either above or below the line.";
         }
 
-        function submitBallot() {
-            console.log("Preparing to submit ballot");
+        async function submitToGoogleSheet(data) {
+            // Replace with your Google Apps Script web app URL
+            const scriptUrl = "https://script.google.com/macros/s/AKfycbx5kxcF0DF2maDC-THWPBklnXcZy7Og9iy2BMELJvrB2Wp2ZhEEq85C9MWd6rO2Kma9/exec";
             
+            try {
+                errorMsg.textContent = "Submitting your ballot...";
+                errorMsg.style.color = "blue";
+                submitBtn.disabled = true;
+                
+                const response = await fetch(scriptUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                // Note: With no-cors mode, we can't read the response
+                errorMsg.textContent = "Ballot submitted successfully!";
+                errorMsg.style.color = "green";
+                
+                // Redirect after 2 seconds
+                setTimeout(() => {
+                    window.location.href = "https://kazjistan.org/voting_complete";
+                }, 2000);
+                
+            } catch (error) {
+                errorMsg.textContent = "Error submitting ballot. Please try again.";
+                errorMsg.style.color = "red";
+                submitBtn.disabled = false;
+                console.error('Error:', error);
+            }
+        }
+
+        submitBtn.addEventListener('click', async function() {
             const error = validateBallot();
             if (error) {
-                console.log("Validation error:", error);
                 errorMsg.textContent = error;
                 errorMsg.style.color = "red";
-                return false;
+                return;
             }
             
             // Determine vote type
@@ -456,38 +232,21 @@
                         preference: input.value
                     }));
             
-            console.log("Submitting ballot with data:", {
+            // Prepare complete data package
+            const formData = {
                 username: usernameInput.value.trim(),
                 votes: votes,
                 isPartyVote: isPartyVote,
                 referendum1: referendum1Input.value.trim().toLowerCase(),
-                referendum2: referendum2Input.value.trim().toLowerCase()
-            });
+                referendum2: referendum2Input.value.trim().toLowerCase(),
+                timestamp: new Date().toISOString()
+            };
             
-            // Show submission in progress
-            errorMsg.textContent = "Submitting your ballot...";
-            errorMsg.style.color = "blue";
-            submitBtn.disabled = true;
-            
-            // Simulate successful submission (replace with actual API call)
-            setTimeout(() => {
-                console.log("Ballot submitted successfully");
-                errorMsg.textContent = "Ballot submitted successfully!";
-                errorMsg.style.color = "green";
-                
-                // Redirect after 2 seconds
-                setTimeout(() => {
-                    window.location.href = "https://example.com/thank-you";
-                }, 2000);
-            }, 1500);
-            
-            return false;
-        }
+            // Submit to Google Apps Script
+            await submitToGoogleSheet(formData);
+        });
 
-        // Event listeners
-        submitBtn.addEventListener('click', submitBallot);
-        
-        // Initialize input handlers
+        // Input validation handlers
         document.addEventListener('input', function(e) {
             if (e.target.classList.contains('party-preference')) {
                 handlePartyInput(e.target);
@@ -498,7 +257,6 @@
 
         function handlePartyInput(input) {
             const value = input.value.trim();
-            
             if (value === "") return;
             
             const numValue = parseInt(value);
@@ -520,7 +278,6 @@
 
         function handleCandidateInput(input) {
             const value = input.value.trim();
-            
             if (value === "") return;
             
             const numValue = parseInt(value);
@@ -541,5 +298,3 @@
         }
     });
 </script>
-</body>
-</html>
