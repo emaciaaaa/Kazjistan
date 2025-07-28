@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2 August 2024 Election Results - People's Republic of Kazjistan</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #004c4c;
+            --secondary-color: #fba910;
+            --accent-color: #e8f7f7;
+            --text-color: #333;
+            --light-text: #666;
+            --white: #ffffff;
+            --header-height: 80px;
+            --max-width: 1200px;
+            --nationalist-color: #2c3e50;
+            --flower-color: #9b59b6;
+        }
+        
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--header-height);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo img {
+            height: 50px;
+        }
+        
+        .logo-text {
+            font-family: 'Noto Serif', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .logo-text span {
+            color: var(--secondary-color);
+            font-weight: 400;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--secondary-color);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        main {
+            padding: 40px 0;
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif', serif;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: var(--white);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .results-table th {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        .results-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--accent-color);
+        }
+        
+        .results-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .results-table tr:hover {
+            background-color: var(--accent-color);
+        }
+        
+        .vote-count, .percentage {
+            font-family: monospace;
+            text-align: right;
+        }
+        
+        .party-nationalist {
+            color: var(--nationalist-color);
+            font-weight: 500;
+        }
+        
+        .party-flower {
+            color: var(--flower-color);
+            font-weight: 500;
+        }
+        
+        .party-independent {
+            font-weight: 500;
+        }
+        
+        .summary-stats {
+            background-color: var(--accent-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .change-increase {
+            color: green;
+        }
+        
+        .change-decrease {
+            color: red;
+        }
+        
+        .change-neutral {
+            color: var(--light-text);
+        }
+        
+        .elected-members {
+            margin-top: 40px;
+        }
+        
+        .elected-members h2 {
+            font-family: 'Noto Serif', serif;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 20px 0;
+            text-align: center;
+            border-top: 3px solid var(--secondary-color);
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                height: auto;
+                padding: 20px 0;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .results-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="../flag-of-kazjistan.svg" alt="Kazjistan Flag" style="height: 40px;">
+                <div class="logo-text">PEOPLE'S REPUBLIC <span>OF KAZJISTAN</span></div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../news.html">News</a></li>
+                    <li><a href="https://kazjistan.miraheze.org/wiki/Main_Page">Wiki</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="section-title">2 August 2024 General Election Results</h1>
+        
+        <div class="summary-stats">
+            <strong>Total Votes Cast:</strong> 26<br>
+            <strong>Seats Won:</strong> 11<br>
+            <strong>Turnout:</strong> (Not specified)
+        </div>
+        
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Party/Ticket</th>
+                    <th>Votes</th>
+                    <th>Percentage</th>
+                    <th>Seats</th>
+                    <th>Change</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="party-nationalist">Nationalist</td>
+                    <td class="vote-count">12</td>
+                    <td class="percentage">46.15%</td>
+                    <td>5</td>
+                    <td class="change-decrease">Decrease 1</td>
+                </tr>
+                <tr>
+                    <td class="party-flower">Flower Appreciation</td>
+                    <td class="vote-count">11</td>
+                    <td class="percentage">42.31%</td>
+                    <td>5</td>
+                    <td class="change-increase">Increase 5</td>
+                </tr>
+                <tr>
+                    <td class="party-independent">Lia (Independent)</td>
+                    <td class="vote-count">1</td>
+                    <td class="percentage">3.85%</td>
+                    <td>1</td>
+                    <td class="change-neutral">-</td>
+                </tr>
+                <tr>
+                    <td>Luci</td>
+                    <td class="vote-count">1</td>
+                    <td class="percentage">3.85%</td>
+                    <td>0</td>
+                    <td class="change-neutral">-</td>
+                </tr>
+                <tr>
+                    <td>Zeynep</td>
+                    <td class="vote-count">1</td>
+                    <td class="percentage">3.85%</td>
+                    <td>0</td>
+                    <td class="change-neutral">-</td>
+                </tr>
+                <tr>
+                    <td>Lumi</td>
+                    <td class="vote-count">0</td>
+                    <td class="percentage">0.00%</td>
+                    <td>0</td>
+                    <td class="change-neutral">-</td>
+                </tr>
+                <tr>
+                    <td>Luzumin</td>
+                    <td class="vote-count">0</td>
+                    <td class="percentage">0.00%</td>
+                    <td>0</td>
+                    <td class="change-neutral">-</td>
+                </tr>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td class="vote-count"><strong>26</strong></td>
+                    <td class="percentage"><strong>100.00%</strong></td>
+                    <td><strong>11</strong></td>
+                    <td class="change-increase"><strong>Increase</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="elected-members">
+            <h2>Elected Members</h2>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Member</th>
+                        <th>Party</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td class="party-nationalist">Igor Witback</td>
+                        <td class="party-nationalist">Nationalist</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td class="party-nationalist">Seat</td>
+                        <td class="party-nationalist">Nationalist</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td class="party-nationalist">Timus Maximus</td>
+                        <td class="party-nationalist">Nationalist</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td class="party-nationalist">Emacia</td>
+                        <td class="party-nationalist">Nationalist</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td class="party-nationalist">Cyrzed</td>
+                        <td class="party-nationalist">Nationalist</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td class="party-flower">Clover</td>
+                        <td class="party-flower">Flower Appreciation</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td class="party-flower">Fixie</td>
+                        <td class="party-flower">Flower Appreciation</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td class="party-flower">CGSplayz</td>
+                        <td class="party-flower">Flower Appreciation</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td class="party-flower">Nono3717</td>
+                        <td class="party-flower">Flower Appreciation</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td class="party-flower">Dani</td>
+                        <td class="party-flower">Flower Appreciation</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td class="party-independent">Lia</td>
+                        <td class="party-independent">Independent</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="notes">
+            <h3>Notes:</h3>
+            <ul>
+                <li>This election used a closed party list proportional representation system</li>
+                <li>The Nationalist party remained the largest party but lost 1 seat compared to previous elections</li>
+                <li>The Flower Appreciation Party (FAP) made significant gains, increasing by 5 seats</li>
+                <li>Lia was the only successful independent candidate</li>
+            </ul>
+        </div>
+        
+        <a href="../elections.html" class="back-link">← Back to All Elections</a>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                &copy; 2025 People's Republic of Kazjistan
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
