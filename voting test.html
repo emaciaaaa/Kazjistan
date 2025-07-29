@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>11 July 2025 By-election</title>
+    <title>1 August 2025 Election</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -101,7 +101,7 @@
 <body>
     <div class="ballot">
         <h2 style="text-align: center;">1 August 2025 Election</h2>
-        <p class="instructions">Number ALL boxes in order of preference (1 to 22).</p>
+        <p class="instructions">Number at least 8 boxes in order of preference (1 to 22). You may number more if you wish.</p>
         
         <div class="parties-container" id="parties-container">
             <!-- Party columns will be inserted here by JavaScript -->
@@ -125,6 +125,7 @@
             const usernameInput = document.getElementById('username');
             const partiesContainer = document.getElementById('parties-container');
             const totalCandidates = 22; // Updated total number of candidates
+            const minPreferences = 8; // Minimum number of preferences required
             
             // Candidate data with party affiliations in exact order
             const partyLists = {
@@ -251,21 +252,43 @@
                 
                 if (!usernameInput.value.trim()) return "Error: Please enter your username.";
                 
-                const emptyInputs = inputs.filter(input => input.value === "");
-                if (emptyInputs.length > 0) return `Error: You must number ALL candidates (1 to ${totalCandidates}).`;
+                // Count how many preferences have been entered
+                const numberedPreferences = inputs.filter(input => input.value !== "").length;
                 
-                const numbers = inputs.map(input => parseInt(input.value)).filter(n => !isNaN(n));
-                if (numbers.length !== new Set(numbers).size) return "Error: Duplicate numbers detected.";
+                if (numberedPreferences < minPreferences) {
+                    return `Error: You must number at least ${minPreferences} candidates.`;
+                }
                 
+                // Get all numbered preferences
+                const numbers = inputs
+                    .filter(input => input.value !== "")
+                    .map(input => parseInt(input.value));
+                
+                // Check for duplicates among numbered preferences
+                if (numbers.length !== new Set(numbers).size) {
+                    return "Error: Duplicate numbers detected.";
+                }
+                
+                // Check for numbers out of range
                 const invalidNumbers = numbers.filter(n => n < 1 || n > totalCandidates);
-                if (invalidNumbers.length > 0) return `Error: Preferences must be between 1 and ${totalCandidates}.`;
+                if (invalidNumbers.length > 0) {
+                    return `Error: Preferences must be between 1 and ${totalCandidates}.`;
+                }
+                
+                // Check for gaps in numbering (optional - remove if not needed)
+                const sortedNumbers = [...numbers].sort((a, b) => a - b);
+                for (let i = 0; i < sortedNumbers.length; i++) {
+                    if (sortedNumbers[i] !== i + 1) {
+                        return "Error: Preferences should be sequential starting from 1 (no gaps).";
+                    }
+                }
                 
                 return '';
             }
 
             // ===== GOOGLE SHEETS SUBMISSION =====
             function submitToGoogleSheet(username, votes) {
-                const googleScriptUrl = "https://script.google.com/macros/s/AKfycbyp7opb6IL5Ld2sZvlFjWQboZBZSGF81eGVYyIWne_3dU4GUynzIhrE84aTIiEGywLt/exec";
+                const googleScriptUrl = "https://script.google.com/macros/s/AKfycbyghWRZoWoRE0ePplAI1wOUVV3z-oYjkwH38LknBQZwDWHx14EsqXrEKQ7-2r11Rj_i/exec";
                 
                 // Show loading state
                 errorMsg.textContent = "Submitting...";
@@ -317,6 +340,7 @@
                 }
                 
                 const votes = Array.from(document.querySelectorAll('.preference'))
+                    .filter(input => input.value !== "") // Only include numbered preferences
                     .map(input => ({
                         candidate: input.dataset.candidate,
                         preference: input.value
