@@ -101,7 +101,7 @@
 <body>
     <div class="ballot">
         <h2 style="text-align: center;">1 August 2025 Election</h2>
-        <p class="instructions">Number at least 8 boxes in order of preference (1 to 22). You may number more if you wish.</p>
+        <p class="instructions">Number at least 8 boxes in order of preference (1 to 22).</p>
         
         <div class="parties-container" id="parties-container">
             <!-- Party columns will be inserted here by JavaScript -->
@@ -287,41 +287,53 @@
             }
 
             // ===== GOOGLE SHEETS SUBMISSION =====
-            function submitToGoogleSheet(username, votes) {
-                const googleScriptUrl = "https://script.google.com/macros/s/AKfycbyghWRZoWoRE0ePplAI1wOUVV3z-oYjkwH38LknBQZwDWHx14EsqXrEKQ7-2r11Rj_i/exec";
-                
-                // Show loading state
-                errorMsg.textContent = "Submitting...";
-                errorMsg.style.color = "blue";
-                submitBtn.disabled = true;
-                
-                fetch(googleScriptUrl, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ 
-                        username: username.trim(),
-                        votes: votes.map(vote => ({
-                            candidate: vote.candidate,
-                            preference: parseInt(vote.preference) || 0
-                        }))
-                    })
-                })
-                .then(() => {
-                    errorMsg.textContent = "Ballot submitted successfully!";
-                    errorMsg.style.color = "green";
-                    
-                    // Redirect to a new page after 2 seconds
-                    setTimeout(() => {
-                        window.location.href = "https://www.kazjistan.org/voting_complete";
-                    }, 2000);
-                })
-                .catch((error) => {
-                    errorMsg.textContent = "Error submitting ballot. Please try again.";
-                    errorMsg.style.color = "red";
-                    submitBtn.disabled = false;
-                    console.error("Error:", error);
-                });
+        function submitToGoogleSheet(username, votes) {
+    const googleScriptUrl = "https://script.google.com/macros/s/AKfycbyghWRZoWoRE0ePplAI1wOUVV3z-oYjkwH38LknBQZwDWHx14EsqXrEKQ7-2r11Rj_i/exec";
+    
+    errorMsg.textContent = "Submitting...";
+    errorMsg.style.color = "blue";
+    submitBtn.disabled = true;
+    
+    // Add these options to your fetch
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+            username: username.trim(),
+            votes: votes.map(vote => ({
+                candidate: vote.candidate,
+                preference: parseInt(vote.preference) || 0
+            }))
+        })
+    };
+    
+    fetch(googleScriptUrl, options)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            errorMsg.textContent = "Ballot submitted successfully!";
+            errorMsg.style.color = "green";
+            setTimeout(() => {
+                window.location.href = "https://www.kazjistan.org/voting_complete";
+            }, 2000);
+        } else {
+            throw new Error(data.error || "Unknown error");
+        }
+    })
+    .catch((error) => {
+        errorMsg.textContent = `Error: ${error.message}`;
+        errorMsg.style.color = "red";
+        submitBtn.disabled = false;
+        console.error("Error:", error);
+    });
+}
             }
 
             // ===== EVENT LISTENERS =====
