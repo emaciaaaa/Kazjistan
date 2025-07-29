@@ -418,26 +418,30 @@
 
             // Submit to Google Sheets
             function submitToGoogleSheet(username, votes) {
-                const googleScriptUrl = "https://script.google.com/macros/s/AKfycbyghWRZoWoRE0ePplAI1wOUVV3z-oYjkwH38LknBQZwDWHx14EsqXrEKQ7-2r11Rj_i/exec";
+                // Replace with your actual Google Apps Script URL
+                const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzhu9Ce8B5meJv2OpS3qSJvOcbGFcp8PNEYQS8YVnShCgvQ5g2SaPu0_R84h-QMCqce/exec";
                 
                 // Show loading state
                 errorMsg.textContent = "Submitting...";
                 errorMsg.style.color = "blue";
                 submitBtn.disabled = true;
                 
+                // Prepare the data to send
+                const formData = new FormData();
+                formData.append('username', username);
+                formData.append('votes', JSON.stringify(votes));
+                
                 fetch(googleScriptUrl, {
                     method: "POST",
-                    mode: "no-cors",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ 
-                        username: username.trim(),
-                        votes: votes.map(vote => ({
-                            candidate: vote.candidate,
-                            preference: vote.preference || 0
-                        }))
-                    })
+                    body: formData
                 })
-                .then(() => {
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
                     errorMsg.textContent = "Ballot submitted successfully!";
                     errorMsg.style.color = "green";
                     
