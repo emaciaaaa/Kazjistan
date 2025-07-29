@@ -14,18 +14,33 @@
             background-color: white;
             border: 2px solid #000;
             padding: 20px;
-            max-width: 600px;
+            max-width: 900px;
             margin: 0 auto;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        .candidates-container {
-            border: 2px solid #000;
-            padding: 15px;
+        .parties-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .party-column {
+            flex: 1;
+            margin: 0 10px;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        .party-header {
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: #f0f0f0;
+            border-bottom: 2px solid #000;
         }
         .candidate {
             display: flex;
             align-items: center;
-            margin: 15px 0;
+            margin: 10px 0;
         }
         .candidate input {
             width: 40px;
@@ -81,12 +96,6 @@
             font-size: 16px;
             width: 200px;
         }
-        .party-header {
-            font-weight: bold;
-            margin-top: 15px;
-            margin-bottom: 5px;
-            color: #0066cc;
-        }
     </style>
 </head>
 <body>
@@ -94,8 +103,8 @@
         <h2 style="text-align: center;">11 July 2025 By-election</h2>
         <p class="instructions">Number ALL boxes in order of preference (1 to 22).</p>
         
-        <div class="candidates-container" id="candidates-container">
-            <!-- Candidates will be inserted here by JavaScript -->
+        <div class="parties-container" id="parties-container">
+            <!-- Party columns will be inserted here by JavaScript -->
         </div>
 
         <!-- Username Input -->
@@ -114,7 +123,7 @@
             const errorMsg = document.getElementById('error-message');
             const submitBtn = document.getElementById('submit-ballot');
             const usernameInput = document.getElementById('username');
-            const candidatesContainer = document.getElementById('candidates-container');
+            const partiesContainer = document.getElementById('parties-container');
             const totalCandidates = 22; // Updated total number of candidates
             
             // Candidate data with party affiliations
@@ -151,10 +160,10 @@
                 { name: "Meg", party: "Independent" }
             ];
             
-            // Initialize ballot with Robson Rotation (random order)
+            // Initialize ballot with party columns
             function initializeBallot() {
-                // Clear existing candidates
-                candidatesContainer.innerHTML = '';
+                // Clear existing content
+                partiesContainer.innerHTML = '';
                 
                 // Group candidates by party
                 const parties = {};
@@ -173,14 +182,17 @@
                 // Define the order of parties
                 const partyOrder = ["Whig", "Revolt!", "Progressive", "Independent"];
                 
-                // Add candidates to the ballot by party
+                // Create columns for each party
                 partyOrder.forEach(party => {
                     if (parties[party]) {
+                        const column = document.createElement('div');
+                        column.className = 'party-column';
+                        
                         // Add party header
                         const header = document.createElement('div');
                         header.className = 'party-header';
-                        header.textContent = party + " Party";
-                        candidatesContainer.appendChild(header);
+                        header.textContent = party + (party === "Independent" ? "" : " Party");
+                        column.appendChild(header);
                         
                         // Add candidates for this party
                         parties[party].forEach(candidate => {
@@ -205,13 +217,15 @@
                             const partySpan = document.createElement('span');
                             partySpan.className = 'candidate-party';
                             partySpan.textContent = candidate.party;
-                            
+                        
                             infoDiv.appendChild(nameSpan);
                             infoDiv.appendChild(partySpan);
                             candidateDiv.appendChild(input);
                             candidateDiv.appendChild(infoDiv);
-                            candidatesContainer.appendChild(candidateDiv);
+                            column.appendChild(candidateDiv);
                         });
+                        
+                        partiesContainer.appendChild(column);
                     }
                 });
             }
@@ -324,7 +338,7 @@
                 submitToGoogleSheet(usernameInput.value.trim(), votes);
             });
 
-            // Initialize the ballot with Robson Rotation within parties
+            // Initialize the ballot with party columns
             initializeBallot();
         });
     </script>
