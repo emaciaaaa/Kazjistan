@@ -126,111 +126,98 @@
             const partiesContainer = document.getElementById('parties-container');
             const totalCandidates = 22; // Updated total number of candidates
             
-            // Candidate data with party affiliations
-            const candidates = [
-                // Whig Party
-                { name: "Sane", party: "Whig" },
-                { name: "Elite", party: "Whig" },
-                { name: "Zelvrix", party: "Whig" },
-                { name: "Hope", party: "Whig" },
-                { name: "Esto", party: "Whig" },
-                { name: "CSG", party: "Whig" },
-                { name: "Fevsear", party: "Whig" },
-                { name: "Zeynep", party: "Whig" },
-                { name: "Goodquestion", party: "Whig" },
-                
-                // Revolt! Party
-                { name: "Clover", party: "Revolt!" },
-                { name: "Luci", party: "Revolt!" },
-                { name: "Cisco", party: "Revolt!" },
-                
-                // Progressive Party
-                { name: "Witback", party: "Progressive" },
-                { name: "Axell Nevylym", party: "Progressive" },
-                { name: "Timus Maximus", party: "Progressive" },
-                { name: "Emacia", party: "Progressive" },
-                { name: "Fixie", party: "Progressive" },
-                { name: "Cyrzed", party: "Progressive" },
-                { name: "Aeropitz", party: "Progressive" },
-                { name: "Baraa", party: "Progressive" },
-                { name: "Coca-Cola King", party: "Progressive" },
-                { name: "Dinobop", party: "Progressive" },
-                
-                // Independent
-                { name: "Meg", party: "Independent" }
-            ];
+            // Candidate data with party affiliations in exact order
+            const partyLists = {
+                "Whig": [
+                    { name: "Sane", party: "Whig" },
+                    { name: "Elite", party: "Whig" },
+                    { name: "Zelvrix", party: "Whig" },
+                    { name: "Hope", party: "Whig" },
+                    { name: "Esto", party: "Whig" },
+                    { name: "CSG", party: "Whig" },
+                    { name: "Fevsear", party: "Whig" },
+                    { name: "Zeynep", party: "Whig" },
+                    { name: "Goodquestion", party: "Whig" }
+                ],
+                "Revolt!": [
+                    { name: "Clover", party: "Revolt!" },
+                    { name: "Luci", party: "Revolt!" },
+                    { name: "Cisco", party: "Revolt!" }
+                ],
+                "Progressive": [
+                    { name: "Witback", party: "Progressive" },
+                    { name: "Axell Nevylym", party: "Progressive" },
+                    { name: "Timus Maximus", party: "Progressive" },
+                    { name: "Emacia", party: "Progressive" },
+                    { name: "Fixie", party: "Progressive" },
+                    { name: "Cyrzed", party: "Progressive" },
+                    { name: "Aeropitz", party: "Progressive" },
+                    { name: "Baraa", party: "Progressive" },
+                    { name: "Coca-Cola King", party: "Progressive" },
+                    { name: "Dinobop", party: "Progressive" }
+                ],
+                "Independent": [
+                    { name: "Meg", party: "Independent" }
+                ]
+            };
             
-            // Initialize ballot with party columns
+            // Initialize ballot with rotating party order but fixed candidate order
             function initializeBallot() {
                 // Clear existing content
                 partiesContainer.innerHTML = '';
                 
-                // Group candidates by party
-                const parties = {};
-                candidates.forEach(candidate => {
-                    if (!parties[candidate.party]) {
-                        parties[candidate.party] = [];
-                    }
-                    parties[candidate.party].push(candidate);
-                });
+                // Get party names and shuffle their order (Robson Rotation for parties)
+                const partyNames = Object.keys(partyLists);
+                const shuffledPartyNames = shuffleArray([...partyNames]);
                 
-                // Shuffle candidates within each party using Fisher-Yates algorithm
-                for (const party in parties) {
-                    parties[party] = shuffleArray(parties[party]);
-                }
-                
-                // Define the order of parties
-                const partyOrder = ["Whig", "Revolt!", "Progressive", "Independent"];
-                
-                // Create columns for each party
-                partyOrder.forEach(party => {
-                    if (parties[party]) {
-                        const column = document.createElement('div');
-                        column.className = 'party-column';
+                // Create columns for each party in shuffled order
+                shuffledPartyNames.forEach(party => {
+                    const candidates = partyLists[party];
+                    const column = document.createElement('div');
+                    column.className = 'party-column';
+                    
+                    // Add party header
+                    const header = document.createElement('div');
+                    header.className = 'party-header';
+                    header.textContent = party + (party === "Independent" ? "" : " Party");
+                    column.appendChild(header);
+                    
+                    // Add candidates in fixed order
+                    candidates.forEach(candidate => {
+                        const candidateDiv = document.createElement('div');
+                        candidateDiv.className = 'candidate';
                         
-                        // Add party header
-                        const header = document.createElement('div');
-                        header.className = 'party-header';
-                        header.textContent = party + (party === "Independent" ? "" : " Party");
-                        column.appendChild(header);
+                        const input = document.createElement('input');
+                        input.type = 'number';
+                        input.min = '1';
+                        input.max = totalCandidates.toString();
+                        input.className = 'preference';
+                        input.placeholder = '-';
+                        input.dataset.candidate = candidate.name;
                         
-                        // Add candidates for this party
-                        parties[party].forEach(candidate => {
-                            const candidateDiv = document.createElement('div');
-                            candidateDiv.className = 'candidate';
-                            
-                            const input = document.createElement('input');
-                            input.type = 'number';
-                            input.min = '1';
-                            input.max = totalCandidates.toString();
-                            input.className = 'preference';
-                            input.placeholder = '-';
-                            input.dataset.candidate = candidate.name;
-                            
-                            const infoDiv = document.createElement('div');
-                            infoDiv.className = 'candidate-info';
-                            
-                            const nameSpan = document.createElement('span');
-                            nameSpan.className = 'candidate-name';
-                            nameSpan.textContent = candidate.name;
-                            
-                            const partySpan = document.createElement('span');
-                            partySpan.className = 'candidate-party';
-                            partySpan.textContent = candidate.party;
+                        const infoDiv = document.createElement('div');
+                        infoDiv.className = 'candidate-info';
                         
-                            infoDiv.appendChild(nameSpan);
-                            infoDiv.appendChild(partySpan);
-                            candidateDiv.appendChild(input);
-                            candidateDiv.appendChild(infoDiv);
-                            column.appendChild(candidateDiv);
-                        });
+                        const nameSpan = document.createElement('span');
+                        nameSpan.className = 'candidate-name';
+                        nameSpan.textContent = candidate.name;
                         
-                        partiesContainer.appendChild(column);
-                    }
+                        const partySpan = document.createElement('span');
+                        partySpan.className = 'candidate-party';
+                        partySpan.textContent = candidate.party;
+                    
+                        infoDiv.appendChild(nameSpan);
+                        infoDiv.appendChild(partySpan);
+                        candidateDiv.appendChild(input);
+                        candidateDiv.appendChild(infoDiv);
+                        column.appendChild(candidateDiv);
+                    });
+                    
+                    partiesContainer.appendChild(column);
                 });
             }
             
-            // Fisher-Yates shuffle algorithm for Robson Rotation
+            // Fisher-Yates shuffle algorithm for party rotation
             function shuffleArray(array) {
                 for (let i = array.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
@@ -338,7 +325,7 @@
                 submitToGoogleSheet(usernameInput.value.trim(), votes);
             });
 
-            // Initialize the ballot with party columns
+            // Initialize the ballot with rotating party order but fixed candidate order
             initializeBallot();
         });
     </script>
