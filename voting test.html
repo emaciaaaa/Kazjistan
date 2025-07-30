@@ -527,25 +527,33 @@
             }
 
             // ===== GOOGLE SHEETS SUBMISSION =====
-           function submitToGoogleSheet(username, votes) {
-    const googleScriptUrl = "https://script.google.com/macros/library/d/1bqA61dWzYbtv8GarBxz_3zbfMQ1vaAkvTzI5qGKF_PmO9npnICJzKt1h/35";
+          function submitToGoogleSheet(username, votes) {
+    const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzhu9Ce8B5meJv2OpS3qSJvOcbGFcp8PNEYQS8YVnShCgvQ5g2SaPu0_R84h-QMCqce/exec";
     
     // Show loading state
+    const errorMsg = document.getElementById('error-message');
+    const submitBtn = document.getElementById('submit-ballot');
     errorMsg.textContent = "Submitting...";
     errorMsg.style.color = "blue";
     submitBtn.disabled = true;
     
-    // Prepare the data
-    const formData = new FormData();
+    // Prepare the data as URL-encoded form data (more reliable)
+    const formData = new URLSearchParams();
     formData.append('username', username.trim());
     formData.append('votes', JSON.stringify(votes));
     
+    // Send the request
     fetch(googleScriptUrl, {
         method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
         body: formData
     })
     .then(response => {
-        if (!response.ok) throw new Error('Network response was not ok');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         return response.json();
     })
     .then(data => {
@@ -556,14 +564,14 @@
                 window.location.href = "https://www.kazjistan.org/voting_complete";
             }, 2000);
         } else {
-            throw new Error(data.message || 'Unknown error occurred');
+            throw new Error(data.message || 'Server returned an error');
         }
     })
     .catch(error => {
         errorMsg.textContent = "Error submitting ballot: " + error.message;
         errorMsg.style.color = "red";
         submitBtn.disabled = false;
-        console.error("Error:", error);
+        console.error("Error details:", error);
     });
 }
             // ===== EVENT LISTENERS =====
