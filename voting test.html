@@ -527,43 +527,45 @@
             }
 
             // ===== GOOGLE SHEETS SUBMISSION =====
-            function submitToGoogleSheet(username, votes) {
-                const googleScriptUrl = "https://script.google.com/macros/s/AKfycbyghWRZoWoRE0ePplAI1wOUVV3z-oYjkwH38LknBQZwDWHx14EsqXrEKQ7-2r11Rj_i/exec";
-                
-                // Show loading state
-                errorMsg.textContent = "Submitting...";
-                errorMsg.style.color = "blue";
-                submitBtn.disabled = true;
-                
-                fetch(googleScriptUrl, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ 
-                        username: username.trim(),
-                        votes: votes.map(vote => ({
-                            candidate: vote.candidate,
-                            preference: parseInt(vote.preference) || 0
-                        }))
-                    })
-                })
-                .then(() => {
-                    errorMsg.textContent = "Ballot submitted successfully!";
-                    errorMsg.style.color = "green";
-                    
-                    // Redirect to a new page after 2 seconds
-                    setTimeout(() => {
-                        window.location.href = "https://www.kazjistan.org/voting_complete";
-                    }, 2000);
-                })
-                .catch((error) => {
-                    errorMsg.textContent = "Error submitting ballot. Please try again.";
-                    errorMsg.style.color = "red";
-                    submitBtn.disabled = false;
-                    console.error("Error:", error);
-                });
-            }
-
+           function submitToGoogleSheet(username, votes) {
+    const googleScriptUrl = "https://script.google.com/macros/library/d/1bqA61dWzYbtv8GarBxz_3zbfMQ1vaAkvTzI5qGKF_PmO9npnICJzKt1h/35";
+    
+    // Show loading state
+    errorMsg.textContent = "Submitting...";
+    errorMsg.style.color = "blue";
+    submitBtn.disabled = true;
+    
+    // Prepare the data
+    const formData = new FormData();
+    formData.append('username', username.trim());
+    formData.append('votes', JSON.stringify(votes));
+    
+    fetch(googleScriptUrl, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            errorMsg.textContent = "Ballot submitted successfully!";
+            errorMsg.style.color = "green";
+            setTimeout(() => {
+                window.location.href = "https://www.kazjistan.org/voting_complete";
+            }, 2000);
+        } else {
+            throw new Error(data.message || 'Unknown error occurred');
+        }
+    })
+    .catch(error => {
+        errorMsg.textContent = "Error submitting ballot: " + error.message;
+        errorMsg.style.color = "red";
+        submitBtn.disabled = false;
+        console.error("Error:", error);
+    });
+}
             // ===== EVENT LISTENERS =====
             document.addEventListener('input', function(e) {
                 if (e.target.classList.contains('preference')) {
