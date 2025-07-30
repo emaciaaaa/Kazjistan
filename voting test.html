@@ -152,7 +152,7 @@
         
         .parties-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
             margin-top: 20px;
         }
@@ -277,6 +277,12 @@
         .copyright {
             font-size: 0.9rem;
             color: rgba(255,255,255,0.9);
+        }
+        
+        @media (max-width: 1024px) {
+            .parties-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
         
         @media (max-width: 768px) {
@@ -415,13 +421,8 @@
                 // Clear existing content
                 partiesContainer.innerHTML = '';
                 
-                // Get party names and shuffle their order (Robson Rotation for parties)
-                const partyNames = Object.keys(partyLists);
-                const shuffledPartyNames = shuffleArray([...partyNames]);
-                
-                // Create columns for each party in shuffled order
-                shuffledPartyNames.forEach(party => {
-                    const candidates = partyLists[party];
+                // Create columns for each party in fixed order
+                Object.entries(partyLists).forEach(([party, candidates]) => {
                     const column = document.createElement('div');
                     column.className = 'party-column';
                     
@@ -464,15 +465,6 @@
                     
                     partiesContainer.appendChild(column);
                 });
-            }
-            
-            // Fisher-Yates shuffle algorithm for party rotation
-            function shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-                return array;
             }
             
             // ===== VALIDATION FUNCTIONS =====
@@ -597,7 +589,7 @@
                 submitToGoogleSheet(usernameInput.value.trim(), votes);
             });
 
-            // Initialize the ballot with rotating party order but fixed candidate order
+            // Initialize the ballot with fixed party order (no rotation)
             initializeBallot();
         });
     </script>
