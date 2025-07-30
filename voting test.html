@@ -528,25 +528,28 @@
 
             // ===== GOOGLE SHEETS SUBMISSION =====
         function submitToGoogleSheet(username, votes) {
-    const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzhu9Ce8B5meJv2OpS3qSJvOcbGFcp8PNEYQS8YVnShCgvQ5g2SaPu0_R84h-QMCqce/exec";
+    console.log("Starting submission..."); // Debug 1
     
-    // Show loading state
+    const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzhu9Ce8B5meJv2OpS3qSJvOcbGFcp8PNEYQS8YVnShCgvQ5g2SaPu0_R84h-QMCqce/exec";
+    console.log("Using URL:", googleScriptUrl); // Debug 2
+    
     const errorMsg = document.getElementById('error-message');
     const submitBtn = document.getElementById('submit-ballot');
+    
     errorMsg.textContent = "Submitting your vote...";
     errorMsg.style.color = "blue";
     submitBtn.disabled = true;
     
-    // Prepare the form data
+    // Prepare the data
     const formData = new URLSearchParams();
     formData.append('username', username.trim());
     formData.append('votes', JSON.stringify(votes));
+    console.log("Form data prepared:", formData.toString()); // Debug 3
     
-    // Add a timestamp to prevent caching issues
-    const timestamp = new Date().getTime();
-    const urlWithCacheBuster = `${googleScriptUrl}?t=${timestamp}`;
+    // Add cache buster
+    const urlWithCacheBuster = `${googleScriptUrl}?t=${Date.now()}`;
     
-    // Send the request
+    console.log("Attempting fetch..."); // Debug 4
     fetch(urlWithCacheBuster, {
         method: "POST",
         headers: {
@@ -555,36 +558,29 @@
         body: formData
     })
     .then(response => {
+        console.log("Received response, status:", response.status); // Debug 5
         if (!response.ok) {
-            throw new Error(`Network response was not ok (status: ${response.status})`);
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return response.json();
     })
     .then(data => {
+        console.log("Response data:", data); // Debug 6
         if (data.status === 'success') {
-            errorMsg.textContent = "✓ Your vote was submitted successfully!";
+            errorMsg.textContent = "✓ Vote submitted!";
             errorMsg.style.color = "green";
-            // Redirect after 2 seconds
             setTimeout(() => {
                 window.location.href = "https://www.kazjistan.org/voting_complete";
             }, 2000);
         } else {
-            throw new Error(data.message || 'Unknown server error');
+            throw new Error(data.message || 'Unknown server response');
         }
     })
     .catch(error => {
-        console.error('Submission error:', error);
-        errorMsg.textContent = `Error submitting ballot: ${error.message}`;
+        console.error("Full error:", error); // Debug 7
+        errorMsg.textContent = `Submission failed: ${error.message}`;
         errorMsg.style.color = "red";
         submitBtn.disabled = false;
-        
-        // Additional error details for debugging
-        const debugInfo = document.createElement('div');
-        debugInfo.style.marginTop = '10px';
-        debugInfo.style.fontSize = '12px';
-        debugInfo.style.color = '#666';
-        debugInfo.textContent = `Technical info: ${error.message}`;
-        errorMsg.appendChild(debugInfo);
     });
 }
             // Initialize the ballot with fixed party order (no rotation)
