@@ -527,23 +527,27 @@
             }
 
             // ===== GOOGLE SHEETS SUBMISSION =====
-          function submitToGoogleSheet(username, votes) {
-    const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzhu9Ce8B5meJv2OpS3qSJvOcbGFcp8PNEYQS8YVnShCgvQ5g2SaPu0_R84h-QMCqce/exec";
+        function submitToGoogleSheet(username, votes) {
+    const googleScriptUrl = "YOUR_GOOGLE_SCRIPT_URL";
     
     // Show loading state
     const errorMsg = document.getElementById('error-message');
     const submitBtn = document.getElementById('submit-ballot');
-    errorMsg.textContent = "Submitting...";
+    errorMsg.textContent = "Submitting your vote...";
     errorMsg.style.color = "blue";
     submitBtn.disabled = true;
     
-    // Prepare the data as URL-encoded form data (more reliable)
+    // Prepare the form data
     const formData = new URLSearchParams();
     formData.append('username', username.trim());
     formData.append('votes', JSON.stringify(votes));
     
+    // Add a timestamp to prevent caching issues
+    const timestamp = new Date().getTime();
+    const urlWithCacheBuster = `${googleScriptUrl}?t=${timestamp}`;
+    
     // Send the request
-    fetch(googleScriptUrl, {
+    fetch(urlWithCacheBuster, {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -552,53 +556,37 @@
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`Network response was not ok (status: ${response.status})`);
         }
         return response.json();
     })
     .then(data => {
         if (data.status === 'success') {
-            errorMsg.textContent = "Ballot submitted successfully!";
+            errorMsg.textContent = "✓ Your vote was submitted successfully!";
             errorMsg.style.color = "green";
+            // Redirect after 2 seconds
             setTimeout(() => {
                 window.location.href = "https://www.kazjistan.org/voting_complete";
             }, 2000);
         } else {
-            throw new Error(data.message || 'Server returned an error');
+            throw new Error(data.message || 'Unknown server error');
         }
     })
     .catch(error => {
-        errorMsg.textContent = "Error submitting ballot: " + error.message;
+        console.error('Submission error:', error);
+        errorMsg.textContent = `Error submitting ballot: ${error.message}`;
         errorMsg.style.color = "red";
         submitBtn.disabled = false;
-        console.error("Error details:", error);
+        
+        // Additional error details for debugging
+        const debugInfo = document.createElement('div');
+        debugInfo.style.marginTop = '10px';
+        debugInfo.style.fontSize = '12px';
+        debugInfo.style.color = '#666';
+        debugInfo.textContent = `Technical info: ${error.message}`;
+        errorMsg.appendChild(debugInfo);
     });
 }
-            // ===== EVENT LISTENERS =====
-            document.addEventListener('input', function(e) {
-                if (e.target.classList.contains('preference')) {
-                    errorMsg.textContent = validateInput(e.target);
-                }
-            });
-            
-            submitBtn.addEventListener('click', function() {
-                const validationError = validateBallot();
-                if (validationError) {
-                    errorMsg.textContent = validationError;
-                    errorMsg.style.color = "red";
-                    return;
-                }
-                
-                const votes = Array.from(document.querySelectorAll('.preference'))
-                    .filter(input => input.value !== "") // Only include numbered preferences
-                    .map(input => ({
-                        candidate: input.dataset.candidate,
-                        preference: input.value
-                    }));
-                
-                submitToGoogleSheet(usernameInput.value.trim(), votes);
-            });
-
             // Initialize the ballot with fixed party order (no rotation)
             initializeBallot();
         });
