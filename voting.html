@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11 July 2025 By-election</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .ballot {
+            background-color: white;
+            border: 2px solid #000;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .parties-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .party-column {
+            width: 24%;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        .party-header {
+            font-weight: bold;
+            text-align: center;
+            padding: 5px;
+            margin-bottom: 10px;
+            background-color: #f0f0f0;
+            border-bottom: 2px solid #000;
+        }
+        .candidate {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .candidate input {
+            width: 40px;
+            height: 30px;
+            margin-right: 10px;
+            text-align: center;
+            font-size: 16px;
+        }
+        .candidate-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .candidate-name {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .candidate-party {
+            font-size: 12px;
+            color: #555;
+            margin-top: 2px;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        button {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0055aa;
+        }
+        .instructions {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+            text-align: center;
+        }
+        .username-input {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .username-input input {
+            padding: 8px;
+            font-size: 16px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="ballot">
+        <h2 style="text-align: center;">11 July 2025 By-election</h2>
+        <p class="instructions">Number ALL boxes in order of preference (1 to 21).</p>
+        
+        <div class="parties-container" id="parties-container">
+            <!-- Whig Column -->
+            <div class="party-column" id="whig-column">
+                <div class="party-header">Whig</div>
+                <!-- Whig candidates will be inserted here -->
+            </div>
+            
+            <!-- Revolt! Column -->
+            <div class="party-column" id="revolt-column">
+                <div class="party-header">Revolt!</div>
+                <!-- Revolt! candidates will be inserted here -->
+            </div>
+            
+            <!-- Progressive Column -->
+            <div class="party-column" id="progressive-column">
+                <div class="party-header">Progressive</div>
+                <!-- Progressive candidates will be inserted here -->
+            </div>
+            
+            <!-- Meg Column -->
+            <div class="party-column" id="meg-column">
+                <div class="party-header">Meg</div>
+                <!-- Meg candidate will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Username Input -->
+        <div class="username-input">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required placeholder="Enter your username">
+        </div>
+        
+        <div class="error" id="error-message"></div>
+        <button id="submit-ballot">Submit Ballot</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const errorMsg = document.getElementById('error-message');
+            const submitBtn = document.getElementById('submit-ballot');
+            const usernameInput = document.getElementById('username');
+            const whigColumn = document.getElementById('whig-column');
+            const revoltColumn = document.getElementById('revolt-column');
+            const progressiveColumn = document.getElementById('progressive-column');
+            const megColumn = document.getElementById('meg-column');
+            
+            // Candidate data organized by party
+            const candidatesByParty = {
+                "Whig": [
+                    "Joe Sane",
+                    "Elite",
+                    "Zelvrix",
+                    "Hope",
+                    "EstoBlake",
+                    "Zeynep",
+                    "Fevsear",
+                    "Goodquestion"
+                ],
+                "Revolt!": [
+                    "Clover",
+                    "Luci",
+                    "Cisco"
+                ],
+                "Progressive": [
+                    "Igor Witback",
+                    "Axell Nevylym",
+                    "Timus Maximus",
+                    "Emacia",
+                    "Fixie",
+                    "Cyrzed",
+                    "Aeropitz",
+                    "Baraa",
+                    "Coca-Cola King",
+                    "Dinobop"
+                ],
+                "Meg": [
+                    "Meg"
+                ]
+            };
+            
+            // Calculate total number of candidates
+            let totalCandidates = 0;
+            for (const party in candidatesByParty) {
+                totalCandidates += candidatesByParty[party].length;
+            }
+            
+            // Initialize ballot with candidates in their respective columns
+            function initializeBallot() {
+                // Add candidates to their party columns
+                for (const party in candidatesByParty) {
+                    const candidates = candidatesByParty[party];
+                    const column = document.getElementById(`${party.toLowerCase().replace('!', '')}-column`);
+                    
+                    candidates.forEach(candidate => {
+                        const candidateDiv = document.createElement('div');
+                        candidateDiv.className = 'candidate';
+                        
+                        const input = document.createElement('input');
+                        input.type = 'number';
+                        input.min = '1';
+                        input.max = totalCandidates.toString();
+                        input.className = 'preference';
+                        input.placeholder = '-';
+                        input.dataset.candidate = candidate;
+                        input.dataset.party = party;
+                        
+                        const infoDiv = document.createElement('div');
+                        infoDiv.className = 'candidate-info';
+                        
+                        const nameSpan = document.createElement('span');
+                        nameSpan.className = 'candidate-name';
+                        nameSpan.textContent = candidate;
+                        
+                        const partySpan = document.createElement('span');
+                        partySpan.className = 'candidate-party';
+                        partySpan.textContent = party;
+                        
+                        infoDiv.appendChild(nameSpan);
+                        infoDiv.appendChild(partySpan);
+                        candidateDiv.appendChild(input);
+                        candidateDiv.appendChild(infoDiv);
+                        column.appendChild(candidateDiv);
+                    });
+                }
+            }
+            
+            // ===== VALIDATION FUNCTIONS =====
+            function validateInput(input) {
+                const value = parseInt(input.value);
+                if (isNaN(value)) return '';
+                
+                const inputs = document.querySelectorAll('.preference');
+                
+                if (value > totalCandidates) return `Error: Maximum preference is ${totalCandidates}.`;
+                
+                let duplicates = 0;
+                inputs.forEach(otherInput => {
+                    if (otherInput !== input && otherInput.value === input.value) {
+                        duplicates++;
+                    }
+                });
+                
+                if (duplicates > 0) return `Error: Number ${input.value} is used more than once.`;
+                return '';
+            }
+
+            function validateBallot() {
+                const inputs = Array.from(document.querySelectorAll('.preference'));
+                
+                if (!usernameInput.value.trim()) return "Error: Please enter your username.";
+                
+                const emptyInputs = inputs.filter(input => input.value === "");
+                if (emptyInputs.length > 0) return `Error: You must number ALL candidates (1 to ${totalCandidates}).`;
+                
+                const numbers = inputs.map(input => parseInt(input.value)).filter(n => !isNaN(n));
+                if (numbers.length !== new Set(numbers).size) return "Error: Duplicate numbers detected.";
+                
+                const invalidNumbers = numbers.filter(n => n < 1 || n > totalCandidates);
+                if (invalidNumbers.length > 0) return `Error: Preferences must be between 1 and ${totalCandidates}.`;
+                
+                return '';
+            }
+
+            // ===== GOOGLE SHEETS SUBMISSION =====
+            function submitToGoogleSheet(username, votes) {
+                const googleScriptUrl = "https://script.google.com/macros/s/AKfycbxB7k30nAm2THUlEI_pcCm9-8C_G-FxJHI0UExSeZdiphVaG2GU1fwmaxA8iKPA-Ws/exec";
+                
+                // Show loading state
+                errorMsg.textContent = "Submitting...";
+                errorMsg.style.color = "blue";
+                submitBtn.disabled = true;
+                
+                fetch(googleScriptUrl, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        username: username.trim(),
+                        votes: votes.map(vote => ({
+                            candidate: vote.candidate,
+                            party: vote.party,
+                            preference: parseInt(vote.preference) || 0
+                        }))
+                    })
+                })
+                .then(() => {
+                    errorMsg.textContent = "Ballot submitted successfully!";
+                    errorMsg.style.color = "green";
+                    
+                    // Redirect to a new page after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = "https://www.kazjistan.org/voting_complete";
+                    }, 2000);
+                })
+                .catch((error) => {
+                    errorMsg.textContent = "Error submitting ballot. Please try again.";
+                    errorMsg.style.color = "red";
+                    submitBtn.disabled = false;
+                    console.error("Error:", error);
+                });
+            }
+
+            // ===== EVENT LISTENERS =====
+            document.addEventListener('input', function(e) {
+                if (e.target.classList.contains('preference')) {
+                    errorMsg.textContent = validateInput(e.target);
+                }
+            });
+            
+            submitBtn.addEventListener('click', function() {
+                const validationError = validateBallot();
+                if (validationError) {
+                    errorMsg.textContent = validationError;
+                    errorMsg.style.color = "red";
+                    return;
+                }
+                
+                const votes = Array.from(document.querySelectorAll('.preference'))
+                    .map(input => ({
+                        candidate: input.dataset.candidate,
+                        party: input.dataset.party,
+                        preference: input.value
+                    }));
+                
+                submitToGoogleSheet(usernameInput.value.trim(), votes);
+            });
+
+            // Initialize the ballot with candidates in their columns
+            initializeBallot();
+        });
+    </script>
+</body>
+</html>
