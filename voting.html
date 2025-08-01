@@ -373,7 +373,7 @@
 
     <section class="hero">
         <div class="container">
-            <h1>11 July 2025 By-election</h1>
+            <h1>1 August 2025 General Election</h1>
             <p>Exercise your democratic right to vote</p>
         </div>
     </section>
@@ -602,7 +602,7 @@
         </div>
     </footer>
 
-    <script>
+ <script>
 document.addEventListener('DOMContentLoaded', function() {
     const errorMsg = document.getElementById('error-message');
     const submitBtn = document.getElementById('submit-ballot');
@@ -610,10 +610,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const referendum1Input = document.getElementById('referendum1');
     const referendum2Input = document.getElementById('referendum2');
 
+    // Validation functions remain the same
     function validateInput(input) {
         const value = parseInt(input.value);
         if (isNaN(value)) return '';
-        
         if (value < 1) return "Error: Minimum preference is 1.";
         
         const inputs = document.querySelectorAll('.preference');
@@ -670,33 +670,52 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.disabled = true;
         
         try {
+            // First validate the Google Script URL
+            if (!googleScriptUrl || !googleScriptUrl.startsWith('https://')) {
+                throw new Error('Invalid Google Script URL');
+            }
+
+            // Create the payload
+            const payload = {
+                username: username.trim(),
+                votes: votes.map(vote => ({
+                    candidate: vote.candidate,
+                    party: vote.party,
+                    preference: vote.value !== "" ? parseInt(vote.value) : 0
+                })),
+                referendum1: referendum1.trim().toLowerCase(),
+                referendum2: referendum2.trim().toLowerCase()
+            };
+
+            // Make the request with error handling
             const response = await fetch(googleScriptUrl, {
                 method: "POST",
                 headers: { 
-                    "Content-Type": "application/json",
-                    "Accept": "application/json" 
+                    "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ 
-                    username: username.trim(),
-                    votes: votes.map(vote => ({
-                        candidate: vote.candidate,
-                        party: vote.party,
-                        preference: vote.value !== "" ? parseInt(vote.value) : 0
-                    })),
-                    referendum1: referendum1.trim().toLowerCase(),
-                    referendum2: referendum2.trim().toLowerCase()
-                })
+                body: JSON.stringify(payload)
             });
 
+            // Check if the request actually reached the server
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                const errorText = await response.text();
+                throw new Error(`Server responded with ${response.status}: ${errorText}`);
             }
 
-            const result = await response.json();
-            if (result.status === 'error') {
-                throw new Error(result.message);
+            // Try to parse the response
+            let result;
+            try {
+                result = await response.json();
+            } catch (e) {
+                throw new Error('Invalid response from server');
             }
 
+            // Check for application-level errors
+            if (result.status !== 'success') {
+                throw new Error(result.message || 'Unknown server error');
+            }
+
+            // Success case
             errorMsg.textContent = "Ballot submitted successfully!";
             errorMsg.style.color = "green";
             
@@ -704,13 +723,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.location.href = "https://www.kazjistan.org/voting_complete";
             }, 2000);
         } catch (error) {
-            console.error("Submission error:", error);
-            errorMsg.textContent = `Error submitting ballot: ${error.message}`;
+            console.error("Full error details:", error);
+            errorMsg.textContent = `Submission failed: ${error.message}`;
             errorMsg.style.color = "red";
             submitBtn.disabled = false;
+            
+            // Additional debugging info
+            if (error.message.includes('Failed to fetch')) {
+                errorMsg.textContent += " (Network error - check connection)";
+            } else if (error.message.includes('CORS')) {
+                errorMsg.textContent += " (Server configuration issue)";
+            }
         }
     }
 
+    // Event listeners remain the same
     document.addEventListener('input', function(e) {
         if (e.target.classList.contains('preference')) {
             errorMsg.textContent = validateInput(e.target);
