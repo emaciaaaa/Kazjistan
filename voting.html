@@ -602,174 +602,147 @@
         </div>
     </footer>
 
- <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const errorMsg = document.getElementById('error-message');
-    const submitBtn = document.getElementById('submit-ballot');
-    const usernameInput = document.getElementById('username');
-    const referendum1Input = document.getElementById('referendum1');
-    const referendum2Input = document.getElementById('referendum2');
-
-    // Validation functions remain the same
-    function validateInput(input) {
-        const value = parseInt(input.value);
-        if (isNaN(value)) return '';
-        if (value < 1) return "Error: Minimum preference is 1.";
-        
-        const inputs = document.querySelectorAll('.preference');
-        let duplicates = 0;
-        inputs.forEach(otherInput => {
-            if (otherInput !== input && otherInput.value === input.value) {
-                duplicates++;
-            }
-        });
-        
-        if (duplicates > 0) return `Error: Number ${input.value} is used more than once.`;
-        return '';
-    }
-
-    function validateReferendum(input) {
-        const value = input.value.trim().toLowerCase();
-        if (value !== 'yes' && value !== 'no') {
-            return "Error: Please enter either 'yes' or 'no'";
-        }
-        return '';
-    }
-
-    function validateBallot() {
-        const inputs = Array.from(document.querySelectorAll('.preference'));
-        
-        if (!usernameInput.value.trim()) return "Error: Please enter your username.";
-        
-        const ref1Error = validateReferendum(referendum1Input);
-        if (ref1Error) return ref1Error;
-        
-        const ref2Error = validateReferendum(referendum2Input);
-        if (ref2Error) return ref2Error;
-        
-        const filledPreferences = inputs.filter(input => input.value !== "").length;
-        if (filledPreferences < 8) return "Error: You must number at least 8 candidates.";
-        
-        const numbers = inputs
-            .filter(input => input.value !== "")
-            .map(input => parseInt(input.value));
-        
-        if (numbers.length !== new Set(numbers).size) return "Error: Duplicate numbers detected.";
-        
-        const invalidNumbers = numbers.filter(n => n < 1);
-        if (invalidNumbers.length > 0) return "Error: Preferences must be 1 or higher.";
-        
-        return '';
-    }
-
-    async function submitToGoogleSheet(username, votes, referendum1, referendum2) {
-        const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzdKU25M9DPnZKbAvWsDqpb3tYhgrZk-tNxgl2UuPxowNFzpz5l1H4mU1p97IJ8ACXy/exec";
-        
-        errorMsg.textContent = "Submitting...";
-        errorMsg.style.color = "blue";
-        submitBtn.disabled = true;
-        
-        try {
-            // First validate the Google Script URL
-            if (!googleScriptUrl || !googleScriptUrl.startsWith('https://')) {
-                throw new Error('Invalid Google Script URL');
+  <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const errorMsg = document.getElementById('error-message');
+            const submitBtn = document.getElementById('submit-ballot');
+            const usernameInput = document.getElementById('username');
+            const referendum1Input = document.getElementById('referendum1');
+            const referendum2Input = document.getElementById('referendum2');
+            
+            // ===== VALIDATION FUNCTIONS =====
+            function validateInput(input) {
+                const value = parseInt(input.value);
+                if (isNaN(value)) return '';
+                
+                if (value < 1) return "Error: Minimum preference is 1.";
+                
+                const inputs = document.querySelectorAll('.preference');
+                
+                let duplicates = 0;
+                inputs.forEach(otherInput => {
+                    if (otherInput !== input && otherInput.value === input.value) {
+                        duplicates++;
+                    }
+                });
+                
+                if (duplicates > 0) return `Error: Number ${input.value} is used more than once.`;
+                return '';
             }
 
-            // Create the payload
-            const payload = {
-                username: username.trim(),
-                votes: votes.map(vote => ({
-                    candidate: vote.candidate,
-                    party: vote.party,
-                    preference: vote.value !== "" ? parseInt(vote.value) : 0
-                })),
-                referendum1: referendum1.trim().toLowerCase(),
-                referendum2: referendum2.trim().toLowerCase()
-            };
+            function validateReferendum(input) {
+                const value = input.value.trim().toLowerCase();
+                if (value !== 'yes' && value !== 'no') {
+                    return "Error: Please enter either 'yes' or 'no'";
+                }
+                return '';
+            }
 
-            // Make the request with error handling
-            const response = await fetch(googleScriptUrl, {
-                method: "POST",
-                headers: { 
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(payload)
+            function validateBallot() {
+                const inputs = Array.from(document.querySelectorAll('.preference'));
+                
+                // Validate username
+                if (!usernameInput.value.trim()) return "Error: Please enter your username.";
+                
+                // Validate referendum questions
+                const ref1Error = validateReferendum(referendum1Input);
+                if (ref1Error) return ref1Error;
+                
+                const ref2Error = validateReferendum(referendum2Input);
+                if (ref2Error) return ref2Error;
+                
+                // Count how many preferences are filled
+                const filledPreferences = inputs.filter(input => input.value !== "").length;
+                if (filledPreferences < 8) return "Error: You must number at least 8 candidates.";
+                
+                // Validate all filled preferences
+                const numbers = inputs
+                    .filter(input => input.value !== "")
+                    .map(input => parseInt(input.value));
+                
+                if (numbers.length !== new Set(numbers).size) return "Error: Duplicate numbers detected.";
+                
+                const invalidNumbers = numbers.filter(n => n < 1);
+                if (invalidNumbers.length > 0) return "Error: Preferences must be 1 or higher.";
+                
+                return '';
+            }
+
+            // ===== GOOGLE SHEETS SUBMISSION =====
+            function submitToGoogleSheet(username, votes, referendum1, referendum2) {
+                const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzdKU25M9DPnZKbAvWsDqpb3tYhgrZk-tNxgl2UuPxowNFzpz5l1H4mU1p97IJ8ACXy/exec";
+                
+                // Show loading state
+                errorMsg.textContent = "Submitting...";
+                errorMsg.style.color = "blue";
+                submitBtn.disabled = true;
+                
+                fetch(googleScriptUrl, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        username: username.trim(),
+                        votes: votes.map(vote => ({
+                            candidate: vote.candidate,
+                            party: vote.party,
+                            preference: vote.value !== "" ? parseInt(vote.value) : 0
+                        })),
+                        referendum1: referendum1.trim().toLowerCase(),
+                        referendum2: referendum2.trim().toLowerCase()
+                    })
+                })
+                .then(() => {
+                    errorMsg.textContent = "Ballot submitted successfully!";
+                    errorMsg.style.color = "green";
+                    
+                    // Redirect to a new page after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = "https://www.kazjistan.org/voting_complete";
+                    }, 2000);
+                })
+                .catch((error) => {
+                    errorMsg.textContent = "Error submitting ballot. Please try again.";
+                    errorMsg.style.color = "red";
+                    submitBtn.disabled = false;
+                    console.error("Error:", error);
+                });
+            }
+
+            // ===== EVENT LISTENERS =====
+            document.addEventListener('input', function(e) {
+                if (e.target.classList.contains('preference')) {
+                    errorMsg.textContent = validateInput(e.target);
+                }
+                else if (e.target.id === 'referendum1' || e.target.id === 'referendum2') {
+                    errorMsg.textContent = validateReferendum(e.target);
+                }
             });
-
-            // Check if the request actually reached the server
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Server responded with ${response.status}: ${errorText}`);
-            }
-
-            // Try to parse the response
-            let result;
-            try {
-                result = await response.json();
-            } catch (e) {
-                throw new Error('Invalid response from server');
-            }
-
-            // Check for application-level errors
-            if (result.status !== 'success') {
-                throw new Error(result.message || 'Unknown server error');
-            }
-
-            // Success case
-            errorMsg.textContent = "Ballot submitted successfully!";
-            errorMsg.style.color = "green";
             
-            setTimeout(() => {
-                window.location.href = "https://www.kazjistan.org/voting_complete";
-            }, 2000);
-        } catch (error) {
-            console.error("Full error details:", error);
-            errorMsg.textContent = `Submission failed: ${error.message}`;
-            errorMsg.style.color = "red";
-            submitBtn.disabled = false;
-            
-            // Additional debugging info
-            if (error.message.includes('Failed to fetch')) {
-                errorMsg.textContent += " (Network error - check connection)";
-            } else if (error.message.includes('CORS')) {
-                errorMsg.textContent += " (Server configuration issue)";
-            }
-        }
-    }
-
-    // Event listeners remain the same
-    document.addEventListener('input', function(e) {
-        if (e.target.classList.contains('preference')) {
-            errorMsg.textContent = validateInput(e.target);
-        }
-        else if (e.target.id === 'referendum1' || e.target.id === 'referendum2') {
-            errorMsg.textContent = validateReferendum(e.target);
-        }
-    });
-    
-    submitBtn.addEventListener('click', function() {
-        const validationError = validateBallot();
-        if (validationError) {
-            errorMsg.textContent = validationError;
-            errorMsg.style.color = "red";
-            return;
-        }
-        
-        const votes = Array.from(document.querySelectorAll('.preference'))
-            .map(input => ({
-                candidate: input.dataset.candidate,
-                party: input.dataset.party,
-                value: input.value
-            }));
-        
-        submitToGoogleSheet(
-            usernameInput.value.trim(), 
-            votes,
-            referendum1Input.value.trim(),
-            referendum2Input.value.trim()
-        );
-    });
-});
-</script>
+            submitBtn.addEventListener('click', function() {
+                const validationError = validateBallot();
+                if (validationError) {
+                    errorMsg.textContent = validationError;
+                    errorMsg.style.color = "red";
+                    return;
+                }
+                
+                const votes = Array.from(document.querySelectorAll('.preference'))
+                    .map(input => ({
+                        candidate: input.dataset.candidate,
+                        party: input.dataset.party,
+                        value: input.value
+                    }));
+                
+                submitToGoogleSheet(
+                    usernameInput.value.trim(), 
+                    votes,
+                    referendum1Input.value.trim(),
+                    referendum2Input.value.trim()
+                );
+            });
+        });
+    </script>
 </body>
 </html>
