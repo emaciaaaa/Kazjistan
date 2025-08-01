@@ -3,292 +3,545 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>11 July 2025 By-election</title>
+    <title>11 July 2025 By-election - People's Republic of Kazjistan</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
+        :root {
+            --primary-color: #004c4c;
+            --secondary-color: #fba910;
+            --accent-color: #e8f7f7;
+            --text-color: #333;
+            --light-text: #666;
+            --white: #ffffff;
+            --header-height: 80px;
+            --max-width: 1200px;
         }
-        .ballot {
-            background-color: white;
-            border: 2px solid #000;
-            padding: 20px;
+        
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--header-height);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo img {
+            height: 50px;
+        }
+        
+        .logo-text {
+            font-family: 'Noto Serif', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .logo-text span {
+            color: var(--secondary-color);
+            font-weight: 400;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--secondary-color);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #006666 100%);
+            color: var(--white);
+            padding: 40px 0;
+            text-align: center;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        
+        .hero h1 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
             max-width: 800px;
             margin: 0 auto;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            font-weight: 300;
         }
+        
+        main {
+            padding: 40px 0;
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif', serif;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        
+        .ballot-container {
+            background-color: var(--white);
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-bottom: 30px;
+            border-top: 3px solid var(--secondary-color);
+        }
+        
         .parties-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 20px;
         }
+        
         .party-column {
-            width: 24%;
             border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: var(--white);
         }
+        
         .party-header {
             font-weight: bold;
             text-align: center;
-            padding: 5px;
-            margin-bottom: 10px;
-            background-color: #f0f0f0;
-            border-bottom: 2px solid #000;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: var(--accent-color);
+            border-bottom: 2px solid var(--secondary-color);
+            color: var(--primary-color);
+            font-family: 'Noto Serif', serif;
         }
+        
         .candidate {
             display: flex;
             align-items: center;
             margin: 10px 0;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
         }
+        
         .candidate input {
             width: 40px;
             height: 30px;
-            margin-right: 10px;
+            margin-right: 15px;
             text-align: center;
             font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
         }
+        
         .candidate-info {
             display: flex;
             flex-direction: column;
+            flex-grow: 1;
         }
+        
         .candidate-name {
-            font-weight: bold;
+            font-weight: 500;
             font-size: 16px;
         }
+        
         .candidate-party {
             font-size: 12px;
-            color: #555;
+            color: var(--light-text);
             margin-top: 2px;
         }
+        
         .error {
             color: red;
             font-size: 14px;
             margin-top: 10px;
             text-align: center;
         }
+        
         button {
             display: block;
             margin: 20px auto 0;
-            padding: 10px 20px;
-            background-color: #0066cc;
-            color: white;
+            padding: 12px 30px;
+            background-color: var(--secondary-color);
+            color: var(--white);
             border: none;
+            border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s;
         }
+        
         button:hover {
-            background-color: #0055aa;
+            background-color: #e69500;
         }
+        
         .instructions {
             margin-bottom: 20px;
             font-size: 16px;
-            color: #333;
+            color: var(--text-color);
             text-align: center;
+            padding: 15px;
+            background-color: var(--accent-color);
+            border-radius: 5px;
         }
+        
         .username-input {
-            margin-top: 20px;
+            margin: 25px 0;
             text-align: center;
         }
+        
+        .username-input label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        
         .username-input input {
-            padding: 8px;
+            padding: 10px 15px;
             font-size: 16px;
-            width: 200px;
+            width: 250px;
+            max-width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 20px 0;
+            text-align: center;
+            border-top: 3px solid var(--secondary-color);
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        @media (max-width: 1024px) {
+            .parties-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                height: auto;
+                padding: 20px 0;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .parties-container {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="ballot">
-        <h2 style="text-align: center;">11 July 2025 By-election</h2>
-        <p class="instructions">Number at least 8 boxes in order of preference (1 to 8+). Additional preferences are optional.</p>
-        
-        <div class="parties-container" id="parties-container">
-            <!-- Whig Column -->
-            <div class="party-column" id="whig-column">
-                <div class="party-header">Whig</div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Joe Sane" data-party="Whig">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Joe Sane</span>
-                        <span class="candidate-party">Whig</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Elite" data-party="Whig">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Elite</span>
-                        <span class="candidate-party">Whig</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Zelvrix" data-party="Whig">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Zelvrix</span>
-                        <span class="candidate-party">Whig</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Hope" data-party="Whig">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Hope</span>
-                        <span class="candidate-party">Whig</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="EstoBlake" data-party="Whig">
-                    <div class="candidate-info">
-                        <span class="candidate-name">EstoBlake</span>
-                        <span class="candidate-party">Whig</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Zeynep" data-party="Whig">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Zeynep</span>
-                        <span class="candidate-party">Whig</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Fevsear" data-party="Whig">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Fevsear</span>
-                        <span class="candidate-party">Whig</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Goodquestion" data-party="Whig">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Goodquestion</span>
-                        <span class="candidate-party">Whig</span>
-                    </div>
-                </div>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="flag-of-kazjistan.svg" alt="Kazjistan Flag" style="height: 40px;">
+                <div class="logo-text">PEOPLE'S REPUBLIC <span>OF KAZJISTAN</span></div>
             </div>
-            
-            <!-- Revolt! Column -->
-            <div class="party-column" id="revolt-column">
-                <div class="party-header">Revolt!</div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Clover" data-party="Revolt!">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Clover</span>
-                        <span class="candidate-party">Revolt!</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Luci" data-party="Revolt!">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Luci</span>
-                        <span class="candidate-party">Revolt!</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Cisco" data-party="Revolt!">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Cisco</span>
-                        <span class="candidate-party">Revolt!</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Progressive Column -->
-            <div class="party-column" id="progressive-column">
-                <div class="party-header">Progressive</div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Igor Witback" data-party="Progressive">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Igor Witback</span>
-                        <span class="candidate-party">Progressive</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Axell Nevylym" data-party="Progressive">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Axell Nevylym</span>
-                        <span class="candidate-party">Progressive</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Timus Maximus" data-party="Progressive">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Timus Maximus</span>
-                        <span class="candidate-party">Progressive</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Emacia" data-party="Progressive">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Emacia</span>
-                        <span class="candidate-party">Progressive</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Fixie" data-party="Progressive">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Fixie</span>
-                        <span class="candidate-party">Progressive</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Cyrzed" data-party="Progressive">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Cyrzed</span>
-                        <span class="candidate-party">Progressive</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Aeropitz" data-party="Progressive">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Aeropitz</span>
-                        <span class="candidate-party">Progressive</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Baraa" data-party="Progressive">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Baraa</span>
-                        <span class="candidate-party">Progressive</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Coca-Cola King" data-party="Progressive">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Coca-Cola King</span>
-                        <span class="candidate-party">Progressive</span>
-                    </div>
-                </div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Dinobop" data-party="Progressive">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Dinobop</span>
-                        <span class="candidate-party">Progressive</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Meg Column -->
-            <div class="party-column" id="meg-column">
-                <div class="party-header">Meg</div>
-                <div class="candidate">
-                    <input type="number" class="preference" placeholder="-" data-candidate="Meg" data-party="Meg">
-                    <div class="candidate-info">
-                        <span class="candidate-name">Meg</span>
-                        <span class="candidate-party">Meg</span>
-                    </div>
-                </div>
-            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="https://kazjistan.miraheze.org/wiki/Main_Page">Wiki</a></li>
+                </ul>
+            </nav>
         </div>
+    </header>
 
-        <!-- Username Input -->
-        <div class="username-input">
-            <label for="username">Username:</label>
-            <input type="text" id="username" required placeholder="Enter your username">
+    <section class="hero">
+        <div class="container">
+            <h1>11 July 2025 By-election</h1>
+            <p>Exercise your democratic right to vote</p>
         </div>
-        
-        <div class="error" id="error-message"></div>
-        <button id="submit-ballot">Submit Ballot</button>
-    </div>
+    </section>
+
+    <main class="container">
+        <div class="ballot-container">
+            <h2 class="section-title">By-election Ballot</h2>
+            
+            <div class="instructions">
+                Number at least 8 boxes in order of preference (1 to 8+). Additional preferences are optional.
+            </div>
+            
+            <div class="parties-container" id="parties-container">
+                <!-- Whig Column -->
+                <div class="party-column" id="whig-column">
+                    <div class="party-header">Whig</div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Joe Sane" data-party="Whig">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Joe Sane</span>
+                            <span class="candidate-party">Whig</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Elite" data-party="Whig">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Elite</span>
+                            <span class="candidate-party">Whig</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Zelvrix" data-party="Whig">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Zelvrix</span>
+                            <span class="candidate-party">Whig</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Hope" data-party="Whig">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Hope</span>
+                            <span class="candidate-party">Whig</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="EstoBlake" data-party="Whig">
+                        <div class="candidate-info">
+                            <span class="candidate-name">EstoBlake</span>
+                            <span class="candidate-party">Whig</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Zeynep" data-party="Whig">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Zeynep</span>
+                            <span class="candidate-party">Whig</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Fevsear" data-party="Whig">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Fevsear</span>
+                            <span class="candidate-party">Whig</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Goodquestion" data-party="Whig">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Goodquestion</span>
+                            <span class="candidate-party">Whig</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Revolt! Column -->
+                <div class="party-column" id="revolt-column">
+                    <div class="party-header">Revolt!</div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Clover" data-party="Revolt!">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Clover</span>
+                            <span class="candidate-party">Revolt!</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Luci" data-party="Revolt!">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Luci</span>
+                            <span class="candidate-party">Revolt!</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Cisco" data-party="Revolt!">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Cisco</span>
+                            <span class="candidate-party">Revolt!</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Progressive Column -->
+                <div class="party-column" id="progressive-column">
+                    <div class="party-header">Progressive</div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Igor Witback" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Igor Witback</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Axell Nevylym" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Axell Nevylym</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Timus Maximus" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Timus Maximus</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Emacia" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Emacia</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Fixie" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Fixie</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Cyrzed" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Cyrzed</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Aeropitz" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Aeropitz</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Baraa" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Baraa</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Coca-Cola King" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Coca-Cola King</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Dinobop" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Dinobop</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Meg Column -->
+                <div class="party-column" id="meg-column">
+                    <div class="party-header">Meg</div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Meg" data-party="Meg">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Meg</span>
+                            <span class="candidate-party">Meg</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Username Input -->
+            <div class="username-input">
+                <label for="username">Username:</label>
+                <input type="text" id="username" required placeholder="Enter your username">
+            </div>
+            
+            <div class="error" id="error-message"></div>
+            <button id="submit-ballot">Submit Ballot</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                &copy; 2025 People's Republic of Kazjistan
+            </div>
+        </div>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -341,7 +594,7 @@
 
             // ===== GOOGLE SHEETS SUBMISSION =====
             function submitToGoogleSheet(username, votes) {
-                const googleScriptUrl = "https://script.google.com/macros/s/AKfycbxB7k30nAm2THUlEI_pcCm9-8C_G-FxJHI0UExSeZdiphVaG2GU1fwmaxA8iKPA-Ws/exec";
+                const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzdKU25M9DPnZKbAvWsDqpb3tYhgrZk-tNxgl2UuPxowNFzpz5l1H4mU1p97IJ8ACXy/exec";
                 
                 // Show loading state
                 errorMsg.textContent = "Submitting...";
