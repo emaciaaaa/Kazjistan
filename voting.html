@@ -266,44 +266,6 @@
             border-radius: 5px;
         }
         
-        .referendum {
-            margin: 30px 0;
-            padding: 20px;
-            background-color: var(--accent-color);
-            border-radius: 5px;
-            border-left: 4px solid var(--primary-color);
-        }
-        
-        .referendum h3 {
-            color: var(--primary-color);
-            margin-top: 0;
-            font-family: 'Noto Serif', serif;
-        }
-        
-        .referendum p {
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-        
-        .referendum-input {
-            margin-top: 15px;
-        }
-        
-        .referendum-input label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-        
-        .referendum-input input {
-            padding: 10px 15px;
-            font-size: 16px;
-            width: 100%;
-            max-width: 300px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        
         footer {
             background-color: var(--primary-color);
             color: var(--white);
@@ -562,27 +524,6 @@
                 </div>
             </div>
 
-            <!-- Referendum Questions -->
-            <div class="referendum">
-                <h3>Referendum Proposition 1</h3>
-                <p>Do you agree with inserting the following article after twenty-eight, thereby shifting each following article by one digit?</p>
-                <p><em>Article Twenty-Nine: The Judiciary shall not unduly delay proceedings without just cause, and must adjudicate cases in a timely manner. Justices found to partake in deliberate or unreasonable postponements of proceedings are to be removed by Parliament.</em></p>
-                <div class="referendum-input">
-                    <label for="referendum1">Your vote (yes/no):</label>
-                    <input type="text" id="referendum1" required placeholder="Enter 'yes' or 'no'">
-                </div>
-            </div>
-
-            <div class="referendum">
-                <h3>Referendum Proposition 2</h3>
-                <p>Do you agree with inserting the following article after fifty-seven, thereby shifting each following article by one digit?</p>
-                <p><em>Fifty-Eight: The government shall not establish, impose, or enforce any centralised economic, monetary, or financial system, nor shall it create institutions, regulations, or mechanisms that effectively constitute such a system, whether in whole or in part, directly or indirectly. No government or citizen shall institute financial, monetary, currency, or economic systems within Kazjistan, including central banks, private financial institutions, or external organizations purporting to act on behalf of the Kazji state. This prohibition extends to all claims of state endorsement, de facto financial structures, or circumvention through external entities.</em></p>
-                <div class="referendum-input">
-                    <label for="referendum2">Your vote (yes/no):</label>
-                    <input type="text" id="referendum2" required placeholder="Enter 'yes' or 'no'">
-                </div>
-            </div>
-
             <!-- Username Input -->
             <div class="username-input">
                 <label for="username">Username:</label>
@@ -602,14 +543,12 @@
         </div>
     </footer>
 
-  <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             // DOM elements
             const errorMsg = document.getElementById('error-message');
             const submitBtn = document.getElementById('submit-ballot');
             const usernameInput = document.getElementById('username');
-            const referendum1Input = document.getElementById('referendum1');
-            const referendum2Input = document.getElementById('referendum2');
             
             // ===== VALIDATION FUNCTIONS =====
             function validateInput(input) {
@@ -631,26 +570,11 @@
                 return '';
             }
 
-            function validateReferendum(input) {
-                const value = input.value.trim().toLowerCase();
-                if (value !== 'yes' && value !== 'no') {
-                    return "Error: Please enter either 'yes' or 'no'";
-                }
-                return '';
-            }
-
             function validateBallot() {
                 const inputs = Array.from(document.querySelectorAll('.preference'));
                 
                 // Validate username
                 if (!usernameInput.value.trim()) return "Error: Please enter your username.";
-                
-                // Validate referendum questions
-                const ref1Error = validateReferendum(referendum1Input);
-                if (ref1Error) return ref1Error;
-                
-                const ref2Error = validateReferendum(referendum2Input);
-                if (ref2Error) return ref2Error;
                 
                 // Count how many preferences are filled
                 const filledPreferences = inputs.filter(input => input.value !== "").length;
@@ -670,7 +594,7 @@
             }
 
             // ===== GOOGLE SHEETS SUBMISSION =====
-            function submitToGoogleSheet(username, votes, referendum1, referendum2) {
+            function submitToGoogleSheet(username, votes) {
                 const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzdKU25M9DPnZKbAvWsDqpb3tYhgrZk-tNxgl2UuPxowNFzpz5l1H4mU1p97IJ8ACXy/exec";
                 
                 // Show loading state
@@ -688,9 +612,7 @@
                             candidate: vote.candidate,
                             party: vote.party,
                             preference: vote.value !== "" ? parseInt(vote.value) : 0
-                        })),
-                        referendum1: referendum1.trim().toLowerCase(),
-                        referendum2: referendum2.trim().toLowerCase()
+                        }))
                     })
                 })
                 .then(() => {
@@ -715,9 +637,6 @@
                 if (e.target.classList.contains('preference')) {
                     errorMsg.textContent = validateInput(e.target);
                 }
-                else if (e.target.id === 'referendum1' || e.target.id === 'referendum2') {
-                    errorMsg.textContent = validateReferendum(e.target);
-                }
             });
             
             submitBtn.addEventListener('click', function() {
@@ -737,9 +656,7 @@
                 
                 submitToGoogleSheet(
                     usernameInput.value.trim(), 
-                    votes,
-                    referendum1Input.value.trim(),
-                    referendum2Input.value.trim()
+                    votes
                 );
             });
         });
