@@ -670,45 +670,36 @@
             }
 
             // ===== GOOGLE SHEETS SUBMISSION =====
-            function submitToGoogleSheet(username, votes, referendum1, referendum2) {
-                const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzdKU25M9DPnZKbAvWsDqpb3tYhgrZk-tNxgl2UuPxowNFzpz5l1H4mU1p97IJ8ACXy/exec";
-                
-                // Show loading state
-                errorMsg.textContent = "Submitting...";
-                errorMsg.style.color = "blue";
-                submitBtn.disabled = true;
-                
-                fetch(googleScriptUrl, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ 
-                        username: username.trim(),
-                        votes: votes.map(vote => ({
-                            candidate: vote.candidate,
-                            party: vote.party,
-                            preference: vote.value !== "" ? parseInt(vote.value) : 0
-                        })),
-                        referendum1: referendum1.trim().toLowerCase(),
-                        referendum2: referendum2.trim().toLowerCase()
-                    })
-                })
-                .then(() => {
-                    errorMsg.textContent = "Ballot submitted successfully!";
-                    errorMsg.style.color = "green";
-                    
-                    // Redirect to a new page after 2 seconds
-                    setTimeout(() => {
-                        window.location.href = "https://www.kazjistan.org/voting_complete";
-                    }, 2000);
-                })
-                .catch((error) => {
-                    errorMsg.textContent = "Error submitting ballot. Please try again.";
-                    errorMsg.style.color = "red";
-                    submitBtn.disabled = false;
-                    console.error("Error:", error);
-                });
-            }
+           function submitToGoogleSheet(username, votes, referendum1, referendum2) {
+    const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzdKU25M9DPnZKbAvWsDqpb3tYhgrZk-tNxgl2UuPxowNFzpz5l1H4mU1p97IJ8ACXy/exec";
+    
+    // Prepare votes data - ensure we're sending 'preference' not 'value'
+    const formattedVotes = votes.map(vote => ({
+        candidate: vote.candidate,
+        party: vote.party,
+        preference: vote.value ? parseInt(vote.value) : 0  // Changed from 'value' to 'preference'
+    }));
+    
+    fetch(googleScriptUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+            username: username.trim(),
+            votes: formattedVotes,
+            referendum1: referendum1.trim().toLowerCase(),
+            referendum2: referendum2.trim().toLowerCase()
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'error') throw new Error(data.message);
+        // Success handling
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        errorMsg.textContent = "Error: " + error.message;
+    });
+}
 
             // ===== EVENT LISTENERS =====
             document.addEventListener('input', function(e) {
