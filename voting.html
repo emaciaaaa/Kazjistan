@@ -102,7 +102,7 @@
 <body>
     <div class="ballot">
         <h2 style="text-align: center;">11 July 2025 By-election</h2>
-        <p class="instructions">Number ALL boxes in order of preference (1 to 21).</p>
+        <p class="instructions">Number at least 8 boxes in order of preference (1 to 8+). Additional preferences are optional.</p>
         
         <div class="parties-container" id="parties-container">
             <!-- Whig Column -->
@@ -185,12 +185,6 @@
                 ]
             };
             
-            // Calculate total number of candidates
-            let totalCandidates = 0;
-            for (const party in candidatesByParty) {
-                totalCandidates += candidatesByParty[party].length;
-            }
-            
             // Initialize ballot with candidates in their respective columns
             function initializeBallot() {
                 // Add candidates to their party columns
@@ -205,7 +199,6 @@
                         const input = document.createElement('input');
                         input.type = 'number';
                         input.min = '1';
-                        input.max = totalCandidates.toString();
                         input.className = 'preference';
                         input.placeholder = '-';
                         input.dataset.candidate = candidate;
@@ -234,11 +227,11 @@
             // ===== VALIDATION FUNCTIONS =====
             function validateInput(input) {
                 const value = parseInt(input.value);
-                if (isNaN(value)) return '';
+                if (isNaN(value) return '';
+                
+                if (value < 1) return "Error: Minimum preference is 1.";
                 
                 const inputs = document.querySelectorAll('.preference');
-                
-                if (value > totalCandidates) return `Error: Maximum preference is ${totalCandidates}.`;
                 
                 let duplicates = 0;
                 inputs.forEach(otherInput => {
@@ -256,14 +249,19 @@
                 
                 if (!usernameInput.value.trim()) return "Error: Please enter your username.";
                 
-                const emptyInputs = inputs.filter(input => input.value === "");
-                if (emptyInputs.length > 0) return `Error: You must number ALL candidates (1 to ${totalCandidates}).`;
+                // Count how many preferences are filled
+                const filledPreferences = inputs.filter(input => input.value !== "").length;
+                if (filledPreferences < 8) return "Error: You must number at least 8 candidates.";
                 
-                const numbers = inputs.map(input => parseInt(input.value)).filter(n => !isNaN(n));
+                // Validate all filled preferences
+                const numbers = inputs
+                    .filter(input => input.value !== "")
+                    .map(input => parseInt(input.value));
+                
                 if (numbers.length !== new Set(numbers).size) return "Error: Duplicate numbers detected.";
                 
-                const invalidNumbers = numbers.filter(n => n < 1 || n > totalCandidates);
-                if (invalidNumbers.length > 0) return `Error: Preferences must be between 1 and ${totalCandidates}.`;
+                const invalidNumbers = numbers.filter(n => n < 1);
+                if (invalidNumbers.length > 0) return "Error: Preferences must be 1 or higher.";
                 
                 return '';
             }
@@ -286,7 +284,7 @@
                         votes: votes.map(vote => ({
                             candidate: vote.candidate,
                             party: vote.party,
-                            preference: parseInt(vote.preference) || 0
+                            preference: vote.value !== "" ? parseInt(vote.value) : 0
                         }))
                     })
                 })
@@ -326,7 +324,7 @@
                     .map(input => ({
                         candidate: input.dataset.candidate,
                         party: input.dataset.party,
-                        preference: input.value
+                        value: input.value
                     }));
                 
                 submitToGoogleSheet(usernameInput.value.trim(), votes);
