@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1 August 2025 Election - People's Republic of Kazjistan</title>
+    <title>11 July 2025 By-election - People's Republic of Kazjistan</title>
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -335,21 +335,193 @@
 
     <section class="hero">
         <div class="container">
-            <h1>1 August 2025 Election</h1>
+            <h1>11 July 2025 By-election</h1>
             <p>Exercise your democratic right to vote</p>
         </div>
     </section>
 
     <main class="container">
         <div class="ballot-container">
-            <h2 class="section-title">Parliament Ballot</h2>
+            <h2 class="section-title">By-election Ballot</h2>
             
             <div class="instructions">
-                Number at least 8 boxes in order of preference (1 to 22). You may number more if you wish.
+                Number at least 8 boxes in order of preference (1 to 8+). Additional preferences are optional.
             </div>
             
             <div class="parties-container" id="parties-container">
-                <!-- Party columns will be inserted here by JavaScript -->
+                <!-- Whig Column -->
+                <div class="party-column" id="whig-column">
+                    <div class="party-header">Whig</div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Joe Sane" data-party="Whig">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Joe Sane</span>
+                            <span class="candidate-party">Whig</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Elite" data-party="Whig">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Elite</span>
+                            <span class="candidate-party">Whig</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Zelvrix" data-party="Whig">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Zelvrix</span>
+                            <span class="candidate-party">Whig</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Hope" data-party="Whig">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Hope</span>
+                            <span class="candidate-party">Whig</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="EstoBlake" data-party="Whig">
+                        <div class="candidate-info">
+                            <span class="candidate-name">EstoBlake</span>
+                            <span class="candidate-party">Whig</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Zeynep" data-party="Whig">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Zeynep</span>
+                            <span class="candidate-party">Whig</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Fevsear" data-party="Whig">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Fevsear</span>
+                            <span class="candidate-party">Whig</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Goodquestion" data-party="Whig">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Goodquestion</span>
+                            <span class="candidate-party">Whig</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Revolt! Column -->
+                <div class="party-column" id="revolt-column">
+                    <div class="party-header">Revolt!</div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Clover" data-party="Revolt!">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Clover</span>
+                            <span class="candidate-party">Revolt!</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Luci" data-party="Revolt!">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Luci</span>
+                            <span class="candidate-party">Revolt!</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Cisco" data-party="Revolt!">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Cisco</span>
+                            <span class="candidate-party">Revolt!</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Progressive Column -->
+                <div class="party-column" id="progressive-column">
+                    <div class="party-header">Progressive</div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Igor Witback" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Igor Witback</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Axell Nevylym" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Axell Nevylym</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Timus Maximus" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Timus Maximus</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Emacia" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Emacia</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Fixie" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Fixie</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Cyrzed" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Cyrzed</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Aeropitz" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Aeropitz</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Baraa" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Baraa</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Coca-Cola King" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Coca-Cola King</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Dinobop" data-party="Progressive">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Dinobop</span>
+                            <span class="candidate-party">Progressive</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Meg Column -->
+                <div class="party-column" id="meg-column">
+                    <div class="party-header">Meg</div>
+                    <div class="candidate">
+                        <input type="number" class="preference" placeholder="-" data-candidate="Meg" data-party="Meg">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Meg</span>
+                            <span class="candidate-party">Meg</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Username Input -->
@@ -377,107 +549,15 @@
             const errorMsg = document.getElementById('error-message');
             const submitBtn = document.getElementById('submit-ballot');
             const usernameInput = document.getElementById('username');
-            const partiesContainer = document.getElementById('parties-container');
-            const totalCandidates = 22; // Updated total number of candidates
-            const minPreferences = 8; // Minimum number of preferences required
-            document.getElementById('submit-ballot').addEventListener('click', function() {
-  console.log("Button clicked - handler is working!");
-});
-            
-            // Candidate data with party affiliations in exact order
-            const partyLists = {
-                "Whig": [
-                    { name: "Joe Sane", party: "Whig" },
-                    { name: "Elite", party: "Whig" },
-                    { name: "Zelvrix", party: "Whig" },
-                    { name: "Hope", party: "Whig" },
-                    { name: "Estoblake", party: "Whig" },
-                    { name: "CSGplayz", party: "Whig" },
-                    { name: "Fevsear", party: "Whig" },
-                    { name: "Zeynep", party: "Whig" },
-                    { name: "Goodquestion", party: "Whig" }
-                ],
-                "Revolt!": [
-                    { name: "Clover", party: "Revolt!" },
-                    { name: "Luci", party: "Revolt!" },
-                    { name: "Cisco", party: "Revolt!" }
-                ],
-                "Progressive": [
-                    { name: "Witback", party: "Progressive" },
-                    { name: "Axell Nevylym", party: "Progressive" },
-                    { name: "Timus Maximus", party: "Progressive" },
-                    { name: "Emacia", party: "Progressive" },
-                    { name: "Fixie", party: "Progressive" },
-                    { name: "Cyrzed", party: "Progressive" },
-                    { name: "Aeropitz", party: "Progressive" },
-                    { name: "Baraa", party: "Progressive" },
-                    { name: "Coca-Cola King", party: "Progressive" },
-                    { name: "Dinobop", party: "Progressive" }
-                ],
-                "Independent": [
-                    { name: "Meg", party: "Independent" }
-                ]
-            };
-            
-            // Initialize ballot with rotating party order but fixed candidate order
-            function initializeBallot() {
-                // Clear existing content
-                partiesContainer.innerHTML = '';
-                
-                // Create columns for each party in fixed order
-                Object.entries(partyLists).forEach(([party, candidates]) => {
-                    const column = document.createElement('div');
-                    column.className = 'party-column';
-                    
-                    // Add party header
-                    const header = document.createElement('div');
-                    header.className = 'party-header';
-                    header.textContent = party;
-                    column.appendChild(header);
-                    
-                    // Add candidates in fixed order
-                    candidates.forEach(candidate => {
-                        const candidateDiv = document.createElement('div');
-                        candidateDiv.className = 'candidate';
-                        
-                        const input = document.createElement('input');
-                        input.type = 'number';
-                        input.min = '1';
-                        input.max = totalCandidates.toString();
-                        input.className = 'preference';
-                        input.placeholder = '-';
-                        input.dataset.candidate = candidate.name;
-                        
-                        const infoDiv = document.createElement('div');
-                        infoDiv.className = 'candidate-info';
-                        
-                        const nameSpan = document.createElement('span');
-                        nameSpan.className = 'candidate-name';
-                        nameSpan.textContent = candidate.name;
-                        
-                        const partySpan = document.createElement('span');
-                        partySpan.className = 'candidate-party';
-                        partySpan.textContent = candidate.party;
-                    
-                        infoDiv.appendChild(nameSpan);
-                        infoDiv.appendChild(partySpan);
-                        candidateDiv.appendChild(input);
-                        candidateDiv.appendChild(infoDiv);
-                        column.appendChild(candidateDiv);
-                    });
-                    
-                    partiesContainer.appendChild(column);
-                });
-            }
             
             // ===== VALIDATION FUNCTIONS =====
             function validateInput(input) {
                 const value = parseInt(input.value);
                 if (isNaN(value)) return '';
                 
-                const inputs = document.querySelectorAll('.preference');
+                if (value < 1) return "Error: Minimum preference is 1.";
                 
-                if (value > totalCandidates) return `Error: Maximum preference is ${totalCandidates}.`;
+                const inputs = document.querySelectorAll('.preference');
                 
                 let duplicates = 0;
                 inputs.forEach(otherInput => {
@@ -495,99 +575,86 @@
                 
                 if (!usernameInput.value.trim()) return "Error: Please enter your username.";
                 
-                // Count how many preferences have been entered
-                const numberedPreferences = inputs.filter(input => input.value !== "").length;
+                // Count how many preferences are filled
+                const filledPreferences = inputs.filter(input => input.value !== "").length;
+                if (filledPreferences < 8) return "Error: You must number at least 8 candidates.";
                 
-                if (numberedPreferences < minPreferences) {
-                    return `Error: You must number at least ${minPreferences} candidates.`;
-                }
-                
-                // Get all numbered preferences
+                // Validate all filled preferences
                 const numbers = inputs
                     .filter(input => input.value !== "")
                     .map(input => parseInt(input.value));
                 
-                // Check for duplicates among numbered preferences
-                if (numbers.length !== new Set(numbers).size) {
-                    return "Error: Duplicate numbers detected.";
-                }
+                if (numbers.length !== new Set(numbers).size) return "Error: Duplicate numbers detected.";
                 
-                // Check for numbers out of range
-                const invalidNumbers = numbers.filter(n => n < 1 || n > totalCandidates);
-                if (invalidNumbers.length > 0) {
-                    return `Error: Preferences must be between 1 and ${totalCandidates}.`;
-                }
-                
-                // Check for gaps in numbering (optional - remove if not needed)
-                const sortedNumbers = [...numbers].sort((a, b) => a - b);
-                for (let i = 0; i < sortedNumbers.length; i++) {
-                    if (sortedNumbers[i] !== i + 1) {
-                        return "Error: Preferences should be sequential starting from 1 (no gaps).";
-                    }
-                }
+                const invalidNumbers = numbers.filter(n => n < 1);
+                if (invalidNumbers.length > 0) return "Error: Preferences must be 1 or higher.";
                 
                 return '';
             }
 
             // ===== GOOGLE SHEETS SUBMISSION =====
-        function submitToGoogleSheet(username, votes) {
-    console.log("Starting submission..."); // Debug 1
-    
-    const googleScriptUrl = "https://script.google.com/macros/s/AKfycbxB7k30nAm2THUlEI_pcCm9-8C_G-FxJHI0UExSeZdiphVaG2GU1fwmaxA8iKPA-Ws/exec";
-    console.log("Using URL:", googleScriptUrl); // Debug 2
-    
-    const errorMsg = document.getElementById('error-message');
-    const submitBtn = document.getElementById('submit-ballot');
-    
-    errorMsg.textContent = "Submitting your vote...";
-    errorMsg.style.color = "blue";
-    submitBtn.disabled = true;
-    
-    // Prepare the data
-    const formData = new URLSearchParams();
-    formData.append('username', username.trim());
-    formData.append('votes', JSON.stringify(votes));
-    console.log("Form data prepared:", formData.toString()); // Debug 3
-    
-    // Add cache buster
-    const urlWithCacheBuster = `${googleScriptUrl}?t=${Date.now()}`;
-    
-    console.log("Attempting fetch..."); // Debug 4
-    fetch(urlWithCacheBuster, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: formData
-    })
-    .then(response => {
-        console.log("Received response, status:", response.status); // Debug 5
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log("Response data:", data); // Debug 6
-        if (data.status === 'success') {
-            errorMsg.textContent = "✓ Vote submitted!";
-            errorMsg.style.color = "green";
-            setTimeout(() => {
-                window.location.href = "https://www.kazjistan.org/voting_complete";
-            }, 2000);
-        } else {
-            throw new Error(data.message || 'Unknown server response');
-        }
-    })
-    .catch(error => {
-        console.error("Full error:", error); // Debug 7
-        errorMsg.textContent = `Submission failed: ${error.message}`;
-        errorMsg.style.color = "red";
-        submitBtn.disabled = false;
-    });
-}
-            // Initialize the ballot with fixed party order (no rotation)
-            initializeBallot();
+            function submitToGoogleSheet(username, votes) {
+                const googleScriptUrl = "https://script.google.com/macros/s/AKfycbxB7k30nAm2THUlEI_pcCm9-8C_G-FxJHI0UExSeZdiphVaG2GU1fwmaxA8iKPA-Ws/exec";
+                
+                // Show loading state
+                errorMsg.textContent = "Submitting...";
+                errorMsg.style.color = "blue";
+                submitBtn.disabled = true;
+                
+                fetch(googleScriptUrl, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        username: username.trim(),
+                        votes: votes.map(vote => ({
+                            candidate: vote.candidate,
+                            party: vote.party,
+                            preference: vote.value !== "" ? parseInt(vote.value) : 0
+                        }))
+                    })
+                })
+                .then(() => {
+                    errorMsg.textContent = "Ballot submitted successfully!";
+                    errorMsg.style.color = "green";
+                    
+                    // Redirect to a new page after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = "https://www.kazjistan.org/voting_complete";
+                    }, 2000);
+                })
+                .catch((error) => {
+                    errorMsg.textContent = "Error submitting ballot. Please try again.";
+                    errorMsg.style.color = "red";
+                    submitBtn.disabled = false;
+                    console.error("Error:", error);
+                });
+            }
+
+            // ===== EVENT LISTENERS =====
+            document.addEventListener('input', function(e) {
+                if (e.target.classList.contains('preference')) {
+                    errorMsg.textContent = validateInput(e.target);
+                }
+            });
+            
+            submitBtn.addEventListener('click', function() {
+                const validationError = validateBallot();
+                if (validationError) {
+                    errorMsg.textContent = validationError;
+                    errorMsg.style.color = "red";
+                    return;
+                }
+                
+                const votes = Array.from(document.querySelectorAll('.preference'))
+                    .map(input => ({
+                        candidate: input.dataset.candidate,
+                        party: input.dataset.party,
+                        value: input.value
+                    }));
+                
+                submitToGoogleSheet(usernameInput.value.trim(), votes);
+            });
         });
     </script>
 </body>
