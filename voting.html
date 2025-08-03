@@ -550,123 +550,129 @@
         </div>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // DOM elements
-            const errorMsg = document.getElementById('error-message');
-            const submitBtn = document.getElementById('submit-ballot');
-            const usernameInput = document.getElementById('username');
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // DOM elements
+        const errorMsg = document.getElementById('error-message');
+        const submitBtn = document.getElementById('submit-ballot');
+        const usernameInput = document.getElementById('username');
+        
+        // ===== VALIDATION FUNCTIONS =====
+        function validateInput(input) {
+            const value = parseInt(input.value);
+            if (input.value === "" || isNaN(value)) return '';
             
-            // ===== VALIDATION FUNCTIONS =====
-            function validateInput(input) {
-                const value = parseInt(input.value);
-                if (isNaN(value)) return '';
-                
-                if (value < 1) return "Error: Minimum preference is 1.";
-                
-                const inputs = document.querySelectorAll('.preference');
-                
-                let duplicates = 0;
-                inputs.forEach(otherInput => {
-                    if (otherInput !== input && otherInput.value === input.value) {
-                        duplicates++;
-                    }
-                });
-                
-                if (duplicates > 0) return `Error: Number ${input.value} is used more than once.`;
-                return '';
+            if (value < 1) {
+                input.value = "";
+                return "Error: Minimum preference is 1.";
             }
-
-            function validateBallot() {
-                const inputs = Array.from(document.querySelectorAll('.preference'));
-                
-                // Validate username
-                if (!usernameInput.value.trim()) return "Error: Please enter your username.";
-                
-                // Count how many preferences are filled
-                const filledPreferences = inputs.filter(input => input.value !== "").length;
-                if (filledPreferences < 8) return "Error: You must number at least 8 candidates.";
-                
-                // Validate all filled preferences
-                const numbers = inputs
-                    .filter(input => input.value !== "")
-                    .map(input => parseInt(input.value));
-                
-                if (numbers.length !== new Set(numbers).size) return "Error: Duplicate numbers detected.";
-                
-                const invalidNumbers = numbers.filter(n => n < 1);
-                if (invalidNumbers.length > 0) return "Error: Preferences must be 1 or higher.";
-                
-                return '';
-            }
-
-            // ===== GOOGLE SHEETS SUBMISSION =====
-            function submitToGoogleSheet(username, votes) {
-                const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzdKU25M9DPnZKbAvWsDqpb3tYhgrZk-tNxgl2UuPxowNFzpz5l1H4mU1p97IJ8ACXy/exec";
-                
-                // Show loading state
-                errorMsg.textContent = "Submitting...";
-                errorMsg.style.color = "blue";
-                submitBtn.disabled = true;
-                
-                fetch(googleScriptUrl, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ 
-                        username: username.trim(),
-                        votes: votes.map(vote => ({
-                            candidate: vote.candidate,
-                            party: vote.party,
-                            preference: vote.value !== "" ? parseInt(vote.value) : 0
-                        }))
-                    })
-                })
-                .then(() => {
-                    errorMsg.textContent = "Ballot submitted successfully!";
-                    errorMsg.style.color = "green";
-                    
-                    // Redirect to a new page after 2 seconds
-                    setTimeout(() => {
-                        window.location.href = "https://www.kazjistan.org/voting_complete";
-                    }, 2000);
-                })
-                .catch((error) => {
-                    errorMsg.textContent = "Error submitting ballot. Please try again.";
-                    errorMsg.style.color = "red";
-                    submitBtn.disabled = false;
-                    console.error("Error:", error);
-                });
-            }
-
-            // ===== EVENT LISTENERS =====
-            document.addEventListener('input', function(e) {
-                if (e.target.classList.contains('preference')) {
-                    errorMsg.textContent = validateInput(e.target);
-                }
-            });
             
-            submitBtn.addEventListener('click', function() {
-                const validationError = validateBallot();
-                if (validationError) {
-                    errorMsg.textContent = validationError;
-                    errorMsg.style.color = "red";
-                    return;
-                }
+            // Check for duplicates only among filled inputs
+            const filledInputs = Array.from(document.querySelectorAll('.preference'))
+                .filter(i => i.value !== "" && i !== input);
+            
+            const duplicate = filledInputs.find(i => i.value === input.value);
+            if (duplicate) {
+                return `Error: Number ${input.value} is already used for ${duplicate.dataset.candidate}.`;
+            }
+            
+            return '';
+        }
+
+        function validateBallot() {
+            // Validate username
+            if (!usernameInput.value.trim()) return "Error: Please enter your username.";
+            
+            // Get all filled preferences
+            const filledInputs = Array.from(document.querySelectorAll('.preference'))
+                .filter(input => input.value !== "");
+            
+            // Check minimum 8 preferences
+            if (filledInputs.length < 8) return "Error: You must number at least 8 candidates.";
+            
+            // Check for duplicates
+            const preferenceNumbers = filledInputs.map(input => parseInt(input.value));
+            if (new Set(preferenceNumbers).size !== preferenceNumbers.length) {
+                return "Error: Duplicate numbers detected.";
+            }
+            
+            // Check all numbers are positive
+            if (preferenceNumbers.some(n => n < 1)) {
+                return "Error: Preferences must be 1 or higher.";
+            }
+            
+            return '';
+        }
+
+        // ===== GOOGLE SHEETS SUBMISSION =====
+        function submitToGoogleSheet(username, votes) {
+            const googleScriptUrl = "https://script.google.com/macros/s/AKfycbzdKU25M9DPnZKbAvWsDqpb3tYhgrZk-tNxgl2UuPxowNFzpz5l1H4mU1p97IJ8ACXy/exec";
+            
+            // Show loading state
+            errorMsg.textContent = "Submitting...";
+            errorMsg.style.color = "blue";
+            submitBtn.disabled = true;
+            
+            fetch(googleScriptUrl, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    username: username.trim(),
+                    votes: votes.map(vote => ({
+                        candidate: vote.candidate,
+                        party: vote.party,
+                        preference: vote.value !== "" ? parseInt(vote.value) : 0
+                    }))
+                })
+            })
+            .then(() => {
+                errorMsg.textContent = "Ballot submitted successfully!";
+                errorMsg.style.color = "green";
                 
-                const votes = Array.from(document.querySelectorAll('.preference'))
-                    .map(input => ({
-                        candidate: input.dataset.candidate,
-                        party: input.dataset.party,
-                        value: input.value
-                    }));
-                
-                submitToGoogleSheet(
-                    usernameInput.value.trim(), 
-                    votes
-                );
+                // Redirect after 2 seconds
+                setTimeout(() => {
+                    window.location.href = "https://www.kazjistan.org/voting_complete";
+                }, 2000);
+            })
+            .catch((error) => {
+                errorMsg.textContent = "Error submitting ballot. Please try again.";
+                errorMsg.style.color = "red";
+                submitBtn.disabled = false;
+                console.error("Error:", error);
             });
+        }
+
+        // ===== EVENT LISTENERS =====
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('preference')) {
+                const error = validateInput(e.target);
+                errorMsg.textContent = error;
+                errorMsg.style.color = error ? "red" : "";
+            }
         });
-    </script>
+        
+        submitBtn.addEventListener('click', function() {
+            const validationError = validateBallot();
+            if (validationError) {
+                errorMsg.textContent = validationError;
+                errorMsg.style.color = "red";
+                return;
+            }
+            
+            const votes = Array.from(document.querySelectorAll('.preference'))
+                .map(input => ({
+                    candidate: input.dataset.candidate,
+                    party: input.dataset.party,
+                    value: input.value
+                }));
+            
+            submitToGoogleSheet(
+                usernameInput.value.trim(), 
+                votes
+            );
+        });
+    });
+</script>
 </body>
 </html>
