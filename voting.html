@@ -557,25 +557,44 @@
         const submitBtn = document.getElementById('submit-ballot');
         const usernameInput = document.getElementById('username');
         
+        // Track all preferences to prevent duplicates
+        const preferenceMap = new Map();
+        
         // ===== VALIDATION FUNCTIONS =====
         function validateInput(input) {
-            const value = parseInt(input.value);
-            if (input.value === "" || isNaN(value)) return '';
+            const value = input.value.trim();
             
-            if (value < 1) {
+            // Clear any existing error when field is cleared
+            if (value === "") {
+                // Remove from preference map if it was there
+                if (preferenceMap.has(input)) {
+                    preferenceMap.delete(input);
+                }
+                return '';
+            }
+            
+            // Validate numeric value
+            const numValue = parseInt(value);
+            if (isNaN(numValue)) {
+                input.value = "";
+                return "Error: Please enter a number.";
+            }
+            
+            if (numValue < 1) {
                 input.value = "";
                 return "Error: Minimum preference is 1.";
             }
             
-            // Check for duplicates only among filled inputs
-            const filledInputs = Array.from(document.querySelectorAll('.preference'))
-                .filter(i => i.value !== "" && i !== input);
-            
-            const duplicate = filledInputs.find(i => i.value === input.value);
-            if (duplicate) {
-                return `Error: Number ${input.value} is already used for ${duplicate.dataset.candidate}.`;
+            // Check for duplicates
+            for (const [existingInput, existingValue] of preferenceMap) {
+                if (existingInput !== input && existingValue === numValue) {
+                    input.value = "";
+                    return `Error: Number ${numValue} is already used for ${existingInput.dataset.candidate}.`;
+                }
             }
             
+            // Update preference map
+            preferenceMap.set(input, numValue);
             return '';
         }
 
@@ -583,23 +602,8 @@
             // Validate username
             if (!usernameInput.value.trim()) return "Error: Please enter your username.";
             
-            // Get all filled preferences
-            const filledInputs = Array.from(document.querySelectorAll('.preference'))
-                .filter(input => input.value !== "");
-            
             // Check minimum 8 preferences
-            if (filledInputs.length < 8) return "Error: You must number at least 8 candidates.";
-            
-            // Check for duplicates
-            const preferenceNumbers = filledInputs.map(input => parseInt(input.value));
-            if (new Set(preferenceNumbers).size !== preferenceNumbers.length) {
-                return "Error: Duplicate numbers detected.";
-            }
-            
-            // Check all numbers are positive
-            if (preferenceNumbers.some(n => n < 1)) {
-                return "Error: Preferences must be 1 or higher.";
-            }
+            if (preferenceMap.size < 8) return "Error: You must number at least 8 candidates.";
             
             return '';
         }
@@ -613,17 +617,21 @@
             errorMsg.style.color = "blue";
             submitBtn.disabled = true;
             
+            // Prepare votes data with proper ordering
+            const orderedVotes = Array.from(document.querySelectorAll('.preference'))
+                .map(input => ({
+                    candidate: input.dataset.candidate,
+                    party: input.dataset.party,
+                    preference: input.value !== "" ? parseInt(input.value) : 0
+                }));
+            
             fetch(googleScriptUrl, {
                 method: "POST",
                 mode: "no-cors",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ 
                     username: username.trim(),
-                    votes: votes.map(vote => ({
-                        candidate: vote.candidate,
-                        party: vote.party,
-                        preference: vote.value !== "" ? parseInt(vote.value) : 0
-                    }))
+                    votes: orderedVotes
                 })
             })
             .then(() => {
@@ -660,6 +668,7 @@
                 return;
             }
             
+            // Get all votes in DOM order
             const votes = Array.from(document.querySelectorAll('.preference'))
                 .map(input => ({
                     candidate: input.dataset.candidate,
