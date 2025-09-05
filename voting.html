@@ -253,6 +253,9 @@
         const totalCandidates = 18; // 5 + 5 + 2 + 6 candidates
         const minRequired = 15; // Minimum number of candidates to number
 
+        // Track currently focused input to prevent premature validation
+        let focusedInput = null;
+
         // ===== RANDOMIZATION FUNCTIONS =====
         function initializeBallot() {
             const ballotContainer = document.querySelector('.ballot-container');
@@ -282,6 +285,12 @@
                     input.placeholder = '-';
                     input.dataset.candidate = candidate;
                     
+                    // Add event listeners
+                    input.addEventListener('focus', handleFocus);
+                    input.addEventListener('blur', handleBlur);
+                    input.addEventListener('keydown', handleKeyDown);
+                    input.addEventListener('input', handlePartialInput);
+                    
                     const span = document.createElement('span');
                     span.textContent = candidate;
                     
@@ -291,11 +300,6 @@
                 });
                 
                 ballotContainer.appendChild(groupDiv);
-            });
-            
-            // Add event listeners to all inputs
-            document.querySelectorAll('.preference').forEach(input => {
-                input.addEventListener('input', handleInput);
             });
             
             updateCounter();
@@ -310,40 +314,45 @@
             return array;
         }
 
-        // ===== VALIDATION FUNCTIONS =====
-        function handleInput(e) {
-            const input = e.target;
-            const value = parseInt(input.value);
-            
-            // Clear any previous error messages
+        // ===== INPUT HANDLING FUNCTIONS =====
+        function handleFocus(e) {
+            focusedInput = e.target;
+            // Clear any error messages when focusing on an input
             errorMsg.textContent = '';
-            successMsg.textContent = '';
-            
-            // If empty, just update counter and return
-            if (isNaN(value)) {
-                updateCounter();
-                return;
-            }
-            
-            // Validate the input
-            const validationError = validateInput(input);
-            
-            if (validationError) {
-                errorMsg.textContent = validationError;
-                input.value = '';
-            }
-            
+        }
+
+        function handleBlur(e) {
+            focusedInput = null;
+            validateInput(e.target);
             updateCounter();
         }
 
+        function handleKeyDown(e) {
+            if (e.key === 'Enter') {
+                e.target.blur(); // Trigger validation
+            }
+        }
+
+        function handlePartialInput(e) {
+            // Only update counter during input, not validation
+            updateCounter();
+        }
+
+        // ===== VALIDATION FUNCTIONS =====
         function validateInput(input) {
             const value = parseInt(input.value);
-            if (isNaN(value)) return '';
+            
+            // If empty, just return
+            if (isNaN(value)) {
+                return '';
+            }
             
             const inputs = document.querySelectorAll('.preference');
             
             if (value < 1 || value > totalCandidates) {
-                return `Error: Preference must be between 1 and ${totalCandidates}.`;
+                errorMsg.textContent = `Error: Preference must be between 1 and ${totalCandidates}.`;
+                input.value = '';
+                return 'invalid';
             }
             
             let duplicates = 0;
@@ -354,7 +363,9 @@
             });
             
             if (duplicates > 0) {
-                return `Error: Number ${input.value} is used more than once.`;
+                errorMsg.textContent = `Error: Number ${input.value} is used more than once.`;
+                input.value = '';
+                return 'duplicate';
             }
             
             return '';
@@ -399,7 +410,9 @@
             } else {
                 submitBtn.disabled = true;
                 successMsg.textContent = '';
-                errorMsg.textContent = `Number at least ${minRequired} candidates to submit.`;
+                if (numberedCount > 0) {
+                    errorMsg.textContent = `Number at least ${minRequired} candidates to submit.`;
+                }
             }
         }
 
