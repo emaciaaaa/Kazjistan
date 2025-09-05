@@ -53,6 +53,12 @@
             margin-top: 10px;
             text-align: center;
         }
+        .success {
+            color: green;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
         button {
             display: block;
             margin: 20px auto 0;
@@ -65,6 +71,10 @@
         }
         button:hover {
             background-color: #0055aa;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
         }
         .instructions {
             margin-bottom: 20px;
@@ -80,6 +90,11 @@
             padding: 8px;
             font-size: 16px;
             width: 200px;
+        }
+        .counter {
+            text-align: center;
+            margin: 10px 0;
+            font-weight: bold;
         }
         @media (max-width: 992px) {
             .ballot-container {
@@ -99,30 +114,31 @@
 <body>
     <div class="ballot">
         <h2 style="text-align: center;">Parliament of Kazjistan Ballot</h2>
-        <p class="instructions">Number ALL boxes in order of preference (1 to 17).</p>
+        <p class="instructions">Number at least 15 boxes in order of preference (1 to 18).</p>
+        <div class="counter" id="counter">Numbered: 0/18 (Minimum: 15)</div>
         
         <div class="ballot-container">
             <!-- Kazjistan Forward -->
             <div class="party-group">
                 <div class="party-name">KAZJISTAN FORWARD</div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="Cisco">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="Cisco">
                     <span>Cisco</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="Timus Maximus">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="Timus Maximus">
                     <span>Timus Maximus</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="Clover">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="Clover">
                     <span>Clover</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="Fixie">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="Fixie">
                     <span>Fixie</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="Nikki">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="Nikki">
                     <span>Nikki</span>
                 </div>
             </div>
@@ -131,23 +147,23 @@
             <div class="party-group">
                 <div class="party-name">SOLIDARITY</div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="Baraa">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="Baraa">
                     <span>Baraa</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="Luci">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="Luci">
                     <span>Luci</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="Emacia">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="Emacia">
                     <span>Emacia</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="Disconsolateness">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="Disconsolateness">
                     <span>Disconsolateness</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="Tanthalas">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="Tanthalas">
                     <span>Tanthalas</span>
                 </div>
             </div>
@@ -156,11 +172,11 @@
             <div class="party-group">
                 <div class="party-name">PROGRESSIVE PARTY OF KAZJISTAN</div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="Igor Witback">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="Igor Witback">
                     <span>Igor Witback</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="Axell Nevylym">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="Axell Nevylym">
                     <span>Axell Nevylym</span>
                 </div>
             </div>
@@ -169,27 +185,27 @@
             <div class="party-group">
                 <div class="party-name">INDEPENDENTS</div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="Andromeda">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="Andromeda">
                     <span>Andromeda</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="CSGPlayz">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="CSGPlayz">
                     <span>CSGPlayz</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="Toast">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="Toast">
                     <span>Toast</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="Yousif">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="Yousif">
                     <span>Yousif</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="EggyJJ">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="EggyJJ">
                     <span>EggyJJ</span>
                 </div>
                 <div class="candidate">
-                    <input type="number" min="1" max="17" class="preference" placeholder="-" data-candidate="Salamanderous">
+                    <input type="number" min="1" max="18" class="preference" placeholder="-" data-candidate="Salamanderous">
                     <span>Salamanderous</span>
                 </div>
             </div>
@@ -202,15 +218,18 @@
         </div>
         
         <div class="error" id="error-message"></div>
-        <button id="submit-ballot">Submit Ballot</button>
+        <div class="success" id="success-message"></div>
+        <button id="submit-ballot" disabled>Submit Ballot</button>
     </div>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         // DOM elements
         const errorMsg = document.getElementById('error-message');
+        const successMsg = document.getElementById('success-message');
         const submitBtn = document.getElementById('submit-ballot');
         const usernameInput = document.getElementById('username');
+        const counter = document.getElementById('counter');
         
         // Candidate data (GROUPED by party for randomization)
         const candidateGroups = [
@@ -231,7 +250,8 @@
                 candidates: ["Andromeda", "CSGPlayz", "Toast", "Yousif", "EggyJJ", "Salamanderous"]
             }
         ];
-        const totalCandidates = 17; // 5 + 5 + 2 + 5 candidates
+        const totalCandidates = 18; // 5 + 5 + 2 + 6 candidates
+        const minRequired = 15; // Minimum number of candidates to number
 
         // ===== RANDOMIZATION FUNCTIONS =====
         function initializeBallot() {
@@ -272,6 +292,13 @@
                 
                 ballotContainer.appendChild(groupDiv);
             });
+            
+            // Add event listeners to all inputs
+            document.querySelectorAll('.preference').forEach(input => {
+                input.addEventListener('input', handleInput);
+            });
+            
+            updateCounter();
         }
 
         // Fisher-Yates shuffle algorithm
@@ -284,13 +311,40 @@
         }
 
         // ===== VALIDATION FUNCTIONS =====
+        function handleInput(e) {
+            const input = e.target;
+            const value = parseInt(input.value);
+            
+            // Clear any previous error messages
+            errorMsg.textContent = '';
+            successMsg.textContent = '';
+            
+            // If empty, just update counter and return
+            if (isNaN(value)) {
+                updateCounter();
+                return;
+            }
+            
+            // Validate the input
+            const validationError = validateInput(input);
+            
+            if (validationError) {
+                errorMsg.textContent = validationError;
+                input.value = '';
+            }
+            
+            updateCounter();
+        }
+
         function validateInput(input) {
             const value = parseInt(input.value);
             if (isNaN(value)) return '';
             
             const inputs = document.querySelectorAll('.preference');
             
-            if (value > totalCandidates) return `Error: Maximum preference is ${totalCandidates}.`;
+            if (value < 1 || value > totalCandidates) {
+                return `Error: Preference must be between 1 and ${totalCandidates}.`;
+            }
             
             let duplicates = 0;
             inputs.forEach(otherInput => {
@@ -299,25 +353,54 @@
                 }
             });
             
-            if (duplicates > 0) return `Error: Number ${input.value} is used more than once.`;
+            if (duplicates > 0) {
+                return `Error: Number ${input.value} is used more than once.`;
+            }
+            
             return '';
         }
 
         function validateBallot() {
             const inputs = Array.from(document.querySelectorAll('.preference'));
             
-            if (!usernameInput.value.trim()) return "Error: Please enter your username.";
+            if (!usernameInput.value.trim()) {
+                return "Error: Please enter your username.";
+            }
             
-            const emptyInputs = inputs.filter(input => input.value === "");
-            if (emptyInputs.length > 0) return `Error: You must number ALL candidates (1 to ${totalCandidates}).`;
+            const numberedInputs = inputs.filter(input => input.value !== "");
+            if (numberedInputs.length < minRequired) {
+                return `Error: You must number at least ${minRequired} candidates.`;
+            }
             
-            const numbers = inputs.map(input => parseInt(input.value)).filter(n => !isNaN(n));
-            if (new Set(numbers).size !== totalCandidates) return "Error: Duplicate numbers detected.";
+            const numbers = numberedInputs.map(input => parseInt(input.value)).filter(n => !isNaN(n));
+            if (new Set(numbers).size !== numberedInputs.length) {
+                return "Error: Duplicate numbers detected.";
+            }
             
             const invalidNumbers = numbers.filter(n => n < 1 || n > totalCandidates);
-            if (invalidNumbers.length > 0) return `Error: Preferences must be between 1 and ${totalCandidates}.`;
+            if (invalidNumbers.length > 0) {
+                return `Error: Preferences must be between 1 and ${totalCandidates}.`;
+            }
             
             return '';
+        }
+
+        function updateCounter() {
+            const inputs = Array.from(document.querySelectorAll('.preference'));
+            const numberedCount = inputs.filter(input => input.value !== "").length;
+            
+            counter.textContent = `Numbered: ${numberedCount}/${totalCandidates} (Minimum: ${minRequired})`;
+            
+            // Enable submit button if minimum requirement is met
+            if (numberedCount >= minRequired) {
+                submitBtn.disabled = false;
+                successMsg.textContent = `You have numbered ${numberedCount} candidates. You can submit your ballot.`;
+                errorMsg.textContent = '';
+            } else {
+                submitBtn.disabled = true;
+                successMsg.textContent = '';
+                errorMsg.textContent = `Number at least ${minRequired} candidates to submit.`;
+            }
         }
 
         // ===== GOOGLE SHEETS SUBMISSION =====
@@ -359,12 +442,6 @@
         }
 
         // ===== EVENT LISTENERS =====
-        document.addEventListener('input', function(e) {
-            if (e.target.classList.contains('preference')) {
-                errorMsg.textContent = validateInput(e.target);
-            }
-        });
-        
         submitBtn.addEventListener('click', function() {
             const validationError = validateBallot();
             if (validationError) {
@@ -374,6 +451,7 @@
             }
             
             const votes = Array.from(document.querySelectorAll('.preference'))
+                .filter(input => input.value !== "")
                 .map(input => ({
                     candidate: input.dataset.candidate,
                     preference: input.value
