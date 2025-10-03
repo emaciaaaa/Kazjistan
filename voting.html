@@ -54,6 +54,33 @@
             gap: 15px;
         }
         
+        .eck-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+       <img src="ECK logo.svg" alt="Electoral Commission of Kazjistan" class="eck-logo-img"> {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .eck-text {
+            font-family: 'Noto Serif', serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+        
         .logo-text {
             font-family: 'Noto Serif', serif;
             font-weight: 700;
@@ -327,6 +354,10 @@
                 margin-bottom: 15px;
             }
             
+            .eck-logo {
+                margin-bottom: 10px;
+            }
+            
             nav ul {
                 flex-wrap: wrap;
                 justify-content: center;
@@ -359,6 +390,10 @@
 <body>
     <header>
         <div class="container header-container">
+            <div class="eck-logo">
+                <div class="eck-logo-placeholder">ECK LOGO</div>
+                <div class="eck-text">ELECTORAL COMMISSION OF KAZJISTAN</div>
+            </div>
             <div class="logo">
                 <div class="logo-text">PEOPLE'S REPUBLIC <span>OF KAZJISTAN</span></div>
             </div>
