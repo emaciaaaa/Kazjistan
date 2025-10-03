@@ -54,33 +54,6 @@
             gap: 15px;
         }
         
-        .eck-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-          {
-            width: 50px;
-            height: 50px;
-            background-color: var(--primary-color);
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 12px;
-            text-align: center;
-        }
-        
-        .eck-text {
-            font-family: 'Noto Serif', serif;
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: var(--primary-color);
-        }
-        
         .logo-text {
             font-family: 'Noto Serif', serif;
             font-weight: 700;
@@ -127,6 +100,36 @@
         
         nav a:hover::after {
             width: 100%;
+        }
+        
+        .eck-logo-container {
+            text-align: center;
+            padding: 25px 0;
+            background-color: var(--white);
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .eck-logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 20px;
+            padding: 15px 30px;
+            background-color: var(--accent-color);
+            border-radius: 10px;
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .eck-logo-svg {
+            width: 70px;
+            height: 70px;
+        }
+        
+        .eck-text {
+            font-family: 'Noto Serif', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
         }
         
         .hero {
@@ -354,14 +357,21 @@
                 margin-bottom: 15px;
             }
             
-            .eck-logo {
-                margin-bottom: 10px;
-            }
-            
             nav ul {
                 flex-wrap: wrap;
                 justify-content: center;
                 gap: 15px;
+            }
+            
+            .eck-logo {
+                flex-direction: column;
+                gap: 15px;
+                padding: 20px;
+            }
+            
+            .eck-text {
+                font-size: 1.3rem;
+                text-align: center;
             }
             
             .hero h1 {
@@ -390,10 +400,6 @@
 <body>
     <header>
         <div class="container header-container">
-            <div class="eck-logo">
-                <div class="  <img src="ECK logo.svg" alt="Electoral Commission of Kazjistan" class="eck-logo-img">">ECK LOGO</div>
-                <div class="eck-text">ELECTORAL COMMISSION OF KAZJISTAN</div>
-            </div>
             <div class="logo">
                 <div class="logo-text">PEOPLE'S REPUBLIC <span>OF KAZJISTAN</span></div>
             </div>
@@ -406,6 +412,18 @@
             </nav>
         </div>
     </header>
+
+    <div class="eck-logo-container">
+        <div class="eck-logo">
+            <svg class="eck-logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <rect x="10" y="10" width="80" height="80" rx="10" fill="#004c4c"/>
+                <circle cx="50" cy="40" r="15" fill="#fba910"/>
+                <rect x="35" y="60" width="30" height="15" rx="5" fill="#fba910"/>
+                <text x="50" y="95" text-anchor="middle" fill="#004c4c" font-family="Arial, sans-serif" font-size="10" font-weight="bold">ECK</text>
+            </svg>
+            <div class="eck-text">ELECTORAL COMMISSION OF KAZJISTAN</div>
+        </div>
+    </div>
 
     <section class="hero">
         <div class="container">
