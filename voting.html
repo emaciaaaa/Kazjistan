@@ -146,20 +146,14 @@
         }
         
         .candidates-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: var(--white);
             margin-top: 20px;
         }
         
-        .party-column {
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 5px;
-            background-color: var(--white);
-        }
-        
-        .party-header {
+        .candidates-header {
             font-weight: bold;
             text-align: center;
             padding: 10px;
@@ -168,24 +162,37 @@
             border-bottom: 2px solid var(--secondary-color);
             color: var(--primary-color);
             font-family: 'Noto Serif', serif;
+            font-size: 1.2rem;
         }
         
         .candidate {
             display: flex;
             align-items: center;
-            margin: 10px 0;
-            padding: 10px;
+            margin: 15px 0;
+            padding: 12px;
             border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+        }
+        
+        .candidate:hover {
+            background-color: #f9f9f9;
         }
         
         .candidate input {
-            width: 40px;
-            height: 30px;
-            margin-right: 15px;
+            width: 50px;
+            height: 35px;
+            margin-right: 20px;
             text-align: center;
             font-size: 16px;
             border: 1px solid #ddd;
             border-radius: 3px;
+            transition: border-color 0.2s;
+        }
+        
+        .candidate input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(251, 169, 16, 0.2);
         }
         
         .candidate-info {
@@ -200,8 +207,8 @@
         }
         
         .candidate-party {
-            font-size: 12px;
-            color: #555;
+            font-size: 14px;
+            color: #666;
             margin-top: 2px;
         }
         
@@ -287,6 +294,13 @@
             max-width: 100%;
             border: 1px solid #ddd;
             border-radius: 5px;
+            transition: border-color 0.2s;
+        }
+        
+        .username-input input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(251, 169, 16, 0.2);
         }
         
         footer {
@@ -327,8 +341,17 @@
                 font-size: 1rem;
             }
             
-            .candidates-container {
-                grid-template-columns: 1fr;
+            .candidate {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px;
+            }
+            
+            .candidate input {
+                margin-right: 0;
+                margin-bottom: 10px;
+                width: 100%;
+                max-width: 80px;
             }
         }
     </style>
@@ -366,8 +389,11 @@
             
             <div class="counter" id="counter">Numbered: 0/4</div>
             
-            <div class="candidates-container" id="candidates-container">
-                <!-- Candidates will be inserted here by JavaScript -->
+            <div class="candidates-container">
+                <div class="candidates-header">CANDIDATES</div>
+                <div id="candidates-list">
+                    <!-- Candidates will be inserted here by JavaScript -->
+                </div>
             </div>
 
             <!-- Username Input -->
@@ -397,7 +423,7 @@
             const successMsg = document.getElementById('success-message');
             const submitBtn = document.getElementById('submit-ballot');
             const usernameInput = document.getElementById('username');
-            const candidatesContainer = document.getElementById('candidates-container');
+            const candidatesList = document.getElementById('candidates-list');
             const counter = document.getElementById('counter');
             const totalCandidates = 4; // Now 4 candidates
             
@@ -412,82 +438,48 @@
             // Initialize ballot with Robson Rotation (random order)
             function initializeBallot() {
                 // Clear existing candidates
-                candidatesContainer.innerHTML = '';
+                candidatesList.innerHTML = '';
                 
                 // Shuffle candidates using Fisher-Yates algorithm
                 const shuffledCandidates = shuffleArray([...candidates]);
                 
-                // Group candidates by party for display
-                const groupedCandidates = groupCandidatesByParty(shuffledCandidates);
-                
-                // Create party columns
-                groupedCandidates.forEach(group => {
-                    const partyColumn = document.createElement('div');
-                    partyColumn.className = 'party-column';
+                // Add shuffled candidates to the ballot
+                shuffledCandidates.forEach(candidate => {
+                    const candidateDiv = document.createElement('div');
+                    candidateDiv.className = 'candidate';
                     
-                    const partyHeader = document.createElement('div');
-                    partyHeader.className = 'party-header';
-                    partyHeader.textContent = group.party;
-                    partyColumn.appendChild(partyHeader);
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.min = '1';
+                    input.max = totalCandidates.toString();
+                    input.className = 'preference';
+                    input.placeholder = '-';
+                    input.dataset.candidate = candidate.name;
                     
-                    // Add candidates to the party column
-                    group.candidates.forEach(candidate => {
-                        const candidateDiv = document.createElement('div');
-                        candidateDiv.className = 'candidate';
-                        
-                        const input = document.createElement('input');
-                        input.type = 'number';
-                        input.min = '1';
-                        input.max = totalCandidates.toString();
-                        input.className = 'preference';
-                        input.placeholder = '-';
-                        input.dataset.candidate = candidate.name;
-                        
-                        // Add event listeners
-                        input.addEventListener('focus', handleFocus);
-                        input.addEventListener('blur', handleBlur);
-                        input.addEventListener('input', handlePartialInput);
-                        
-                        const infoDiv = document.createElement('div');
-                        infoDiv.className = 'candidate-info';
-                        
-                        const nameSpan = document.createElement('span');
-                        nameSpan.className = 'candidate-name';
-                        nameSpan.textContent = candidate.name;
-                        
-                        const partySpan = document.createElement('span');
-                        partySpan.className = 'candidate-party';
-                        partySpan.textContent = candidate.party;
-                        
-                        infoDiv.appendChild(nameSpan);
-                        infoDiv.appendChild(partySpan);
-                        candidateDiv.appendChild(input);
-                        candidateDiv.appendChild(infoDiv);
-                        partyColumn.appendChild(candidateDiv);
-                    });
+                    // Add event listeners
+                    input.addEventListener('focus', handleFocus);
+                    input.addEventListener('blur', handleBlur);
+                    input.addEventListener('input', handlePartialInput);
                     
-                    candidatesContainer.appendChild(partyColumn);
+                    const infoDiv = document.createElement('div');
+                    infoDiv.className = 'candidate-info';
+                    
+                    const nameSpan = document.createElement('span');
+                    nameSpan.className = 'candidate-name';
+                    nameSpan.textContent = candidate.name;
+                    
+                    const partySpan = document.createElement('span');
+                    partySpan.className = 'candidate-party';
+                    partySpan.textContent = candidate.party;
+                    
+                    infoDiv.appendChild(nameSpan);
+                    infoDiv.appendChild(partySpan);
+                    candidateDiv.appendChild(input);
+                    candidateDiv.appendChild(infoDiv);
+                    candidatesList.appendChild(candidateDiv);
                 });
                 
                 updateCounter();
-            }
-            
-            // Group candidates by party
-            function groupCandidatesByParty(candidates) {
-                const groups = {};
-                
-                candidates.forEach(candidate => {
-                    if (!groups[candidate.party]) {
-                        groups[candidate.party] = [];
-                    }
-                    groups[candidate.party].push(candidate);
-                });
-                
-                // Convert to array format
-                return Object.keys(groups).map(party => ({
-                    party: party,
-                    candidates: groups[party]
-                }));
             }
             
             // Fisher-Yates shuffle algorithm for Robson Rotation
