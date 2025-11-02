@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parliament of Kazjistan Ballot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #004c4c;
+            --secondary-color: #fba910;
+            --accent-color: #e8f7f7;
+            --text-color: #333;
+            --light-text: #666;
+            --white: #ffffff;
+            --header-height: 80px;
+            --max-width: 1200px;
+        }
+        
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--header-height);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo img {
+            height: 50px;
+        }
+        
+        .logo-text {
+            font-family: 'Noto Serif', serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .logo-text span {
+            color: var(--secondary-color);
+            font-weight: 400;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--secondary-color);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #006666 100%);
+            color: var(--white);
+            padding: 40px 0;
+            text-align: center;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        
+        .hero h1 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+        
+        main {
+            padding: 40px 0;
+        }
+        
+        .section-title {
+            font-family: 'Noto Serif', serif;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        
+        .ballot-container {
+            background-color: var(--white);
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-bottom: 30px;
+            border-top: 3px solid var(--secondary-color);
+        }
+        
+        .parties-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .party-column {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: var(--white);
+        }
+        
+        .party-header {
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: var(--accent-color);
+            border-bottom: 2px solid var(--secondary-color);
+            color: var(--primary-color);
+            font-family: 'Noto Serif', serif;
+        }
+        
+        .candidate {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .candidate input {
+            width: 40px;
+            height: 30px;
+            margin-right: 15px;
+            text-align: center;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        
+        .candidate-info {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        
+        .candidate-name {
+            font-weight: 500;
+            font-size: 16px;
+        }
+        
+        .counter {
+            text-align: center;
+            margin: 10px 0;
+            font-weight: bold;
+            color: var(--primary-color);
+            padding: 10px;
+            background-color: var(--accent-color);
+            border-radius: 5px;
+        }
+        
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+            padding: 10px;
+            background-color: #ffeeee;
+            border-radius: 5px;
+        }
+        
+        .success {
+            color: green;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+            padding: 10px;
+            background-color: #eeffee;
+            border-radius: 5px;
+        }
+        
+        button {
+            display: block;
+            margin: 20px auto 0;
+            padding: 12px 30px;
+            background-color: var(--secondary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #e69500;
+        }
+        
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .instructions {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: var(--text-color);
+            text-align: center;
+            padding: 15px;
+            background-color: var(--accent-color);
+            border-radius: 5px;
+        }
+        
+        .username-input {
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .username-input label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        
+        .username-input input {
+            padding: 10px 15px;
+            font-size: 16px;
+            width: 250px;
+            max-width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 20px 0;
+            text-align: center;
+            border-top: 3px solid var(--secondary-color);
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        @media (max-width: 1024px) {
+            .parties-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                height: auto;
+                padding: 20px 0;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .parties-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-text">PEOPLE'S REPUBLIC <span>OF KAZJISTAN</span></div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="https://kazjistan.miraheze.org/wiki/Main_Page">Wiki</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Parliament of Kazjistan Election</h1>
+            <p>Exercise your democratic right to vote</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <div class="ballot-container">
+            <h2 class="section-title">Election Ballot</h2>
+            
+            <div class="instructions">
+                Number at least 15 boxes in order of preference (1 to 23). Additional preferences are optional.
+            </div>
+            
+            <div class="counter" id="counter">Numbered: 0/23 (Minimum: 15)</div>
+            
+            <div class="parties-container" id="parties-container">
+                <!-- Kazjistan Forward Column -->
+                <div class="party-column">
+                    <div class="party-header">KAZJISTAN FORWARD</div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Timus Maximus">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Timus Maximus</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Cisco">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Cisco</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Asher">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Asher</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Nikki">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Nikki</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Fixie">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Fixie</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Zoup">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Zoup</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Liberal Progressive Party Column -->
+                <div class="party-column">
+                    <div class="party-header">LIBERAL PROGRESSIVE PARTY</div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Igor Witback">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Igor Witback</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Axell Nevylym">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Axell Nevylym</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Joe Sane">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Joe Sane</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Reverend Toast">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Reverend Toast</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Droge">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Droge</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Solidarity Column -->
+                <div class="party-column">
+                    <div class="party-header">SOLIDARITY</div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Luci">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Luci</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Emacia">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Emacia</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Seat">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Seat</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Disconsolateness">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Disconsolateness</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Tanthalas">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Tanthalas</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Iso_hel">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Iso_hel</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Baraa">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Baraa</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Thera">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Thera</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Luffy">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Luffy</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Worm food">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Worm food</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Independents Column -->
+                <div class="party-column">
+                    <div class="party-header">INDEPENDENTS</div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Dracula">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Dracula</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Hito">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Hito</span>
+                        </div>
+                    </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="CSGPlayz">
+                        <div class="candidate-info">
+                            <span class="candidate-name">CSGPlayz</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Username Input -->
+            <div class="username-input">
+                <label for="username">Username:</label>
+                <input type="text" id="username" required placeholder="Enter your username">
+            </div>
+            
+            <div class="error" id="error-message"></div>
+            <div class="success" id="success-message"></div>
+            <button id="submit-ballot" disabled>Submit Ballot</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                &copy; 2025 People's Republic of Kazjistan
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // DOM elements
+        const errorMsg = document.getElementById('error-message');
+        const successMsg = document.getElementById('success-message');
+        const submitBtn = document.getElementById('submit-ballot');
+        const usernameInput = document.getElementById('username');
+        const counter = document.getElementById('counter');
+        
+        // Candidate data (GROUPED by party for randomization)
+        const candidateGroups = [
+            {
+                name: "KAZJISTAN FORWARD",
+                candidates: ["Timus Maximus", "Cisco", "Asher", "Nikki", "Fixie", "Zoup"]
+            },
+            {
+                name: "LIBERAL PROGRESSIVE PARTY",
+                candidates: ["Igor Witback", "Axell Nevylym", "Joe Sane", "Reverend Toast", "Droge"]
+            },
+            {
+                name: "SOLIDARITY",
+                candidates: ["Luci", "Emacia", "Seat", "Disconsolateness", "Tanthalas", "Iso_hel", "Baraa", "Thera", "Luffy", "Worm food"]
+            },
+            {
+                name: "INDEPENDENTS",
+                candidates: ["Dracula", "Hito", "CSGPlayz"]
+            }
+        ];
+        const totalCandidates = 24; // 6 + 5 + 10 + 3 candidates
+        const minRequired = 15; // Minimum number of candidates to number
+
+        // Track currently focused input to prevent premature validation
+        let focusedInput = null;
+
+        // ===== RANDOMIZATION FUNCTIONS =====
+        function initializeBallot() {
+            const partiesContainer = document.getElementById('parties-container');
+            partiesContainer.innerHTML = '';
+            
+            candidateGroups.forEach(group => {
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'party-column';
+                
+                const partyHeader = document.createElement('div');
+                partyHeader.className = 'party-header';
+                partyHeader.textContent = group.name;
+                groupDiv.appendChild(partyHeader);
+                
+                // Shuffle candidates within each group
+                const shuffledCandidates = shuffleArray([...group.candidates]);
+                
+                shuffledCandidates.forEach(candidate => {
+                    const candidateDiv = document.createElement('div');
+                    candidateDiv.className = 'candidate';
+                    
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.min = '1';
+                    input.max = totalCandidates.toString();
+                    input.className = 'preference';
+                    input.placeholder = '-';
+                    input.dataset.candidate = candidate;
+                    
+                    // Add event listeners
+                    input.addEventListener('focus', handleFocus);
+                    input.addEventListener('blur', handleBlur);
+                    input.addEventListener('keydown', handleKeyDown);
+                    input.addEventListener('input', handlePartialInput);
+                    
+                    const candidateInfo = document.createElement('div');
+                    candidateInfo.className = 'candidate-info';
+                    
+                    const candidateName = document.createElement('span');
+                    candidateName.className = 'candidate-name';
+                    candidateName.textContent = candidate;
+                    
+                    candidateInfo.appendChild(candidateName);
+                    candidateDiv.appendChild(input);
+                    candidateDiv.appendChild(candidateInfo);
+                    groupDiv.appendChild(candidateDiv);
+                });
+                
+                partiesContainer.appendChild(groupDiv);
+            });
+            
+            updateCounter();
+        }
+
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // ===== INPUT HANDLING FUNCTIONS =====
+        function handleFocus(e) {
+            focusedInput = e.target;
+            // Clear any error messages when focusing on an input
+            errorMsg.textContent = '';
+        }
+
+        function handleBlur(e) {
+            focusedInput = null;
+            validateInput(e.target);
+            updateCounter();
+        }
+
+        function handleKeyDown(e) {
+            if (e.key === 'Enter') {
+                e.target.blur(); // Trigger validation
+            }
+        }
+
+        function handlePartialInput(e) {
+            // Only update counter during input, not validation
+            updateCounter();
+        }
+
+        // ===== VALIDATION FUNCTIONS =====
+        function validateInput(input) {
+            const value = parseInt(input.value);
+            
+            // If empty, just return
+            if (isNaN(value)) {
+                return '';
+            }
+            
+            const inputs = document.querySelectorAll('.preference');
+            
+            if (value < 1 || value > totalCandidates) {
+                errorMsg.textContent = `Error: Preference must be between 1 and ${totalCandidates}.`;
+                input.value = '';
+                return 'invalid';
+            }
+            
+            let duplicates = 0;
+            inputs.forEach(otherInput => {
+                if (otherInput !== input && otherInput.value === input.value) {
+                    duplicates++;
+                }
+            });
+            
+            if (duplicates > 0) {
+                errorMsg.textContent = `Error: Number ${input.value} is used more than once.`;
+                input.value = '';
+                return 'duplicate';
+            }
+            
+            return '';
+        }
+
+        function validateBallot() {
+            const inputs = Array.from(document.querySelectorAll('.preference'));
+            
+            if (!usernameInput.value.trim()) {
+                return "Error: Please enter your username.";
+            }
+            
+            const numberedInputs = inputs.filter(input => input.value !== "");
+            if (numberedInputs.length < minRequired) {
+                return `Error: You must number at least ${minRequired} candidates.`;
+            }
+            
+            const numbers = numberedInputs.map(input => parseInt(input.value)).filter(n => !isNaN(n));
+            if (new Set(numbers).size !== numberedInputs.length) {
+                return "Error: Duplicate numbers detected.";
+            }
+            
+            const invalidNumbers = numbers.filter(n => n < 1 || n > totalCandidates);
+            if (invalidNumbers.length > 0) {
+                return `Error: Preferences must be between 1 and ${totalCandidates}.`;
+            }
+            
+            return '';
+        }
+
+        function updateCounter() {
+            const inputs = Array.from(document.querySelectorAll('.preference'));
+            const numberedCount = inputs.filter(input => input.value !== "").length;
+            
+            counter.textContent = `Numbered: ${numberedCount}/${totalCandidates} (Minimum: ${minRequired})`;
+            
+            // Enable submit button if minimum requirement is met
+            if (numberedCount >= minRequired) {
+                submitBtn.disabled = false;
+                successMsg.textContent = `You have numbered ${numberedCount} candidates. You can submit your ballot.`;
+                errorMsg.textContent = '';
+            } else {
+                submitBtn.disabled = true;
+                successMsg.textContent = '';
+                if (numberedCount > 0) {
+                    errorMsg.textContent = `Number at least ${minRequired} candidates to submit.`;
+                }
+            }
+        }
+
+        // ===== GOOGLE SHEETS SUBMISSION =====
+        function submitToGoogleSheet(username, votes) {
+            const googleScriptUrl = "https://script.google.com/macros/s/AKfycbwW6ebY1rVjJKLXSxBcIvt-3YIp5CTMXF1TfoO2-Ps311IqVaUF6wq4Copw0CftIMSK/exec";
+            
+            // Show loading state
+            errorMsg.textContent = "Submitting...";
+            errorMsg.style.color = "blue";
+            submitBtn.disabled = true;
+            
+            fetch(googleScriptUrl, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    username: username.trim(),
+                    votes: votes.map(vote => ({
+                        candidate: vote.candidate,
+                        preference: parseInt(vote.preference) || 0
+                    }))
+                })
+            })
+            .then(() => {
+                errorMsg.textContent = "Ballot submitted successfully!";
+                errorMsg.style.color = "green";
+                
+                // Redirect to a new page after 2 seconds
+                setTimeout(() => {
+                    window.location.href = "https://www.kazjistan.org/voting_complete";
+                }, 2000);
+            })
+            .catch((error) => {
+                errorMsg.textContent = "Error submitting ballot. Please try again.";
+                errorMsg.style.color = "red";
+                submitBtn.disabled = false;
+                console.error("Error:", error);
+            });
+        }
+
+        // ===== EVENT LISTENERS =====
+        submitBtn.addEventListener('click', function() {
+            const validationError = validateBallot();
+            if (validationError) {
+                errorMsg.textContent = validationError;
+                errorMsg.style.color = "red";
+                return;
+            }
+            
+            const votes = Array.from(document.querySelectorAll('.preference'))
+                .filter(input => input.value !== "")
+                .map(input => ({
+                    candidate: input.dataset.candidate,
+                    preference: input.value
+                }));
+            
+            submitToGoogleSheet(usernameInput.value.trim(), votes);
+        });
+
+        // Initialize the randomized ballot
+        initializeBallot();
+    });
+    </script>
+</body>
+</html>
