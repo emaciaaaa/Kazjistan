@@ -162,12 +162,26 @@
             margin-bottom: 30px;
         }
         
+        .urgent-notice {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .urgent-notice h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
         .quick-actions {
             background-color: var(--accent-color);
             padding: 30px;
             border-radius: 8px;
             margin-bottom: 40px;
-            border-left: 4px solid var(--secondary-color);
+            border-left: 4px solid var(--primary-color);
         }
         
         .quick-actions h3 {
@@ -217,70 +231,109 @@
             background-color: #006666;
         }
         
-        .documents-section {
+        .form-section {
             margin-bottom: 50px;
         }
         
-        .doc-grid {
+        .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 25px;
         }
         
-        .doc-card {
+        .form-card {
             background: var(--white);
             border-radius: 5px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.08);
             padding: 25px;
             transition: transform 0.3s;
-            border-left: 4px solid var(--primary-color);
+            border-top: 4px solid var(--primary-color);
         }
         
-        .doc-card.legislation {
-            border-left-color: var(--success-color);
+        .form-card.urgent {
+            border-top-color: var(--danger-color);
         }
         
-        .doc-card.forms {
-            border-left-color: var(--secondary-color);
+        .form-card.routine {
+            border-top-color: var(--success-color);
         }
         
-        .doc-card.registry {
-            border-left-color: var(--neutral-color);
+        .form-card.administrative {
+            border-top-color: var(--secondary-color);
         }
         
-        .doc-card:hover {
+        .form-card:hover {
             transform: translateY(-3px);
         }
         
-        .doc-card h3 {
+        .form-card h3 {
             color: var(--primary-color);
             margin-top: 0;
             margin-bottom: 15px;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
         }
         
-        .doc-card p {
+        .form-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+        
+        .deadline {
+            color: var(--danger-color);
+            font-weight: 500;
+        }
+        
+        .form-description {
             color: var(--light-text);
             margin-bottom: 20px;
             font-size: 0.95rem;
         }
         
-        .doc-link {
-            display: inline-block;
-            color: var(--secondary-color);
+        .download-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 8px 16px;
+            border-radius: 4px;
             text-decoration: none;
             font-weight: 500;
             font-size: 0.9rem;
+            transition: background-color 0.3s;
         }
         
-        .doc-link::after {
-            content: '→';
-            margin-left: 5px;
-            transition: margin-left 0.3s;
+        .download-btn:hover {
+            background-color: #006666;
         }
         
-        .doc-link:hover::after {
-            margin-left: 10px;
+        .download-btn.pdf {
+            background-color: var(--danger-color);
+        }
+        
+        .download-btn.pdf:hover {
+            background-color: #8b0000;
+        }
+        
+        .download-btn.alt {
+            background-color: var(--light-text);
+        }
+        
+        .download-btn.alt:hover {
+            background-color: #555;
+        }
+        
+        .icon {
+            font-size: 1.1rem;
         }
         
         .party-table {
@@ -387,13 +440,21 @@
                 font-size: 1rem;
             }
             
-            .doc-grid, .actions-grid {
+            .form-grid, .actions-grid {
                 grid-template-columns: 1fr;
             }
             
             .party-table {
                 display: block;
                 overflow-x: auto;
+            }
+            
+            .download-links {
+                flex-direction: column;
+            }
+            
+            .download-btn {
+                justify-content: center;
             }
         }
     </style>
@@ -425,111 +486,184 @@
     </section>
 
     <main class="container">
+        <div class="urgent-notice">
+            <h3>⚠️ Important Notice</h3>
+            <p><strong>Deadline Compliance:</strong> Leadership changes and expulsion notifications must be submitted within <strong>96 hours</strong> as per Section IV & IX of the Political Party Act. Late submissions may result in penalties.</p>
+        </div>
+        
         <div class="quick-actions">
-            <h3>Quick Actions</h3>
+            <h3>Most Frequently Used Forms</h3>
             <div class="actions-grid">
                 <div class="action-card">
                     <h4>Register a New Party</h4>
-                    <p>Form a new political party with 4 citizens</p>
-                    <a href="#forms" class="action-btn">Start Registration</a>
+                    <p>Form ECK-01: Initial party registration</p>
+                    <a href="#form-01" class="action-btn">Download Form</a>
                 </div>
                 <div class="action-card">
-                    <h4>Update Party Details</h4>
-                    <p>Change party name or leadership information</p>
-                    <a href="#forms" class="action-btn">Update Party</a>
+                    <h4>Change Party Leadership</h4>
+                    <p>Form ECK-02: Report leadership changes</p>
+                    <a href="#form-02" class="action-btn">Download Form</a>
+                </div>
+                <div class="action-card">
+                    <h4>Change Party Name</h4>
+                    <p>Form ECK-03: Request name change</p>
+                    <a href="#form-03" class="action-btn">Download Form</a>
                 </div>
                 <div class="action-card">
                     <h4>View Election Results</h4>
                     <p>Access certified election results and statistics</p>
                     <a href="election-results.html" class="action-btn">View Results</a>
                 </div>
-                <div class="action-card">
-                    <h4>Report an Issue</h4>
-                    <p>File a complaint or report electoral concerns</p>
-                    <a href="#contact" class="action-btn">Contact ECK</a>
-                </div>
             </div>
         </div>
         
-        <h2 class="section-title">Official Documents & Legislation</h2>
-        <p class="subtitle">Governing legislation and procedural documents for the Electoral Commission</p>
+        <h2 class="section-title">Official ECK Forms</h2>
+        <p class="subtitle">Download, complete, and submit these forms to the Electoral Commission</p>
         
-        <div class="documents-section">
-            <div class="doc-grid">
-                <div class="doc-card legislation">
-                    <h3>Electoral Commission Act</h3>
-                    <p><strong>Electoral Commission of Kazjistan Act, September 2025</strong></p>
-                    <p>Establishes the ECK as a body managed by the Department of Governmental Services. Defines the Chief Electoral Commissioner and Electoral Board responsibilities.</p>
-                    <a href="#" class="doc-link">View Full Legislation</a>
+        <div class="form-section">
+            <div class="form-grid">
+                <!-- Form 01: Party Registration -->
+                <div class="form-card administrative" id="form-01">
+                    <h3>Form ECK-01: Political Party Registration</h3>
+                    <div class="form-meta">
+                        <span>Form ID: ECK-01</span>
+                        <span>Reference: <strong>Section III</strong></span>
+                    </div>
+                    <p class="form-description">Initial registration form for new political parties. Requires declarations from four citizens in the public assembly channel. Submit this form within 7 days of formation.</p>
+                    <div class="download-links">
+                        <a href="forms/eck-01-party-registration.docx" class="download-btn">
+                            <span class="icon">📝</span> Download DOCX
+                        </a>
+                        <a href="forms/eck-01-party-registration.pdf" class="download-btn pdf">
+                            <span class="icon">📄</span> Download PDF
+                        </a>
+                    </div>
                 </div>
                 
-                <div class="doc-card legislation">
-                    <h3>Political Party Act</h3>
-                    <p><strong>Political Party Act, October 2025</strong></p>
-                    <p>Governs party formation, leadership, mergers, dissolution, and registration requirements. Repeals the July 2025 version.</p>
-                    <a href="#" class="doc-link">View Full Legislation</a>
+                <!-- Form 02: Leadership Change -->
+                <div class="form-card urgent" id="form-02">
+                    <h3>Form ECK-02: Leadership Change Notification</h3>
+                    <div class="form-meta">
+                        <span>Form ID: ECK-02</span>
+                        <span class="deadline">96-HOUR DEADLINE</span>
+                    </div>
+                    <p class="form-description">Mandatory notification of changes to party leadership (Leader, Deputy Leader, or Collective Leadership). Must be submitted within 96 hours as per Section IV of the Political Party Act.</p>
+                    <div class="download-links">
+                        <a href="forms/eck-02-leadership-change.docx" class="download-btn">
+                            <span class="icon">📝</span> Download DOCX
+                        </a>
+                        <a href="forms/eck-02-leadership-change.pdf" class="download-btn pdf">
+                            <span class="icon">📄</span> Download PDF
+                        </a>
+                    </div>
                 </div>
                 
-                <div class="doc-card legislation">
-                    <h3>Election Procedures Manual</h3>
-                    <p><strong>ECK Official Procedures</strong></p>
-                    <p>Detailed guidelines for conducting parliamentary elections, by-elections, national referenda, and constitutional conventions.</p>
-                    <a href="#" class="doc-link">View Procedures</a>
-                </div>
-            </div>
-        </div>
-        
-        <h2 class="section-title" id="forms">Official ECK Forms</h2>
-        <p class="subtitle">Submit these forms to comply with electoral legislation</p>
-        
-        <div class="documents-section">
-            <div class="doc-grid">
-                <div class="doc-card forms">
-                    <h3>Party Formation Form</h3>
-                    <p>Initial registration for new political parties. Requires 4 citizen declarations per Section III of the Political Party Act.</p>
-                    <a href="#" class="doc-link">Access Form</a>
+                <!-- Form 03: Party Name Change -->
+                <div class="form-card administrative" id="form-03">
+                    <h3>Form ECK-03: Party Name Change Request</h3>
+                    <div class="form-meta">
+                        <span>Form ID: ECK-03</span>
+                        <span>Reference: <strong>Section X</strong></span>
+                    </div>
+                    <p class="form-description">Formal request to change a registered party's name. New names must comply with naming rules (no government affiliation terms, 45 character limit, no inappropriate connotations).</p>
+                    <div class="download-links">
+                        <a href="forms/eck-03-name-change.docx" class="download-btn">
+                            <span class="icon">📝</span> Download DOCX
+                        </a>
+                        <a href="forms/eck-03-name-change.pdf" class="download-btn pdf">
+                            <span class="icon">📄</span> Download PDF
+                        </a>
+                    </div>
                 </div>
                 
-                <div class="doc-card forms">
-                    <h3>Party Name Change Form</h3>
-                    <p>Formal request to change a registered party's name. Must comply with Section X naming rules.</p>
-                    <a href="#" class="doc-link">Access Form</a>
+                <!-- Form 04: Member Expulsion -->
+                <div class="form-card urgent" id="form-04">
+                    <h3>Form ECK-04: Member Expulsion Notification</h3>
+                    <div class="form-meta">
+                        <span>Form ID: ECK-04</span>
+                        <span class="deadline">96-HOUR DEADLINE</span>
+                    </div>
+                    <p class="form-description">Required notification when a party expels a member under its internal rules. Must be submitted within 96 hours as per Section IX. Include evidence of proper procedure.</p>
+                    <div class="download-links">
+                        <a href="forms/eck-04-expulsion-notification.docx" class="download-btn">
+                            <span class="icon">📝</span> Download DOCX
+                        </a>
+                        <a href="forms/eck-04-expulsion-notification.pdf" class="download-btn pdf">
+                            <span class="icon">📄</span> Download PDF
+                        </a>
+                    </div>
                 </div>
                 
-                <div class="doc-card forms">
-                    <h3>Leadership Change Notification</h3>
-                    <p>Mandatory notification of leadership changes within 96 hours as per Section IV.</p>
-                    <a href="#" class="doc-link">Access Form</a>
+                <!-- Form 05: Party Dissolution -->
+                <div class="form-card routine" id="form-05">
+                    <h3>Form ECK-05: Party Dissolution Certification</h3>
+                    <div class="form-meta">
+                        <span>Form ID: ECK-05</span>
+                        <span>Reference: <strong>Section VI</strong></span>
+                    </div>
+                    <p class="form-description">Certification of party dissolution vote and seat reassignment. Requires evidence of majority vote by party members and details on elected member succession per Section VI.</p>
+                    <div class="download-links">
+                        <a href="forms/eck-05-dissolution-certification.docx" class="download-btn">
+                            <span class="icon">📝</span> Download DOCX
+                        </a>
+                        <a href="forms/eck-05-dissolution-certification.pdf" class="download-btn pdf">
+                            <span class="icon">📄</span> Download PDF
+                        </a>
+                    </div>
                 </div>
                 
-                <div class="doc-card forms">
-                    <h3>Member Expulsion Notification</h3>
-                    <p>Required notification when a party expels a member (96-hour reporting under Section IX).</p>
-                    <a href="#" class="doc-link">Access Form</a>
+                <!-- Form 06: Party Merger -->
+                <div class="form-card routine" id="form-06">
+                    <h3>Form ECK-06: Party Merger Proposal</h3>
+                    <div class="form-meta">
+                        <span>Form ID: ECK-06</span>
+                        <span>Reference: <strong>Section VII</strong></span>
+                    </div>
+                    <p class="form-description">Formal merger approval request requiring majority votes in each merging party. Includes certification of votes, proposed new party details, and member list consolidation.</p>
+                    <div class="download-links">
+                        <a href="forms/eck-06-merger-proposal.docx" class="download-btn">
+                            <span class="icon">📝</span> Download DOCX
+                        </a>
+                        <a href="forms/eck-06-merger-proposal.pdf" class="download-btn pdf">
+                            <span class="icon">📄</span> Download PDF
+                        </a>
+                    </div>
                 </div>
                 
-                <div class="doc-card forms">
-                    <h3>Party Dissolution Request</h3>
-                    <p>Certification of party dissolution vote and seat reassignment per Section VI.</p>
-                    <a href="#" class="doc-link">Access Form</a>
+                <!-- Form 07: Election Contesting -->
+                <div class="form-card urgent" id="form-07">
+                    <h3>Form ECK-07: Election Result Contestation</h3>
+                    <div class="form-meta">
+                        <span>Form ID: ECK-07</span>
+                        <span class="deadline">7-DAY DEADLINE</span>
+                    </div>
+                    <p class="form-description">Formal challenge to election results. Must be submitted within 7 days of result certification. Requires detailed grounds for contestation and supporting evidence.</p>
+                    <div class="download-links">
+                        <a href="forms/eck-07-election-contesting.docx" class="download-btn">
+                            <span class="icon">📝</span> Download DOCX
+                        </a>
+                        <a href="forms/eck-07-election-contesting.pdf" class="download-btn pdf">
+                            <span class="icon">📄</span> Download PDF
+                        </a>
+                    </div>
                 </div>
                 
-                <div class="doc-card forms">
-                    <h3>Party Merger Certification</h3>
-                    <p>Formal merger approval request requiring majority votes in each party (Section VII).</p>
-                    <a href="#" class="doc-link">Access Form</a>
-                </div>
-                
-                <div class="doc-card forms">
-                    <h3>Member Declaration/Resignation</h3>
-                    <p>Official form for citizens to join or leave a party. Critical for Section VIII compliance.</p>
-                    <a href="#" class="doc-link">Access Form</a>
-                </div>
-                
-                <div class="doc-card forms">
-                    <h3>Deregistration Appeal</h3>
-                    <p>Appeal process for parties threatened with deregistration under Section VIII.</p>
-                    <a href="#" class="doc-link">Access Form</a>
+                <!-- Form 08: Deregistration Appeal -->
+                <div class="form-card routine" id="form-08">
+                    <h3>Form ECK-08: Deregistration Appeal</h3>
+                    <div class="form-meta">
+                        <span>Form ID: ECK-08</span>
+                        <span>Reference: <strong>Section VIII</strong></span>
+                    </div>
+                    <p class="form-description">Appeal process for parties threatened with deregistration due to low membership (<3) or inactivity (<100 messages/7 days). Submit evidence to maintain registration.</p>
+                    <div class="download-links">
+                        <a href="forms/eck-08-deregistration-appeal.docx" class="download-btn">
+                            <span class="icon">📝</span> Download DOCX
+                        </a>
+                        <a href="forms/eck-08-deregistration-appeal.pdf" class="download-btn pdf">
+                            <span class="icon">📄</span> Download PDF
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -537,91 +671,104 @@
         <h2 class="section-title">Register of Political Parties</h2>
         <p class="subtitle">Official registry as maintained by the Electoral Commission (Updated 14 December 2025)</p>
         
-        <div class="documents-section">
-            <div class="doc-card registry">
-                <table class="party-table">
-                    <thead>
-                        <tr>
-                            <th>Party Name</th>
-                            <th>Abbreviation</th>
-                            <th>Color</th>
-                            <th>Leader(s)</th>
-                            <th>Members</th>
-                            <th>Elected</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><div class="party-color" style="background-color: #4c7823;"></div> Kazjistan Forward</td>
-                            <td><strong>KaFo</strong></td>
-                            <td>#4c7823</td>
-                            <td>Cisco</td>
-                            <td>12</td>
-                            <td>4</td>
-                            <td><span style="color: var(--success-color); font-weight: 500;">Registered</span></td>
-                        </tr>
-                        <tr>
-                            <td><div class="party-color" style="background-color: #000000;"></div> Solidarity</td>
-                            <td><strong>SOL</strong></td>
-                            <td>#000000</td>
-                            <td>Collective Leadership</td>
-                            <td>12</td>
-                            <td>5</td>
-                            <td><span style="color: var(--success-color); font-weight: 500;">Registered</span></td>
-                        </tr>
-                        <tr>
-                            <td><div class="party-color" style="background-color: #faa911;"></div> House of Kazjis</td>
-                            <td><strong>HoK</strong></td>
-                            <td>#faa911</td>
-                            <td>EstoBlake, Axel Nevylym</td>
-                            <td>6</td>
-                            <td>1</td>
-                            <td><span style="color: var(--success-color); font-weight: 500;">Registered</span></td>
-                        </tr>
-                        <tr>
-                            <td><div class="party-color" style="background-color: #b11b1b;"></div> Kazji Communist Party</td>
-                            <td><strong>KCP</strong></td>
-                            <td>#b11b1b</td>
-                            <td>Igor Witback</td>
-                            <td>6</td>
-                            <td>3</td>
-                            <td><span style="color: var(--success-color); font-weight: 500;">Registered</span></td>
-                        </tr>
-                        <tr>
-                            <td><div class="party-color" style="background-color: #1c1c84;"></div> Popular Liberal Front</td>
-                            <td><strong>PLF</strong></td>
-                            <td>#1c1c84</td>
-                            <td>imyourstudent</td>
-                            <td>5</td>
-                            <td>0</td>
-                            <td><span style="color: var(--success-color); font-weight: 500;">Registered</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <p><em>Note: Parties must maintain at least 3 members and 100 messages/week to avoid deregistration per Section VIII.</em></p>
-                <a href="#" class="doc-link">Download Complete Registry (CSV)</a>
+        <div class="form-card">
+            <table class="party-table">
+                <thead>
+                    <tr>
+                        <th>Party Name</th>
+                        <th>Abbreviation</th>
+                        <th>Color</th>
+                        <th>Leader(s)</th>
+                        <th>Members</th>
+                        <th>Elected</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><div class="party-color" style="background-color: #4c7823;"></div> Kazjistan Forward</td>
+                        <td><strong>KaFo</strong></td>
+                        <td>#4c7823</td>
+                        <td>Cisco</td>
+                        <td>12</td>
+                        <td>4</td>
+                        <td><span style="color: var(--success-color); font-weight: 500;">Registered</span></td>
+                    </tr>
+                    <tr>
+                        <td><div class="party-color" style="background-color: #000000;"></div> Solidarity</td>
+                        <td><strong>SOL</strong></td>
+                        <td>#000000</td>
+                        <td>Collective Leadership</td>
+                        <td>12</td>
+                        <td>5</td>
+                        <td><span style="color: var(--success-color); font-weight: 500;">Registered</span></td>
+                    </tr>
+                    <tr>
+                        <td><div class="party-color" style="background-color: #faa911;"></div> House of Kazjis</td>
+                        <td><strong>HoK</strong></td>
+                        <td>#faa911</td>
+                        <td>EstoBlake, Axel Nevylym</td>
+                        <td>6</td>
+                        <td>1</td>
+                        <td><span style="color: var(--success-color); font-weight: 500;">Registered</span></td>
+                    </tr>
+                    <tr>
+                        <td><div class="party-color" style="background-color: #b11b1b;"></div> Kazji Communist Party</td>
+                        <td><strong>KCP</strong></td>
+                        <td>#b11b1b</td>
+                        <td>Igor Witback</td>
+                        <td>6</td>
+                        <td>3</td>
+                        <td><span style="color: var(--success-color); font-weight: 500;">Registered</span></td>
+                    </tr>
+                    <tr>
+                        <td><div class="party-color" style="background-color: #1c1c84;"></div> Popular Liberal Front</td>
+                        <td><strong>PLF</strong></td>
+                        <td>#1c1c84</td>
+                        <td>imyourstudent</td>
+                        <td>5</td>
+                        <td>0</td>
+                        <td><span style="color: var(--success-color); font-weight: 500;">Registered</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><em>Note: Parties must maintain at least 3 members and 100 messages/week to avoid deregistration per Section VIII.</em></p>
+            <div class="download-links">
+                <a href="data/party-registry.csv" class="download-btn alt">
+                    <span class="icon">📊</span> Download Registry (CSV)
+                </a>
+                <a href="data/party-registry.pdf" class="download-btn alt">
+                    <span class="icon">📋</span> Download Registry (PDF)
+                </a>
             </div>
         </div>
         
         <div class="commission-info" id="contact">
-            <h3>Electoral Commission Leadership</h3>
+            <h3>Submission Instructions & Contact</h3>
             <div class="info-grid">
                 <div class="info-item">
-                    <h4>Chief Electoral Commissioner</h4>
-                    <p>Appointed by Minister of Governmental Services</p>
+                    <h4>How to Submit Forms</h4>
+                    <p>1. Download and complete the form<br>
+                    2. Email to: eck@kazjistan.gov.kz<br>
+                    3. Or submit in #electoral-commission Discord channel</p>
                 </div>
                 <div class="info-item">
-                    <h4>Electoral Board</h4>
-                    <p>4-member board including CEC and 3 Returning Officers</p>
+                    <h4>Contact Electoral Commission</h4>
+                    <p>Email: eck@kazjistan.gov.kz<br>
+                    Discord: @ChiefElectoralCommissioner<br>
+                    Department: Governmental Services</p>
                 </div>
                 <div class="info-item">
-                    <h4>Contact for Electoral Matters</h4>
-                    <p>eck@kazjistan.gov.kz</p>
+                    <h4>Office Hours</h4>
+                    <p>Mon-Fri: 9:00-17:00 KST<br>
+                    Emergency electoral matters:<br>
+                    Available 24/7 during election periods</p>
                 </div>
                 <div class="info-item">
-                    <h4>Department</h4>
-                    <p>Department of Governmental Services</p>
+                    <h4>Governing Legislation</h4>
+                    <p><a href="#" style="color: var(--primary-color);">Political Party Act, Oct 2025</a><br>
+                    <a href="#" style="color: var(--primary-color);">ECK Act, Sept 2025</a><br>
+                    <a href="#" style="color: var(--primary-color);">Election Procedures Manual</a></p>
                 </div>
             </div>
         </div>
@@ -630,7 +777,8 @@
     <footer>
         <div class="container">
             <div class="copyright">
-                &copy; 2025 People's Republic of Kazjistan • Electoral Commission of Kazjistan
+                &copy; 2025 People's Republic of Kazjistan • Electoral Commission of Kazjistan<br>
+                All forms are official documents of the ECK
             </div>
         </div>
     </footer>
