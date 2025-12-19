@@ -492,6 +492,12 @@
                             <span class="candidate-name">Jolly Person</span>
                         </div>
                     </div>
+                    <div class="candidate">
+                        <input type="number" min="1" max="23" class="preference" placeholder="-" data-candidate="Drifters">
+                        <div class="candidate-info">
+                            <span class="candidate-name">Drifters</span>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Kazji Communist Party Column -->
@@ -570,7 +576,7 @@
             },
             {
                 name: "POPULAR LIBERAL FRONT",
-                candidates: ["Imyourstudent", "TotalRozza", "PingPongProductions", "Jolly Person"]
+                candidates: ["Imyourstudent", "TotalRozza", "PingPongProductions", "Jolly Person", "Drifters"]
             },
             {
                 name: "KAZJI COMMUNIST PARTY",
@@ -581,7 +587,7 @@
                 candidates: ["Axell Nevylym"]
             }
         ];
-        const totalCandidates = 21; // 8 + 5 + 4 + 3 + 1 = 21 candidates
+        const totalCandidates = 22; // 8 + 5 + 5 + 3 + 1 = 22 candidates (updated from 21)
         const minRequired = 15; // Minimum number of candidates to number
 
         // Track currently focused input to prevent premature validation
