@@ -7,6 +7,12 @@
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --primary-color: #004c4c;
             --secondary-color: #fba910;
@@ -126,6 +132,30 @@
             max-width: 800px;
             margin: 0 auto 30px;
             font-weight: 300;
+        }
+        
+        .hero .btn-electoral {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 14px 38px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            letter-spacing: 0.5px;
+        }
+        .hero .btn-electoral:hover {
+            background-color: #ffc130;
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border-color: var(--white);
+        }
+        .hero .btn-electoral i {
+            margin-right: 8px;
         }
         
         main {
@@ -301,6 +331,10 @@
         <div class="container">
             <h1>Welcome to the People's Portal</h1>
             <p>Your direct connection to Kazjistan</p>
+            <!-- NEW: Electoral Commission button -->
+            <a href="#" class="btn-electoral" aria-label="Electoral Commission of Kazjistan Portal">
+                🗳️ Electoral Commission of Kazjistan Portal
+            </a>
         </div>
     </section>
 
@@ -343,7 +377,7 @@
         <div class="container">
             <h2 class="section-title" style="text-align: center; border-bottom: none;">Resources</h2>
             <div class="quick-links-container">
-            <a href="election-results.html" class="quick-link">Official Election Results</a>
+                <a href="election-results.html" class="quick-link">Official Election Results</a>
                 <a href="#" class="quick-link">Resource Library</a>
             </div>
         </div>
@@ -352,7 +386,7 @@
     <footer>
         <div class="container">
             <div class="copyright">
-                &copy; 2025 People's Republic of Kazjistan
+                &copy; 2026 People's Republic of Kazjistan
             </div>
         </div>
     </footer>
