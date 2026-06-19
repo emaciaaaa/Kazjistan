@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electoral Commission of Kazjistan</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #004c4c;
+            --secondary-color: #fba910;
+            --accent-color: #e8f7f7;
+            --text-color: #333;
+            --light-text: #555;
+            --white: #ffffff;
+            --max-width: 1100px;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: #f4f7f7;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* header */
+        .ec-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            border-bottom: 5px solid var(--secondary-color);
+        }
+        .ec-header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .ec-header h1 {
+            font-family: 'Noto Serif', serif;
+            font-weight: 700;
+            font-size: 1.9rem;
+            letter-spacing: 0.5px;
+        }
+        .ec-header h1 span {
+            color: var(--secondary-color);
+        }
+        .ec-header .back-link {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+            border: 1px solid var(--secondary-color);
+            padding: 8px 18px;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+        .ec-header .back-link:hover {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        /* main content */
+        .ec-main {
+            padding: 40px 0;
+        }
+        .ec-intro {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 35px;
+            border-left: 6px solid var(--secondary-color);
+        }
+        .ec-intro h2 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        .ec-intro p {
+            color: var(--light-text);
+            font-size: 1.05rem;
+        }
+
+        /* forms grid */
+        .forms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .form-card {
+            background: white;
+            border-radius: 10px;
+            padding: 22px 20px 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-bottom: 4px solid var(--secondary-color);
+            display: flex;
+            flex-direction: column;
+        }
+        .form-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+        .form-card .icon {
+            font-size: 2rem;
+            margin-bottom: 6px;
+        }
+        .form-card h3 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin: 8px 0 6px;
+        }
+        .form-card p {
+            color: var(--light-text);
+            font-size: 0.95rem;
+            flex: 1;
+            margin-bottom: 16px;
+        }
+        .form-card .form-link {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 500;
+            text-align: center;
+            transition: 0.2s;
+            border: 1px solid transparent;
+            align-self: flex-start;
+        }
+        .form-card .form-link:hover {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* footer */
+        .ec-footer {
+            background: var(--primary-color);
+            color: rgba(255,255,255,0.9);
+            padding: 18px 0;
+            margin-top: 20px;
+            text-align: center;
+            border-top: 3px solid var(--secondary-color);
+        }
+        .ec-footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        @media (max-width: 650px) {
+            .ec-header .container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .ec-header h1 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Electoral Commission Header -->
+    <header class="ec-header">
+        <div class="container">
+            <h1>🗳️ Electoral Commission <span>of Kazjistan</span></h1>
+            <a href="index.html" class="back-link">← Back to Main Portal</a>
+        </div>
+    </header>
+
+    <main class="ec-main container">
+        <!-- intro -->
+        <div class="ec-intro">
+            <h2>Official Forms &amp; Filings</h2>
+            <p>Submit your party or candidate documents directly through the Electoral Commission. All forms are processed in accordance with Kazjistan election law.</p>
+        </div>
+
+        <!-- forms grid - all links now point to real pages -->
+        <div class="forms-grid">
+            <!-- 1. Candidate Nomination -->
+            <div class="form-card">
+                <div class="icon">📋</div>
+                <h3>Candidate Nomination Form</h3>
+                <p>Nominate a candidate for public office. Must be submitted before the election deadline.</p>
+                <a href="candidate-nomination.html" class="form-link">Access Form →</a>
+            </div>
+
+            <!-- 2. Party Name Change -->
+            <div class="form-card">
+                <div class="icon">✏️</div>
+                <h3>Party Name Change Form</h3>
+                <p>Request to officially change the registered name of a political party.</p>
+                <a href="party-name-change.html" class="form-link">Access Form →</a>
+            </div>
+
+            <!-- 3. Party Leadership Form -->
+            <div class="form-card">
+                <div class="icon">👥</div>
+                <h3>Party Leadership Form</h3>
+                <p>Update the leadership structure or designate new party officers.</p>
+                <a href="party-leadership.html" class="form-link">Access Form →</a>
+            </div>
+
+            <!-- 4. Party Member Expulsion -->
+            <div class="form-card">
+                <div class="icon">🚫</div>
+                <h3>Party Member Expulsion Form</h3>
+                <p>Formally expel a member from a political party. Requires justification.</p>
+                <a href="party-expulsion.html" class="form-link">Access Form →</a>
+            </div>
+
+            <!-- 5. Party Merger Form -->
+            <div class="form-card">
+                <div class="icon">🔗</div>
+                <h3>Party Merger Form</h3>
+                <p>File for the merger of two or more political parties into a single entity.</p>
+                <a href="party-merger.html" class="form-link">Access Form →</a>
+            </div>
+
+            <!-- 6. Party Dissolution Form -->
+            <div class="form-card">
+                <div class="icon">⚰️</div>
+                <h3>Party Dissolution Form</h3>
+                <p>Officially dissolve a political party and settle all regulatory obligations.</p>
+                <a href="party-dissolution.html" class="form-link">Access Form →</a>
+            </div>
+        </div>
+
+        <!-- extra note -->
+        <p style="margin-top: 30px; font-style: italic; color: var(--light-text); border-top: 1px solid #ddd; padding-top: 20px;">
+            ⚠️ All forms are processed within 3–5 business days. For urgent matters, contact the Electoral Commission directly.
+        </p>
+    </main>
+
+    <footer class="ec-footer">
+        <div class="container">
+            <p>© 2025 Electoral Commission · People's Republic of Kazjistan</p>
+            <p style="font-size: 0.9rem; margin-top: 4px;">
+                <a href="#">Privacy</a> · <a href="#">Contact</a> · <a href="#">Election Calendar</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
