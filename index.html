@@ -116,14 +116,14 @@
         .hero {
             background: linear-gradient(135deg, var(--primary-color) 0%, #006666 100%);
             color: var(--white);
-            padding: 60px 0;
+            padding: 50px 0 40px;
             text-align: center;
             border-bottom: 3px solid var(--secondary-color);
         }
         
         .hero h1 {
             font-size: 2.5rem;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
             font-weight: 300;
         }
         
@@ -134,28 +134,55 @@
             font-weight: 300;
         }
         
-        .hero .btn-electoral {
+        /* portal buttons group */
+        .portal-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 14px 20px;
+            margin-top: 10px;
+        }
+        .portal-btn {
             display: inline-block;
+            background-color: var(--white);
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 12px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            letter-spacing: 0.3px;
+            background-color: #f5f9f9;
+        }
+        .portal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+            border-color: var(--secondary-color);
+            background-color: var(--white);
+        }
+        .portal-btn.electoral {
             background-color: var(--secondary-color);
             color: var(--primary-color);
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             padding: 14px 38px;
-            border-radius: 50px;
-            text-decoration: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            transition: all 0.2s ease;
-            border: 2px solid transparent;
-            letter-spacing: 0.5px;
+            border: 2px solid #ffdd77;
         }
-        .hero .btn-electoral:hover {
+        .portal-btn.electoral:hover {
             background-color: #ffc130;
-            transform: scale(1.02);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
             border-color: var(--white);
         }
-        .hero .btn-electoral i {
-            margin-right: 8px;
+        .portal-btn i {
+            margin-right: 6px;
+        }
+        .hero-sub {
+            margin-top: 6px;
+            font-size: 0.95rem;
+            opacity: 0.9;
+            letter-spacing: 1px;
         }
         
         main {
@@ -307,6 +334,15 @@
                 flex-direction: column;
                 align-items: center;
             }
+            .portal-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+            .portal-btn {
+                width: 80%;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -331,10 +367,21 @@
         <div class="container">
             <h1>Welcome to the People's Portal</h1>
             <p>Your direct connection to Kazjistan</p>
-            <!-- NEW: Electoral Commission button -->
-            <a href="#" class="btn-electoral" aria-label="Electoral Commission of Kazjistan Portal">
-                🗳️ Electoral Commission of Kazjistan Portal
-            </a>
+            
+            <!-- PORTAL BUTTONS: Electoral Commission on top, then all department portals -->
+            <div class="portal-buttons">
+                <!-- Electoral Commission (prominent) -->
+                <a href="electoral-commission.html" class="portal-btn electoral">🗳️ Electoral Commission of Kazjistan Portal</a>
+            </div>
+            <div class="portal-buttons" style="margin-top: 6px;">
+                <!-- Department portals (all link to separate pages) -->
+                <a href="department-information.html" class="portal-btn">📢 Department of Information</a>
+                <a href="department-community.html" class="portal-btn">🤝 Department of Community Affairs</a>
+                <a href="department-governmental.html" class="portal-btn">🏛️ Department of Governmental Services</a>
+                <a href="department-recruitment.html" class="portal-btn">🧑‍🤝‍🧑 Department of Recruitment and Integration</a>
+                <a href="department-justice.html" class="portal-btn">⚖️ Department of Justice</a>
+            </div>
+            <div class="hero-sub">— select a portal to continue —</div>
         </div>
     </section>
 
@@ -350,25 +397,31 @@
             <div class="department-card">
                 <h3>Department of Justice</h3>
                 <p>Manages all legal affairs and administers justice. Oversees the judiciary from an executive standpoint to ensure fair and consistent application of Kazjistan's laws.</p>
-                <a href="#" class="department-link">Access legal resources</a>
+                <a href="department-justice.html" class="department-link">Access legal resources</a>
             </div>
             
             <div class="department-card">
                 <h3>Department of Community Affairs</h3>
                 <p>Promotes social cohesion and strengthens Kazji cultural identity through community programs and initiatives that bring citizens together.</p>
-                <a href="#" class="department-link">Explore community programs</a>
+                <a href="department-community.html" class="department-link">Explore community programs</a>
             </div>
             
             <div class="department-card">
                 <h3>Department of Information</h3>
                 <p>Publishes official government news, updates, and media. Manages the national Wiki and promotes Kazjistan's public image through official communications.</p>
-                <a href="#" class="department-link">Read official bulletins</a>
+                <a href="department-information.html" class="department-link">Read official bulletins</a>
             </div>
             
             <div class="department-card">
-                <h3>Department of Recruitment and Activity</h3>
+                <h3>Department of Recruitment and Integration</h3>
                 <p>Recruits new members into the community and provides orientation services to help them integrate into Kazjistan's society and government structures.</p>
-                <a href="#" class="department-link">Learn about recruitment</a>
+                <a href="department-recruitment.html" class="department-link">Learn about recruitment</a>
+            </div>
+
+            <div class="department-card">
+                <h3>Department of Governmental Services</h3>
+                <p>Coordinates public administration, citizen services, and interdepartmental operations to ensure efficient governance across all branches.</p>
+                <a href="department-governmental.html" class="department-link">Access government services</a>
             </div>
         </div>
     </main>
